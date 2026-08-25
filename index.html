@@ -51,6 +51,25 @@ input[type=range]{appearance:none;width:100%;height:4px;border-radius:2px;backgr
 </head>
 <body>
 <div id="app"></div>
+  <script type="module">
+  import { initializeApp } from "https://www.gstatic.com/firebasejs/12.7.0/firebase-app.js";
+  import { getFirestore } from "https://www.gstatic.com/firebasejs/12.7.0/firebase-firestore.js";
+
+  const firebaseConfig = {
+    apiKey: "AIzaSyDzzu9WjtwVBLGgvkohYZdu_DGfuUUYCQw",
+    authDomain: "qa---bha.firebaseapp.com",
+    projectId: "qa---bha",
+    storageBucket: "qa---bha.firebasestorage.app",
+    messagingSenderId: "1034926863923",
+    appId: "1:1034926863923:web:ff4750c712852087ebd546",
+    measurementId: "G-1EWTRVBZZM"
+  };
+
+  const firebaseApp = initializeApp(firebaseConfig);
+  const db = getFirestore(firebaseApp);
+
+  window.firebaseDB = db;
+</script>
 <script>
 const PARAMETERS=[
  {key:"warmWelcome",label:"Warm Welcome",max:10},
