@@ -7,48 +7,50 @@
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&family=Inter:wght@400;500;600;700&family=IBM+Plex+Mono:wght@500;600&display=swap">
 <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.4/chart.umd.min.js"></script>
 <style>
-:root{--ink:#171B26;--paper:#F5F6FA;--card:#fff;--line:#E3E5EC;--teal:#0F9D8C;--indigo:#4C5FD5;--amber:#E29A2E;--coral:#E0574A;--muted:#6B7280}
-*{box-sizing:border-box}body{margin:0;background:var(--paper);color:var(--ink);font-family:Inter,sans-serif}button,input,textarea,select{font:inherit}
-header{background:var(--ink)}.header-inner{max-width:1180px;margin:auto;padding:18px 24px;display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap}
-.brand{display:flex;align-items:center;gap:12px}.brand-icon{width:38px;height:38px;border-radius:10px;background:var(--indigo);display:grid;place-items:center;color:white}.brand-name{font-weight:700;font-size:19px;color:#fff}.brand-sub{font-size:11px;color:#9ca3af}
-nav{display:flex;gap:5px;background:#232A3B;padding:5px;border-radius:12px;flex-wrap:wrap}.tabbtn{border:0;background:transparent;color:#b9bec9;padding:9px 14px;border-radius:9px;cursor:pointer;font-weight:600;font-size:13px}.tabbtn.active{background:var(--ink);color:#fff}
-.who{display:flex;align-items:center;gap:9px;color:#b9bec9;font-size:13px}.logout-btn{background:none;border:1px solid #3a4256;color:#b9bec9;padding:7px 12px;border-radius:9px;cursor:pointer}
-.wrap{max-width:1180px;margin:auto;padding:28px 24px 60px}.card{background:var(--card);border:1px solid var(--line);border-radius:14px}.grid{display:grid;gap:16px}.grid-stats{grid-template-columns:repeat(auto-fit,minmax(200px,1fr))}.grid-2{grid-template-columns:1.3fr 1fr}
-.stat-card{padding:16px 18px;display:flex;gap:14px;align-items:center}.stat-icon{width:40px;height:40px;border-radius:10px;display:grid;place-items:center}.stat-label{font-size:11px;color:var(--muted);font-weight:700;text-transform:uppercase}.stat-value{font-size:22px;font-weight:600}
-.section-title{font-family:"Space Grotesk";font-weight:600;font-size:15px;margin-bottom:16px}.field-label{display:block;font-size:12px;color:var(--muted);font-weight:700;text-transform:uppercase;margin-bottom:6px}.text-input{width:100%;padding:10px 12px;border:1px solid var(--line);border-radius:9px;background:#fff}.text-input:focus{outline:none;border-color:var(--indigo)}
-.btn-primary{width:100%;padding:11px;border:0;border-radius:10px;background:var(--ink);color:white;font-weight:700;cursor:pointer}.btn-primary:disabled{opacity:.55}.btn-ghost{padding:9px 13px;border:1px solid var(--line);background:#fff;border-radius:9px;font-weight:600;cursor:pointer}.icon-btn{border:0;background:none;cursor:pointer}.empty{padding:60px;text-align:center;color:var(--muted)}.error-text{color:var(--coral);font-size:12px;min-height:16px;margin-top:8px}
-.badge{display:inline-flex;align-items:center;gap:6px;padding:4px 9px;border-radius:999px;font-size:11px;font-weight:700;text-transform:uppercase}.badge-dot{width:6px;height:6px;border-radius:50%}
-.notice{padding:11px 13px;background:#eef2ff;color:#3949a3;border-radius:10px;font-size:12px;margin-bottom:16px}.mono{font-family:"IBM Plex Mono",monospace}
-.login-wrap{min-height:100vh;display:grid;place-items:center;padding:24px}.login-card{width:min(380px,100%);padding:32px;background:#fff;border:1px solid var(--line);border-radius:16px}.role-btn{width:100%;padding:15px;margin:0 0 10px;border:1px solid var(--line);background:#fff;border-radius:12px;text-align:left;font-weight:700;cursor:pointer}.pin-input{text-align:center;letter-spacing:6px;font-size:20px}.back-link{border:0;background:none;color:var(--muted);cursor:pointer;padding:0;margin-bottom:14px}
-.slider{width:100%}.audit-row{padding:16px 20px}.audit-row-top{display:flex;align-items:center;gap:10px}.audit-click{flex:1;display:flex;gap:14px;align-items:center;cursor:pointer}.avatar{width:34px;height:34px;border-radius:50%;background:#eef0ff;color:var(--indigo);display:grid;place-items:center;font-weight:700;flex-shrink:0}.audit-name{font-weight:700}.audit-meta{font-size:12px;color:var(--muted);display:flex;gap:10px;flex-wrap:wrap}.audit-detail{display:none;border-top:1px solid var(--line);margin-top:15px;padding-top:15px}.audit-detail.open{display:block}.param-bar-track{height:6px;background:var(--line);border-radius:4px;overflow:hidden}.param-bar-fill{height:100%;background:var(--indigo)}.agent-history-card{padding:14px 20px;display:flex;align-items:center;gap:12px}
-.pin-row{display:flex;justify-content:space-between;align-items:center;padding:12px 0;border-bottom:1px solid var(--line)}
-@media(max-width:800px){.grid-2{grid-template-columns:1fr}.header-inner,.wrap{padding-left:14px;padding-right:14px}.audit-row-top{align-items:flex-start}}
+:root{
+  --ink:#171B26;--paper:#F5F6FA;--card:#FFFFFF;--line:#E3E5EC;
+  --teal:#0F9D8C;--indigo:#4C5FD5;--amber:#E29A2E;--coral:#E0574A;--muted:#6B7280;
+}
+*{box-sizing:border-box}
+body{margin:0;background:var(--paper);color:var(--ink);font-family:Inter,sans-serif}
+input,textarea,select,button{font-family:Inter,sans-serif}
+.mono{font-family:"IBM Plex Mono",monospace}.display{font-family:"Space Grotesk",sans-serif}
+header{background:var(--ink);border-bottom:1px solid var(--line)}
+.header-inner{max-width:1180px;margin:auto;padding:18px 24px;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:12px}
+.brand{display:flex;align-items:center;gap:12px}.brand-icon{width:38px;height:38px;border-radius:10px;background:var(--indigo);display:flex;align-items:center;justify-content:center;color:#fff;font-weight:700}
+.brand-name{font-weight:700;font-size:19px;color:#fff;line-height:1.1}.brand-sub{font-size:11.5px;color:#9CA3AF}
+nav{display:flex;gap:6px;background:#232A3B;padding:5px;border-radius:12px;flex-wrap:wrap;align-items:center}
+.tabbtn{display:flex;align-items:center;gap:8px;padding:9px 16px;border-radius:10px;border:0;font-size:13.5px;font-weight:600;cursor:pointer;background:transparent;color:#B9BEC9}
+.tabbtn.active{background:var(--ink);color:#fff}.who{display:flex;align-items:center;gap:10px;color:#B9BEC9;font-size:13px}
+.logout-btn{background:none;border:1px solid #3A4256;color:#B9BEC9;padding:7px 12px;border-radius:9px;font-size:12.5px;cursor:pointer}
+.wrap{max-width:1180px;margin:auto;padding:28px 24px 60px}.card{background:var(--card);border:1px solid var(--line);border-radius:14px}
+.grid{display:grid;gap:16px}.grid-stats{grid-template-columns:repeat(auto-fit,minmax(200px,1fr))}.grid-2{grid-template-columns:1.3fr 1fr;gap:18px}
+@media(max-width:800px){.grid-2{grid-template-columns:1fr}.header-inner{padding:14px}.wrap{padding:20px 14px 40px}}
+.stat-card{padding:16px 18px;display:flex;align-items:center;gap:14px}.stat-icon{width:40px;height:40px;border-radius:10px;display:flex;align-items:center;justify-content:center;flex-shrink:0;font-size:18px}
+.stat-label{font-size:11.5px;color:var(--muted);font-weight:600;text-transform:uppercase;letter-spacing:.3px}.stat-value{font-size:22px;font-weight:600}
+.section-title{font-family:"Space Grotesk",sans-serif;font-weight:600;font-size:15px;margin-bottom:16px}.field-label{font-size:12px;font-weight:600;color:var(--muted);text-transform:uppercase;letter-spacing:.4px;margin-bottom:6px;display:block}
+.text-input{width:100%;padding:10px 12px;border-radius:9px;border:1px solid var(--line);font-size:14px;outline:none;background:#fff}.text-input:focus{border-color:var(--indigo)}
+input[type=range]{appearance:none;width:100%;height:4px;border-radius:2px;background:var(--line)}input[type=range]::-webkit-slider-thumb{appearance:none;width:16px;height:16px;border-radius:50%;background:var(--indigo);cursor:pointer;border:2px solid #fff;box-shadow:0 0 0 1px var(--indigo)}
+.stub-divider{position:relative;width:1px;align-self:stretch;border-left:1.5px dashed var(--line);margin:0 18px}.stub-divider:before,.stub-divider:after{content:"";position:absolute;left:-8px;width:16px;height:16px;border-radius:50%;background:var(--paper)}
+.stub-divider:before{top:-8px}.stub-divider:after{bottom:-8px}
+.badge{display:inline-flex;align-items:center;gap:6px;padding:3px 10px;border-radius:999px;font-size:11px;font-weight:600;letter-spacing:.3px;text-transform:uppercase;white-space:nowrap}.badge-dot{width:6px;height:6px;border-radius:50%}
+.btn-primary{padding:11px 14px;border-radius:10px;border:0;background:var(--ink);color:#fff;font-weight:600;font-size:13.5px;cursor:pointer;width:100%}.btn-primary:disabled{opacity:.6;cursor:default}
+.btn-ghost{padding:9px 14px;border-radius:9px;border:1px solid var(--line);background:#fff;font-weight:600;font-size:12.5px;cursor:pointer;color:var(--ink)}.icon-btn{background:none;border:0;cursor:pointer;color:var(--muted);padding:6px}
+.empty{padding:60px;text-align:center;color:var(--muted)}.error-text{color:var(--coral);font-size:12.5px;margin-top:8px;min-height:16px}
+.audit-row{padding:16px 20px;display:flex;flex-direction:column}.audit-row-top{display:flex;align-items:center}.audit-click{flex:1;display:flex;align-items:center;gap:16px;cursor:pointer;min-width:0}
+.avatar{width:34px;height:34px;border-radius:50%;background:rgba(76,95,213,.1);display:flex;align-items:center;justify-content:center;flex-shrink:0;color:var(--indigo);font-weight:700}
+.audit-name{font-weight:600;font-size:14.5px}.audit-meta{font-size:12px;color:var(--muted);display:flex;gap:10px;margin-top:2px;flex-wrap:wrap}
+.audit-detail{margin-top:16px;padding-top:16px;border-top:1px solid var(--line);display:none}.audit-detail.open{display:block}.param-bar-track{height:6px;border-radius:3px;background:var(--line);overflow:hidden}.param-bar-fill{height:100%;background:var(--indigo)}
+.remarks-box{margin-top:14px;font-size:13px;background:var(--paper);padding:12px;border-radius:8px}.agent-history-card{padding:14px 20px;display:flex;align-items:center}
+.login-wrap{min-height:100vh;display:flex;align-items:center;justify-content:center;padding:24px}.login-card{width:100%;max-width:380px;background:var(--card);border:1px solid var(--line);border-radius:16px;padding:32px}
+.role-btn{width:100%;padding:16px;border-radius:12px;border:1.5px solid var(--line);background:#fff;cursor:pointer;display:flex;align-items:center;gap:12px;font-size:14.5px;font-weight:600;margin-bottom:10px;text-align:left}.role-btn:hover{border-color:var(--indigo)}
+.pin-input{letter-spacing:6px;font-size:20px;text-align:center;font-family:"IBM Plex Mono",monospace}.back-link{background:none;border:0;color:var(--muted);font-size:12.5px;cursor:pointer;margin-bottom:14px;padding:0}
+.pin-row{display:flex;align-items:center;justify-content:space-between;padding:12px 0;border-bottom:1px solid var(--line)}.pin-row:last-child{border-bottom:0}
+.notice{padding:12px 14px;border-radius:10px;background:#EEF2FF;color:#3949A3;font-size:12.5px;margin-bottom:16px}
 </style>
 </head>
 <body>
 <div id="app"></div>
-
-<script type="module">
-import { initializeApp } from "https://www.gstatic.com/firebasejs/12.7.0/firebase-app.js";
-import {
-  getFirestore, collection, getDocs, addDoc, setDoc, doc, deleteDoc,
-  onSnapshot, query, orderBy
-} from "https://www.gstatic.com/firebasejs/12.7.0/firebase-firestore.js";
-
-const firebaseConfig={
- apiKey:"AIzaSyDzzu9WjtwVBLGgvkohYZdu_DGfuUUYCQw",
- authDomain:"qa---bha.firebaseapp.com",
- projectId:"qa---bha",
- storageBucket:"qa---bha.firebasestorage.app",
- messagingSenderId:"1034926863923",
- appId:"1:1034926863923:web:ff4750c712852087ebd546",
- measurementId:"G-1EWTRVBZZM"
-};
-const firebaseApp=initializeApp(firebaseConfig);
-const db=getFirestore(firebaseApp);
-window.CS={db,collection,getDocs,addDoc,setDoc,doc,deleteDoc,onSnapshot,query,orderBy};
-</script>
-
 <script>
 const PARAMETERS=[
  {key:"warmWelcome",label:"Warm Welcome",max:10},
@@ -61,70 +63,167 @@ const PARAMETERS=[
  {key:"followup",label:"Follow-up",max:10}
 ];
 const MAX_TOTAL=100;
-const COLORS={ink:"#171B26",paper:"#F5F6FA",card:"#fff",line:"#E3E5EC",teal:"#0F9D8C",indigo:"#4C5FD5",amber:"#E29A2E",coral:"#E0574A",muted:"#6B7280"};
+const COLORS={ink:"#171B26",paper:"#F5F6FA",card:"#FFFFFF",line:"#E3E5EC",teal:"#0F9D8C",indigo:"#4C5FD5",amber:"#E29A2E",coral:"#E0574A",muted:"#6B7280"};
 const DEFAULT_ADMIN_PIN="1234";
+
 let audits=[],agentPins={},adminPin=DEFAULT_ADMIN_PIN,role=null,currentAgentName=null,tab="overview",charts={},currentScores={};
 
-function band(p){return p>=90?{label:"Excellent",color:COLORS.teal}:p>=75?{label:"Good",color:COLORS.indigo}:p>=60?{label:"Average",color:COLORS.amber}:{label:"Needs Improvement",color:COLORS.coral}}
+function band(pct){
+ if(pct>=90)return{label:"Excellent",color:COLORS.teal};
+ if(pct>=75)return{label:"Good",color:COLORS.indigo};
+ if(pct>=60)return{label:"Average",color:COLORS.amber};
+ return{label:"Needs Improvement",color:COLORS.coral};
+}
 function uid(){return"aud_"+Date.now().toString(36)+"_"+Math.random().toString(36).slice(2,8)}
 function esc(s){return String(s??"").replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]))}
 function genPin(){return String(Math.floor(1000+Math.random()*9000))}
-function badgeHTML(b){return`<span class="badge" style="color:${b.color};background:${b.color}18"><span class="badge-dot" style="background:${b.color}"></span>${b.label}</span>`}
-function statCard(i,l,v,a=COLORS.indigo){return`<div class="card stat-card"><div class="stat-icon" style="background:${a}18;color:${a}">${i}</div><div><div class="stat-label">${l}</div><div class="stat-value mono">${v}</div></div></div>`}
-function ring(p,size,color){const sw=5,r=(size-sw)/2,c=2*Math.PI*r,o=c-(Math.min(p,100)/100)*c;return`<svg width="${size}" height="${size}" style="transform:rotate(-90deg)"><circle cx="${size/2}" cy="${size/2}" r="${r}" fill="none" stroke="${COLORS.line}" stroke-width="${sw}"/><circle cx="${size/2}" cy="${size/2}" r="${r}" fill="none" stroke="${color}" stroke-width="${sw}" stroke-dasharray="${c}" stroke-dashoffset="${o}" stroke-linecap="round"/><text x="${size/2}" y="${size/2}" text-anchor="middle" dominant-baseline="central" transform="rotate(90 ${size/2} ${size/2})" style="font-family:IBM Plex Mono;font-size:${size*.25}px;fill:${COLORS.ink}">${Math.round(p)}</text></svg>`}
-function destroyCharts(){Object.values(charts).forEach(c=>c?.destroy());charts={}}
+function badgeHTML(b){return `<span class="badge" style="color:${b.color};background:${b.color}18"><span class="badge-dot" style="background:${b.color}"></span>${b.label}</span>`}
+function ringSVG(pct,size,stroke,color,id=""){
+ const r=(size-stroke)/2,c=2*Math.PI*r,offset=c-(Math.min(pct,100)/100)*c;
+ return `<svg width="${size}" height="${size}" style="transform:rotate(-90deg)">
+ <circle cx="${size/2}" cy="${size/2}" r="${r}" fill="none" stroke="${COLORS.line}" stroke-width="${stroke}"/>
+ <circle id="${id}" cx="${size/2}" cy="${size/2}" r="${r}" fill="none" stroke="${color}" stroke-width="${stroke}" stroke-dasharray="${c}" stroke-dashoffset="${offset}" stroke-linecap="round"/>
+ <text x="${size/2}" y="${size/2}" text-anchor="middle" dominant-baseline="central" transform="rotate(90 ${size/2} ${size/2})" style="font-family:IBM Plex Mono,monospace;font-size:${size*.28}px;font-weight:600;fill:${COLORS.ink}">${Math.round(pct)}</text>
+ </svg>`
+}
+function statCard(icon,label,value,accent=COLORS.indigo){
+ return `<div class="card stat-card"><div class="stat-icon" style="background:${accent}18;color:${accent}">${icon}</div><div><div class="stat-label">${label}</div><div class="stat-value mono">${value}</div></div></div>`
+}
+function destroyCharts(){Object.values(charts).forEach(c=>c&&c.destroy());charts={}}
 
-async function loadAll(){
- try{
-  const [aSnap,gSnap,sSnap]=await Promise.all([
-   CS.getDocs(CS.query(CS.collection(CS.db,"audits"),CS.orderBy("createdAt","desc"))),
-   CS.getDocs(CS.collection(CS.db,"agents")),
-   CS.getDocs(CS.collection(CS.db,"settings"))
-  ]);
-  audits=aSnap.docs.map(d=>({id:d.id,...d.data()}));
-  agentPins={};gSnap.docs.forEach(d=>{const x=d.data();if(x.name)agentPins[x.name]=String(x.pin||"")});
-  const admin=sSnap.docs.find(d=>d.id==="admin");adminPin=admin?.data()?.pin||DEFAULT_ADMIN_PIN;
- }catch(e){
-  console.error(e);
-  try{audits=JSON.parse(localStorage.getItem("qa_audits")||"[]");agentPins=JSON.parse(localStorage.getItem("qa_agent_pins")||"{}");adminPin=localStorage.getItem("qa_admin_pin")||DEFAULT_ADMIN_PIN}catch(_){}
- }
+function loadAll(){
+ try{audits=JSON.parse(localStorage.getItem("qa_audits")||"[]")}catch(e){audits=[]}
+ try{agentPins=JSON.parse(localStorage.getItem("qa_agent_pins")||"{}")}catch(e){agentPins={}}
+ adminPin=localStorage.getItem("qa_admin_pin")||DEFAULT_ADMIN_PIN;
 }
-async function saveAudit(record){
- try{const ref=await CS.addDoc(CS.collection(CS.db,"audits"),record);record.id=ref.id;audits=[record,...audits.filter(a=>a.id!==record.id)];return true}catch(e){console.error(e);alert("Could not save evaluation. Check Firestore rules.");return false}
-}
-async function saveAgent(name,pin){
- try{const safe=btoa(unescape(encodeURIComponent(name))).replace(/[^A-Za-z0-9_-]/g,"_").slice(0,90);await CS.setDoc(CS.doc(CS.db,"agents",safe),{name,pin:String(pin),updatedAt:Date.now()},{merge:true});agentPins[name]=String(pin);return true}catch(e){console.error(e);alert("Could not save agent. Check Firestore rules.");return false}
-}
-async function saveAdminPin(pin){
- try{await CS.setDoc(CS.doc(CS.db,"settings","admin"),{pin:String(pin),updatedAt:Date.now()},{merge:true});adminPin=String(pin);return true}catch(e){console.error(e);alert("Could not save admin PIN. Check Firestore rules.");return false}
-}
-async function deleteAudit(id){
- try{await CS.deleteDoc(CS.doc(CS.db,"audits",id));audits=audits.filter(a=>a.id!==id)}catch(e){alert("Could not delete evaluation. Check Firestore rules.")}
-}
-function agentNames(){return Object.keys(agentPins).sort()}
+function persistAudits(next){audits=next;localStorage.setItem("qa_audits",JSON.stringify(next))}
+function persistAgentPins(next){agentPins=next;localStorage.setItem("qa_agent_pins",JSON.stringify(next))}
+function persistAdminPin(next){adminPin=next;localStorage.setItem("qa_admin_pin",String(next))}
+function agentNames(){return Array.from(new Set([...audits.map(a=>a.agentName),...Object.keys(agentPins)])).sort()}
 
-function loginChooserHTML(){return`<div class="login-wrap"><div class="login-card"><div class="brand" style="justify-content:center;margin-bottom:22px"><div class="brand-icon">📋</div><div><div class="brand-name" style="color:var(--ink)">CallScore</div><div class="brand-sub" style="color:var(--muted)">QA Audit Desk</div></div></div><div id="login-body"><div class="field-label">I am signing in as</div><button class="role-btn" id="pick-admin">🛡️ QA Admin / Auditor</button><button class="role-btn" id="pick-agent">🎧 Agent — view my scores</button></div></div></div>`}
-function renderApp(){destroyCharts();const app=document.getElementById("app");if(!role){app.innerHTML=loginChooserHTML();document.getElementById("pick-admin").onclick=showAdminLogin;document.getElementById("pick-agent").onclick=showAgentLogin;return}app.innerHTML=shellHTML();wireShell()}
-function showAdminLogin(){document.getElementById("login-body").innerHTML=`<button class="back-link" id="back">← back</button><div class="field-label">Admin PIN</div><input id="admin-pin" class="text-input pin-input" maxlength="4" inputmode="numeric" placeholder="••••"><div id="err" class="error-text"></div><button id="submit" class="btn-primary">Unlock Admin Dashboard</button>`;document.getElementById("back").onclick=renderApp;const i=document.getElementById("admin-pin"),go=()=>{if(i.value.trim()===String(adminPin)){role="admin";tab="overview";renderApp()}else document.getElementById("err").textContent="Incorrect PIN."};document.getElementById("submit").onclick=go;i.onkeydown=e=>e.key==="Enter"&&go();i.focus()}
-function showAgentLogin(){const names=agentNames();document.getElementById("login-body").innerHTML=`<button class="back-link" id="back">← back</button><div class="field-label">Your Name</div>${names.length?`<select id="agent-name" class="text-input">${names.map(n=>`<option value="${esc(n)}">${esc(n)}</option>`).join("")}</select>`:`<div class="notice">No agents have been added yet. Ask your QA admin.</div>`}<div class="field-label" style="margin-top:14px">Your PIN</div><input id="agent-pin" class="text-input pin-input" maxlength="4" inputmode="numeric" placeholder="••••"><div id="err" class="error-text"></div><button id="submit" class="btn-primary" ${names.length?"":"disabled"}>View My Scores</button>`;document.getElementById("back").onclick=renderApp;if(!names.length)return;const i=document.getElementById("agent-pin"),go=()=>{const n=document.getElementById("agent-name").value;if(agentPins[n]===i.value.trim()){role="agent";currentAgentName=n;tab="agent";renderApp()}else document.getElementById("err").textContent="Incorrect PIN."};document.getElementById("submit").onclick=go;i.onkeydown=e=>e.key==="Enter"&&go()}
+function renderApp(){
+ destroyCharts();
+ const app=document.getElementById("app");
+ if(!role){app.innerHTML=loginChooserHTML();wireLoginChooser();return}
+ app.innerHTML=shellHTML();wireShell();
+}
+function loginChooserHTML(){return `<div class="login-wrap"><div class="login-card">
+ <div class="brand" style="margin-bottom:22px;justify-content:center"><div class="brand-icon">📋</div><div><div class="brand-name" style="color:var(--ink)">CallScore</div><div class="brand-sub" style="color:var(--muted)">QA Audit Desk</div></div></div>
+ <div id="login-body"><div class="field-label">I am signing in as</div>
+ <button class="role-btn" id="pick-admin">🛡️ &nbsp; QA Admin / Auditor</button>
+ <button class="role-btn" id="pick-agent">🎧 &nbsp; Agent — view my scores</button></div>
+ </div></div>`}
+function wireLoginChooser(){document.getElementById("pick-admin").onclick=showAdminLogin;document.getElementById("pick-agent").onclick=showAgentLogin}
+function showAdminLogin(){
+ document.getElementById("login-body").innerHTML=`<button class="back-link" id="back-btn">← back</button><div class="field-label">Admin PIN</div><input class="text-input pin-input" id="admin-pin-input" maxlength="4" inputmode="numeric" placeholder="••••"><div class="error-text" id="admin-err"></div><button class="btn-primary" id="admin-submit">Unlock Admin Dashboard</button>`;
+ document.getElementById("back-btn").onclick=renderApp;const input=document.getElementById("admin-pin-input");input.focus();
+ const login=()=>{if(input.value.trim()===String(adminPin)){role="admin";tab="overview";renderApp()}else document.getElementById("admin-err").textContent="Incorrect PIN. Try again."};
+ document.getElementById("admin-submit").onclick=login;input.onkeydown=e=>{if(e.key==="Enter")login()}
+}
+function showAgentLogin(){
+ const names=agentNames();
+ document.getElementById("login-body").innerHTML=`<button class="back-link" id="back-btn">← back</button>
+ <div class="field-label">Your Name</div>
+ ${names.length?`<select class="text-input" id="agent-name-input" style="margin-bottom:14px">${names.map(n=>`<option value="${esc(n)}">${esc(n)}</option>`).join("")}</select>`:`<div class="notice">No agents have been set up yet. Ask your QA admin to add you.</div>`}
+ <div class="field-label">Your PIN</div><input class="text-input pin-input" id="agent-pin-input" maxlength="4" inputmode="numeric" placeholder="••••">
+ <div class="error-text" id="agent-err"></div><button class="btn-primary" id="agent-submit" ${names.length?"":"disabled"}>View My Scores</button>`;
+ document.getElementById("back-btn").onclick=renderApp;if(!names.length)return;
+ const pinInput=document.getElementById("agent-pin-input");
+ const login=()=>{const name=document.getElementById("agent-name-input").value;if(agentPins[name]&&pinInput.value.trim()===String(agentPins[name])){role="agent";currentAgentName=name;tab="agent";renderApp()}else document.getElementById("agent-err").textContent="Incorrect PIN for this name. Check with your QA admin."};
+ document.getElementById("agent-submit").onclick=login;pinInput.onkeydown=e=>{if(e.key==="Enter")login()}
+}
 function logout(){role=null;currentAgentName=null;tab="overview";renderApp()}
-function shellHTML(){return`<header><div class="header-inner"><div class="brand"><div class="brand-icon">📋</div><div><div class="brand-name">CallScore</div><div class="brand-sub">QA Audit Desk · 100-point scorecard</div></div></div><div style="display:flex;align-items:center;gap:12px;flex-wrap:wrap"><nav id="nav"></nav><div class="who">${role==="admin"?"🛡️ Admin":"🎧 "+esc(currentAgentName)}<button class="logout-btn" id="logout">Sign out</button></div></div></div></header><main class="wrap" id="content"></main>`}
-function wireShell(){document.getElementById("logout").onclick=logout;renderNav();renderTabContent()}
-function renderNav(){const ts=role==="admin"?[{id:"overview",l:"Overview",i:"📊"},{id:"new",l:"New Audit",i:"➕"},{id:"all",l:"All Audits",i:"📞"},{id:"pins",l:"Manage PINs",i:"🔑"}]:[{id:"agent",l:"My Scores",i:"👤"}];document.getElementById("nav").innerHTML=ts.map(t=>`<button class="tabbtn ${tab===t.id?"active":""}" data-tab="${t.id}">${t.i} ${t.l}</button>`).join("");document.querySelectorAll(".tabbtn").forEach(b=>b.onclick=()=>{tab=b.dataset.tab;renderTabContent()})}
-function renderTabContent(){destroyCharts();renderNav();const c=document.getElementById("content");if(role==="admin"){c.innerHTML=tab==="overview"?overviewHTML():tab==="new"?newAuditHTML():tab==="all"?allAuditsHTML():pinsHTML();if(tab==="overview")wireOverview();if(tab==="new")wireNewAudit();if(tab==="all")wireAllAudits();if(tab==="pins")wirePins()}else{c.innerHTML="<div id='agent-content'></div>";renderAgentContent()}}
-function overviewHTML(){if(!audits.length)return`<div class="card empty">📋<br><br>No audits yet. Go to New Audit.</div>`;const avg=audits.reduce((s,a)=>s+a.total,0)/audits.length,p=avg/MAX_TOTAL*100,b=band(p);return`<div class="grid grid-stats" style="margin-bottom:24px">${statCard("📞","Calls Audited",audits.length)}${statCard("👥","Agents Covered",agentNames().length)}${statCard("📈","Team Average",p.toFixed(1)+"%",b.color)}</div><div class="grid grid-2"><div class="card" style="padding:20px"><div class="section-title">Agent Leaderboard</div><canvas id="leader" height="250"></canvas></div><div class="card" style="padding:20px"><div class="section-title">Team Strength by Parameter</div><canvas id="team" height="260"></canvas></div></div>`}
-function wireOverview(){if(!audits.length)return;const names=agentNames(),pa=names.map(n=>{const l=audits.filter(a=>a.agentName===n),v=l.reduce((s,a)=>s+a.total,0)/l.length/MAX_TOTAL*100;return[n,v]}).sort((a,b)=>b[1]-a[1]);charts.leader=new Chart(document.getElementById("leader"),{type:"bar",data:{labels:pa.map(x=>x[0]),datasets:[{data:pa.map(x=>x[1]),backgroundColor:pa.map(x=>band(x[1]).color),borderRadius:6}]},options:{indexAxis:"y",plugins:{legend:{display:false}},scales:{x:{min:0,max:100},y:{grid:{display:false}}}}});const pp=PARAMETERS.map(p=>{const v=audits.reduce((s,a)=>s+a.scores[p.key],0)/audits.length/p.max*100;return[p.label.split(" / ")[0],v]});charts.team=new Chart(document.getElementById("team"),{type:"radar",data:{labels:pp.map(x=>x[0]),datasets:[{data:pp.map(x=>x[1]),borderColor:COLORS.indigo,backgroundColor:COLORS.indigo+"55"}]},options:{plugins:{legend:{display:false}},scales:{r:{min:0,max:100,ticks:{display:false}}}}})}
-function defaultScores(){return Object.fromEntries(PARAMETERS.map(p=>[p.key,Math.round(p.max*.7)]))}
-function newAuditHTML(){currentScores=defaultScores();const t=Object.values(currentScores).reduce((a,b)=>a+b,0),p=t/MAX_TOTAL*100,b=band(p);return`<form id="audit-form" class="card" style="padding:24px;display:flex;gap:22px"><div style="flex:1"><div class="section-title">Score a Call</div><div class="grid" style="grid-template-columns:1fr 1fr;margin-bottom:20px"><div><label class="field-label">Agent Name</label><input id="f-agent" class="text-input" list="agents" required><datalist id="agents">${agentNames().map(n=>`<option value="${esc(n)}">`).join("")}</datalist></div><div><label class="field-label">Auditor Name</label><input id="f-auditor" class="text-input" required></div><div><label class="field-label">Call ID</label><input id="f-callid" class="text-input"></div><div><label class="field-label">Call Date</label><input id="f-date" type="date" class="text-input" value="${new Date().toISOString().slice(0,10)}"></div></div>${PARAMETERS.map(x=>`<div style="margin:0 0 15px"><div style="display:flex;justify-content:space-between"><b style="font-size:13px">${x.label}</b><span id="v-${x.key}" class="mono">${currentScores[x.key]}/${x.max}</span></div><input class="slider" type="range" min="0" max="${x.max}" value="${currentScores[x.key]}" data-key="${x.key}" data-max="${x.max}"></div>`).join("")}<label class="field-label">Remarks / Coaching Notes</label><textarea id="f-remarks" class="text-input" rows="3"></textarea></div><div style="width:180px;display:grid;place-items:center;align-content:center;gap:12px"><div class="field-label">Total Score</div><div id="ring">${ring(p,110,b.color)}</div><div id="fraction" class="mono">${t}/100</div><div id="badge">${badgeHTML(b)}</div><button class="btn-primary" id="save" type="submit">Save Evaluation</button><div id="saved" class="error-text"></div></div></form>`}
-function wireNewAudit(){document.querySelectorAll(".slider").forEach(s=>s.oninput=e=>{const k=e.target.dataset.key;currentScores[k]=+e.target.value;document.getElementById("v-"+k).textContent=`${currentScores[k]}/${e.target.dataset.max}`;const t=PARAMETERS.reduce((z,p)=>z+currentScores[p.key],0),p=t/100*100,b=band(p);document.getElementById("ring").innerHTML=ring(p,110,b.color);document.getElementById("fraction").textContent=t+"/100";document.getElementById("badge").innerHTML=badgeHTML(b)});document.getElementById("audit-form").onsubmit=async e=>{e.preventDefault();const name=document.getElementById("f-agent").value.trim(),aud=document.getElementById("f-auditor").value.trim();if(!name||!aud)return;const btn=document.getElementById("save");btn.disabled=true;btn.textContent="Saving…";const total=PARAMETERS.reduce((s,p)=>s+currentScores[p.key],0);const rec={agentName:name,auditorName:aud,callId:document.getElementById("f-callid").value.trim()||"—",date:document.getElementById("f-date").value,scores:{...currentScores},remarks:document.getElementById("f-remarks").value.trim(),total,createdAt:Date.now()};const ok=await saveAudit(rec);if(!agentPins[name]){const pin=genPin();await saveAgent(name,pin);document.getElementById("saved").style.color=COLORS.teal;document.getElementById("saved").textContent=`✓ Saved. Agent PIN: ${pin}`;alert(`New agent PIN for ${name}: ${pin}`)}else{document.getElementById("saved").style.color=COLORS.teal;document.getElementById("saved").textContent=ok?"✓ Evaluation saved to Firebase.":"Saved locally."}btn.disabled=false;btn.textContent="Save Evaluation"}}
-function allAuditsHTML(){return audits.length?`<input id="filter" class="text-input" style="max-width:320px;margin-bottom:16px" placeholder="Filter by agent or call ID…"><div id="list" style="display:grid;gap:12px"></div>`:`<div class="card empty">No evaluations yet.</div>`}
-function auditRow(a){const p=a.total/100*100,b=band(p),ini=a.agentName.split(" ").map(x=>x[0]).slice(0,2).join("").toUpperCase();return`<div class="card audit-row" data-id="${a.id}"><div class="audit-row-top"><div class="audit-click"><div class="avatar">${ini}</div><div><div class="audit-name">${esc(a.agentName)}</div><div class="audit-meta">${esc(a.date)} · Call ${esc(a.callId)} · Auditor: ${esc(a.auditorName)}</div></div></div>${badgeHTML(b)}${ring(p,44,b.color)}<button class="icon-btn del">🗑️</button><button class="icon-btn tog">▾</button></div><div class="audit-detail">${PARAMETERS.map(x=>`<div style="margin:8px 0"><div style="display:flex;justify-content:space-between;font-size:12px"><span>${x.label}</span><b>${a.scores[x.key]}/${x.max}</b></div><div class="param-bar-track"><div class="param-bar-fill" style="width:${a.scores[x.key]/x.max*100}%"></div></div></div>`).join("")}${a.remarks?`<div class="notice"><b>Remarks:</b> ${esc(a.remarks)}</div>`:""}</div></div>`}
-function wireAllAudits(){const draw=f=>{const x=audits.filter(a=>(a.agentName+" "+a.callId).toLowerCase().includes(f.toLowerCase()));document.getElementById("list").innerHTML=x.map(auditRow).join("");document.querySelectorAll(".tog,.audit-click").forEach(e=>e.onclick=()=>{const d=e.closest(".audit-row").querySelector(".audit-detail");d.classList.toggle("open")});document.querySelectorAll(".del").forEach(e=>e.onclick=async()=>{await deleteAudit(e.closest(".audit-row").dataset.id);draw(document.getElementById("filter").value)})};draw("");document.getElementById("filter").oninput=e=>draw(e.target.value)}
-function pinsHTML(){return`<div class="grid grid-2"><div class="card" style="padding:22px"><div class="section-title">Agent PINs</div>${agentNames().map(n=>`<div class="pin-row"><div><b>${esc(n)}</b><div class="mono" style="font-size:12px;color:var(--muted)">PIN: ${esc(agentPins[n])}</div></div><button class="btn-ghost regen" data-name="${esc(n)}">Regenerate</button></div>`).join("")}<div style="display:flex;gap:8px;margin-top:18px"><input id="new-agent" class="text-input" placeholder="Add agent name"><button id="add-agent" class="btn-ghost">Add + Generate PIN</button></div></div><div class="card" style="padding:22px"><div class="section-title">Admin PIN</div><input id="new-admin" class="text-input pin-input" maxlength="4" placeholder="••••"><button id="change-admin" class="btn-primary" style="margin-top:12px">Update Admin PIN</button><div id="pin-msg" class="error-text"></div></div></div>`}
-function wirePins(){document.querySelectorAll(".regen").forEach(b=>b.onclick=async()=>{await saveAgent(b.dataset.name,genPin());renderTabContent()});document.getElementById("add-agent").onclick=async()=>{const n=document.getElementById("new-agent").value.trim();if(n&&!agentPins[n])await saveAgent(n,genPin());renderTabContent()};document.getElementById("change-admin").onclick=async()=>{const v=document.getElementById("new-admin").value.trim();if(!/^\d{4}$/.test(v)){document.getElementById("pin-msg").textContent="PIN must be 4 digits.";return}await saveAdminPin(v);document.getElementById("pin-msg").style.color=COLORS.teal;document.getElementById("pin-msg").textContent="Admin PIN updated."}}
-function renderAgentContent(){const list=audits.filter(a=>a.agentName===currentAgentName).sort((a,b)=>a.createdAt-b.createdAt),el=document.getElementById("agent-content");if(!list.length){el.innerHTML=`<div class="notice">☁️ Connected to Firebase. No evaluation has been assigned to you yet.</div><div class="card empty">No calls audited for you yet.</div>`;return}const avg=list.reduce((s,a)=>s+a.total,0)/list.length,p=avg/100*100,b=band(p);el.innerHTML=`<div class="notice">☁️ Your evaluations are loaded from Firebase. <button id="refresh" class="btn-ghost" style="float:right">Refresh</button></div><div class="grid grid-stats" style="margin-bottom:20px">${statCard("📞","Calls Audited",list.length)}${statCard("📈","Average Score",p.toFixed(1)+"%",b.color)}${statCard("📋","Latest",list[list.length-1].total+"%")}</div><div class="grid grid-2" style="margin-bottom:20px"><div class="card" style="padding:20px"><div class="section-title">Score Trend</div><canvas id="trend" height="220"></canvas></div><div class="card" style="padding:20px"><div class="section-title">Strengths & Gaps</div><canvas id="radar" height="220"></canvas></div></div><div class="section-title">My Evaluations</div><div style="display:grid;gap:12px">${[...list].reverse().map(a=>{const q=a.total,bx=band(q);return`<div class="card agent-history-card"><div style="flex:1"><b>Call ${esc(a.callId)}</b><div style="font-size:12px;color:var(--muted)">${esc(a.date)} · Audited by ${esc(a.auditorName)}</div>${a.remarks?`<div style="font-size:12.5px;margin-top:6px">${esc(a.remarks)}</div>`:""}</div>${badgeHTML(bx)}${ring(q,44,bx.color)}</div>`}).join("")}</div>`;document.getElementById("refresh").onclick=async()=>{await loadAll();renderAgentContent()};charts.trend=new Chart(document.getElementById("trend"),{type:"line",data:{labels:list.map((_,i)=>"#"+(i+1)),datasets:[{data:list.map(a=>a.total),borderColor:COLORS.indigo,backgroundColor:COLORS.indigo,tension:.3}]},options:{plugins:{legend:{display:false}},scales:{y:{min:0,max:100}}}});const pa=PARAMETERS.map(p=>[p.label,list.reduce((s,a)=>s+a.scores[p.key],0)/list.length/p.max*100]);charts.radar=new Chart(document.getElementById("radar"),{type:"radar",data:{labels:pa.map(x=>x[0]),datasets:[{data:pa.map(x=>x[1]),borderColor:b.color,backgroundColor:b.color+"55"}]},options:{plugins:{legend:{display:false}},scales:{r:{min:0,max:100,ticks:{display:false}}}}})}
 
-(async()=>{document.getElementById("app").innerHTML=`<div class="empty">Connecting to Firebase…</div>`;await loadAll();renderApp()})();
+function shellHTML(){return `<header><div class="header-inner"><div class="brand"><div class="brand-icon">📋</div><div><div class="brand-name">CallScore</div><div class="brand-sub">QA Audit Desk · 100-point scorecard</div></div></div>
+ <div style="display:flex;align-items:center;gap:14px;flex-wrap:wrap"><nav id="nav"></nav><div class="who">${role==="admin"?"🛡️ Admin":"🎧 "+esc(currentAgentName)}<button class="logout-btn" id="logout-btn">Sign out</button></div></div></div></header><div class="wrap" id="content"></div>`}
+function wireShell(){document.getElementById("logout-btn").onclick=logout;renderNav();renderTabContent()}
+function renderNav(){
+ const tabs=role==="admin"?[
+  {id:"overview",label:"Overview",icon:"📊"},{id:"new",label:"New Audit",icon:"➕"},{id:"all",label:"All Audits",icon:"📞"},{id:"pins",label:"Manage PINs",icon:"🔑"}
+ ]:[{id:"agent",label:"My Scores",icon:"👤"}];
+ document.getElementById("nav").innerHTML=tabs.map(t=>`<button class="tabbtn ${tab===t.id?"active":""}" data-tab="${t.id}">${t.icon} ${t.label}</button>`).join("");
+ document.querySelectorAll(".tabbtn").forEach(b=>b.onclick=()=>{tab=b.dataset.tab;renderTabContent()})
+}
+function renderTabContent(){
+ destroyCharts();renderNav();const c=document.getElementById("content");
+ if(role==="admin"){
+  c.innerHTML=tab==="overview"?overviewHTML():tab==="new"?newAuditHTML():tab==="all"?allAuditsHTML():pinsHTML();
+  if(tab==="overview")wireOverview();if(tab==="new")wireNewAudit();if(tab==="all")wireAllAudits();if(tab==="pins")wirePins();
+ }else{c.innerHTML=`<div id="agent-content"></div>`;renderAgentContent()}
+}
+
+function overviewHTML(){
+ if(!audits.length)return `<div class="card empty">📋<br><br>No audits logged yet. Head to “New Audit” to score your first call.</div>`;
+ const avg=audits.reduce((s,a)=>s+a.total,0)/audits.length,pct=avg/MAX_TOTAL*100,b=band(pct);
+ return `<div class="grid grid-stats" style="margin-bottom:24px">${statCard("📞","Calls Audited",audits.length)}${statCard("👥","Agents Covered",agentNames().length)}${statCard("📈","Team Average",pct.toFixed(1)+"%",b.color)}</div>
+ <div class="grid grid-2"><div class="card" style="padding:20px"><div class="section-title">Agent Leaderboard</div><canvas id="chart-leaderboard" height="${Math.max(220,agentNames().length*42)}"></canvas></div>
+ <div class="card" style="padding:20px"><div class="section-title">Team Strength by Parameter</div><canvas id="chart-teamradar" height="260"></canvas></div></div>`
+}
+function wireOverview(){
+ if(!audits.length)return;const names=agentNames();
+ const perAgent=names.map(name=>{const list=audits.filter(a=>a.agentName===name);if(!list.length)return null;const avg=list.reduce((s,a)=>s+a.total,0)/list.length;return{name,avgPct:avg/MAX_TOTAL*100}}).filter(Boolean).sort((a,b)=>b.avgPct-a.avgPct);
+ charts.leaderboard=new Chart(document.getElementById("chart-leaderboard"),{type:"bar",data:{labels:perAgent.map(a=>a.name),datasets:[{data:perAgent.map(a=>a.avgPct),backgroundColor:perAgent.map(a=>band(a.avgPct).color),borderRadius:6}]},options:{indexAxis:"y",plugins:{legend:{display:false},tooltip:{callbacks:{label:c=>c.parsed.x.toFixed(1)+"%"}}},scales:{x:{min:0,max:100},y:{grid:{display:false}}}}});
+ const pp=PARAMETERS.map(p=>{const avg=audits.reduce((s,a)=>s+a.scores[p.key],0)/audits.length;return{label:p.label.split(" / ")[0].split(" & ")[0],value:+(avg/p.max*100).toFixed(1)}});
+ charts.teamradar=new Chart(document.getElementById("chart-teamradar"),{type:"radar",data:{labels:pp.map(p=>p.label),datasets:[{data:pp.map(p=>p.value),borderColor:COLORS.indigo,backgroundColor:COLORS.indigo+"55",pointBackgroundColor:COLORS.indigo}]},options:{plugins:{legend:{display:false}},scales:{r:{min:0,max:100,ticks:{display:false},pointLabels:{font:{size:10.5},color:COLORS.muted}}}}})
+}
+
+function defaultScores(){return Object.fromEntries(PARAMETERS.map(p=>[p.key,Math.round(p.max*.7)]) )}
+function newAuditHTML(){
+ currentScores=defaultScores();const total=Object.values(currentScores).reduce((a,b)=>a+b,0),pct=total/MAX_TOTAL*100,b=band(pct);
+ return `<form id="audit-form" class="card" style="padding:26px;display:flex;gap:8px"><div style="flex:1;min-width:0">
+ <div class="section-title">Score a Call</div><div class="grid" style="grid-template-columns:1fr 1fr;gap:14px;margin-bottom:20px">
+ <div><label class="field-label">Agent Name</label><input class="text-input" list="agent-list" id="f-agent" placeholder="e.g. Priya Sharma" required><datalist id="agent-list">${agentNames().map(n=>`<option value="${esc(n)}">`).join("")}</datalist></div>
+ <div><label class="field-label">Auditor Name</label><input class="text-input" id="f-auditor" placeholder="Your name" required></div>
+ <div><label class="field-label">Call ID / Reference</label><input class="text-input" id="f-callid" placeholder="e.g. CL-10234"></div>
+ <div><label class="field-label">Call Date</label><input type="date" class="text-input" id="f-date" value="${new Date().toISOString().slice(0,10)}"></div></div>
+ <div style="display:flex;flex-direction:column;gap:16px">${PARAMETERS.map(p=>`<div><div style="display:flex;justify-content:space-between;margin-bottom:6px"><label style="font-size:13.5px;font-weight:600">${p.label}</label><span class="mono" id="val-${p.key}" style="font-size:13px;color:${COLORS.muted}">${currentScores[p.key]} / ${p.max}</span></div><input type="range" min="0" max="${p.max}" value="${currentScores[p.key]}" data-key="${p.key}" data-max="${p.max}" class="score-slider"></div>`).join("")}</div>
+ <div style="margin-top:20px"><label class="field-label">Remarks / Coaching Notes</label><textarea class="text-input" id="f-remarks" rows="3" placeholder="Observations, what went well, what to improve…"></textarea></div></div>
+ <div class="stub-divider"></div><div style="width:190px;flex-shrink:0;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:14px"><div class="field-label">Total Score</div><div id="ring-wrap">${ringSVG(pct,110,9,b.color,"main-ring")}</div><div class="mono" id="total-fraction" style="font-size:13px;color:${COLORS.muted}">${total} / ${MAX_TOTAL}</div><div id="badge-wrap">${badgeHTML(b)}</div><button type="submit" class="btn-primary" id="save-btn" style="margin-top:10px">Save Audit</button><div id="saved-msg" class="mono" style="font-size:11.5px;color:${COLORS.teal};font-weight:600;display:none;text-align:center"></div></div></form>`
+}
+function wireNewAudit(){
+ document.querySelectorAll(".score-slider").forEach(sl=>sl.oninput=e=>{const key=e.target.dataset.key,max=+e.target.dataset.max;currentScores[key]=+e.target.value;document.getElementById("val-"+key).textContent=`${currentScores[key]} / ${max}`;const total=PARAMETERS.reduce((s,p)=>s+currentScores[p.key],0),pct=total/MAX_TOTAL*100,b=band(pct);document.getElementById("ring-wrap").innerHTML=ringSVG(pct,110,9,b.color,"main-ring");document.getElementById("total-fraction").textContent=`${total} / ${MAX_TOTAL}`;document.getElementById("badge-wrap").innerHTML=badgeHTML(b)});
+ document.getElementById("audit-form").onsubmit=e=>{e.preventDefault();const agentName=document.getElementById("f-agent").value.trim(),auditorName=document.getElementById("f-auditor").value.trim();if(!agentName||!auditorName)return;const total=PARAMETERS.reduce((s,p)=>s+currentScores[p.key],0);const record={id:uid(),agentName,auditorName,callId:document.getElementById("f-callid").value.trim()||"—",date:document.getElementById("f-date").value,scores:{...currentScores},remarks:document.getElementById("f-remarks").value.trim(),total,createdAt:Date.now()};persistAudits([record,...audits]);let msg="✓ Saved.";if(!agentPins[agentName]){const pin=genPin();persistAgentPins({...agentPins,[agentName]:pin});msg+=` New agent PIN for ${agentName}: ${pin}`};document.getElementById("saved-msg").style.display="block";document.getElementById("saved-msg").textContent=msg}
+}
+
+function allAuditsHTML(){if(!audits.length)return `<div class="card empty">No audits logged yet.</div>`;return `<input class="text-input" id="filter-input" style="max-width:320px;margin-bottom:16px" placeholder="Filter by agent or call ID…"><div id="audit-list" style="display:flex;flex-direction:column;gap:12px"></div>`}
+function auditRowHTML(a){
+ const pct=a.total/MAX_TOTAL*100,b=band(pct),initials=a.agentName.split(" ").map(w=>w[0]).slice(0,2).join("").toUpperCase();
+ return `<div class="card audit-row" data-id="${a.id}"><div class="audit-row-top"><div class="audit-click"><div class="avatar">${initials}</div><div style="min-width:0"><div class="audit-name">${esc(a.agentName)}</div><div class="audit-meta"><span>📅 ${esc(a.date)}</span><span>Call ${esc(a.callId)}</span><span>Auditor: ${esc(a.auditorName)}</span></div></div></div>${badgeHTML(b)}<div class="stub-divider" style="height:34px"></div>${ringSVG(pct,44,5,b.color)}<button class="icon-btn del-btn" title="Delete" style="margin-left:14px">🗑️</button><button class="icon-btn toggle-btn">▾</button></div>
+ <div class="audit-detail"><div class="grid" style="grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:10px 24px">${PARAMETERS.map(p=>`<div><div style="display:flex;justify-content:space-between;font-size:12.5px;margin-bottom:4px"><span style="color:${COLORS.muted}">${p.label}</span><span class="mono">${a.scores[p.key]}/${p.max}</span></div><div class="param-bar-track"><div class="param-bar-fill" style="width:${a.scores[p.key]/p.max*100}%"></div></div></div>`).join("")}</div>${a.remarks?`<div class="remarks-box"><strong style="font-size:11px;color:${COLORS.muted};text-transform:uppercase;display:block;margin-bottom:4px">Remarks</strong>${esc(a.remarks)}</div>`:""}</div></div>`
+}
+function wireAllAudits(){
+ function draw(f=""){const filtered=audits.filter(a=>a.agentName.toLowerCase().includes(f.toLowerCase())||a.callId.toLowerCase().includes(f.toLowerCase()));document.getElementById("audit-list").innerHTML=filtered.map(auditRowHTML).join("");
+ document.querySelectorAll(".audit-click,.toggle-btn").forEach(el=>el.onclick=()=>{const row=el.closest(".audit-row"),d=row.querySelector(".audit-detail");d.classList.toggle("open");row.querySelector(".toggle-btn").textContent=d.classList.contains("open")?"▴":"▾"});
+ document.querySelectorAll(".del-btn").forEach(el=>el.onclick=e=>{e.stopPropagation();persistAudits(audits.filter(a=>a.id!==el.closest(".audit-row").dataset.id));draw(f)})}
+ draw();document.getElementById("filter-input").oninput=e=>draw(e.target.value)
+}
+
+function pinsHTML(){
+ const names=agentNames();
+ return `<div class="grid grid-2"><div class="card" style="padding:22px"><div class="section-title">Agent PINs</div>${names.length?names.map(n=>`<div class="pin-row"><div><div style="font-weight:600;font-size:13.5px">${esc(n)}</div><div class="mono" style="font-size:13px;color:${COLORS.muted}">PIN: ${esc(agentPins[n]||"— none —")}</div></div><button class="btn-ghost regen-btn" data-name="${esc(n)}">Regenerate</button></div>`).join(""):`<div style="color:${COLORS.muted};font-size:13px">No agents yet.</div>`}
+ <div style="margin-top:18px;display:flex;gap:8px"><input class="text-input" id="new-agent-name" placeholder="Add agent by name"><button class="btn-ghost" id="add-agent-btn" style="white-space:nowrap">Add + Generate PIN</button></div></div>
+ <div class="card" style="padding:22px"><div class="section-title">Admin PIN</div><div style="font-size:13px;color:${COLORS.muted};margin-bottom:14px">Keep this PIN private.</div><label class="field-label">New Admin PIN</label><input class="text-input pin-input" id="new-admin-pin" maxlength="4" inputmode="numeric" placeholder="••••"><button class="btn-primary" id="change-admin-pin-btn" style="margin-top:12px">Update Admin PIN</button><div class="error-text" id="admin-pin-msg"></div></div></div>`
+}
+function wirePins(){
+ document.querySelectorAll(".regen-btn").forEach(btn=>btn.onclick=()=>{const name=btn.dataset.name;persistAgentPins({...agentPins,[name]:genPin()});renderTabContent()});
+ document.getElementById("add-agent-btn").onclick=()=>{const name=document.getElementById("new-agent-name").value.trim();if(name&&!agentPins[name])persistAgentPins({...agentPins,[name]:genPin()});renderTabContent()};
+ document.getElementById("change-admin-pin-btn").onclick=()=>{const v=document.getElementById("new-admin-pin").value.trim(),msg=document.getElementById("admin-pin-msg");if(!/^\d{4}$/.test(v)){msg.textContent="PIN must be 4 digits.";return}persistAdminPin(v);msg.style.color=COLORS.teal;msg.textContent="Admin PIN updated."}
+}
+
+function renderAgentContent(){
+ const list=audits.filter(a=>a.agentName===currentAgentName).sort((a,b)=>a.createdAt-b.createdAt),el=document.getElementById("agent-content");
+ if(!list.length){el.innerHTML=`<div class="card empty">No calls audited for you yet — check back after your next audit.</div>`;return}
+ const avg=list.reduce((s,a)=>s+a.total,0)/list.length,pct=avg/MAX_TOTAL*100,b=band(pct),latest=list[list.length-1].total/MAX_TOTAL*100;
+ el.innerHTML=`<div class="grid grid-stats" style="margin-bottom:20px">${statCard("📞","Calls Audited",list.length)}${statCard("📈","Average Score",pct.toFixed(1)+"%",b.color)}${statCard("📋","Latest Call",latest.toFixed(0)+"%")}</div>
+ <div class="grid grid-2" style="margin-bottom:20px"><div class="card" style="padding:20px"><div class="section-title">Score Trend</div><canvas id="chart-trend" height="220"></canvas></div><div class="card" style="padding:20px"><div class="section-title">Strengths & Gaps</div><canvas id="chart-radar" height="220"></canvas></div></div>
+ <div class="section-title">Call History</div><div style="display:flex;flex-direction:column;gap:12px">${[...list].reverse().map(a=>{const p=a.total/MAX_TOTAL*100,cb=band(p);return `<div class="card agent-history-card"><div style="flex:1"><div style="font-weight:600;font-size:14px">Call ${esc(a.callId)}</div><div style="font-size:12px;color:${COLORS.muted};margin-top:2px">${esc(a.date)} · Audited by ${esc(a.auditorName)}</div>${a.remarks?`<div style="font-size:12.5px;margin-top:6px">${esc(a.remarks)}</div>`:""}</div>${badgeHTML(cb)}<div class="stub-divider" style="height:34px"></div>${ringSVG(p,44,5,cb.color)}</div>`}).join("")}</div>`;
+ charts.trend=new Chart(document.getElementById("chart-trend"),{type:"line",data:{labels:list.map((a,i)=>"#"+(i+1)),datasets:[{data:list.map(a=>+(a.total/MAX_TOTAL*100).toFixed(1)),borderColor:COLORS.indigo,backgroundColor:COLORS.indigo,tension:.35,pointRadius:4}]},options:{plugins:{legend:{display:false}},scales:{y:{min:0,max:100},x:{grid:{display:false}}}}});
+ const pa=PARAMETERS.map(p=>({label:p.label.split(" / ")[0].split(" & ")[0],value:+(list.reduce((s,a)=>s+a.scores[p.key],0)/list.length/p.max*100).toFixed(1)}));
+ charts.radar=new Chart(document.getElementById("chart-radar"),{type:"radar",data:{labels:pa.map(p=>p.label),datasets:[{data:pa.map(p=>p.value),borderColor:b.color,backgroundColor:b.color+"55",pointBackgroundColor:b.color}]},options:{plugins:{legend:{display:false}},scales:{r:{min:0,max:100,ticks:{display:false},pointLabels:{font:{size:10},color:COLORS.muted}}}}})
+}
+
+loadAll();
+renderApp();
 </script>
 </body>
 </html>
