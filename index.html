@@ -1,0 +1,2551 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>QA Monitor | Call Quality Management</title>
+
+<style>
+*{
+    box-sizing:border-box;
+    margin:0;
+    padding:0;
+}
+
+:root{
+    --primary:#4f46e5;
+    --primary-dark:#3730a3;
+    --bg:#f5f7fb;
+    --card:#ffffff;
+    --text:#172033;
+    --muted:#6b7280;
+    --border:#e5e7eb;
+    --green:#16a34a;
+    --red:#dc2626;
+    --orange:#ea580c;
+}
+
+body{
+    font-family:Arial,Helvetica,sans-serif;
+    background:var(--bg);
+    color:var(--text);
+}
+
+/* ================= LOGIN ================= */
+
+.login{
+    min-height:100vh;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    background:
+        radial-gradient(circle at top right,#6366f133,transparent 35%),
+        #f5f7fb;
+}
+
+.login-box{
+    width:400px;
+    max-width:92%;
+    background:white;
+    padding:35px;
+    border-radius:20px;
+    border:1px solid var(--border);
+    box-shadow:0 20px 60px rgba(0,0,0,.08);
+}
+
+.logo{
+    text-align:center;
+    margin-bottom:30px;
+}
+
+.logo-icon{
+    width:60px;
+    height:60px;
+    margin:auto;
+    margin-bottom:12px;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    border-radius:16px;
+    background:linear-gradient(135deg,#4f46e5,#7c3aed);
+    color:white;
+    font-size:28px;
+}
+
+.logo h1{
+    font-size:26px;
+}
+
+.logo p{
+    color:var(--muted);
+    margin-top:5px;
+    font-size:13px;
+}
+
+.role-buttons{
+    display:grid;
+    grid-template-columns:1fr 1fr;
+    gap:10px;
+    margin-bottom:20px;
+}
+
+.role-btn{
+    padding:12px;
+    border:1px solid var(--border);
+    background:white;
+    border-radius:9px;
+    cursor:pointer;
+}
+
+.role-btn.active{
+    background:#eef2ff;
+    color:var(--primary);
+    border-color:var(--primary);
+}
+
+.login-box input{
+    width:100%;
+    padding:13px;
+    margin-bottom:12px;
+    border:1px solid var(--border);
+    border-radius:9px;
+    outline:none;
+}
+
+.login-btn{
+    width:100%;
+    padding:14px;
+    background:var(--primary);
+    color:white;
+    border:0;
+    border-radius:9px;
+    font-weight:bold;
+    cursor:pointer;
+}
+
+.login-note{
+    text-align:center;
+    margin-top:15px;
+    color:#9ca3af;
+    font-size:11px;
+}
+
+/* ================= APP ================= */
+
+.app{
+    display:none;
+    min-height:100vh;
+}
+
+.sidebar{
+    position:fixed;
+    left:0;
+    top:0;
+    bottom:0;
+    width:240px;
+    background:#111827;
+    color:white;
+    padding:20px 14px;
+    z-index:10;
+}
+
+.brand{
+    font-size:21px;
+    font-weight:bold;
+    padding:8px 12px 25px;
+}
+
+.brand span{
+    color:#818cf8;
+}
+
+.nav{
+    display:flex;
+    flex-direction:column;
+    gap:5px;
+}
+
+.nav button{
+    border:0;
+    background:transparent;
+    color:#9ca3af;
+    padding:12px;
+    text-align:left;
+    border-radius:8px;
+    cursor:pointer;
+    font-size:14px;
+}
+
+.nav button:hover,
+.nav button.active{
+    background:#1f2937;
+    color:white;
+}
+
+.logout{
+    position:absolute;
+    bottom:20px;
+    left:15px;
+    right:15px;
+}
+
+.logout button{
+    width:100%;
+    padding:10px;
+    border:1px solid #374151;
+    background:transparent;
+    color:#aaa;
+    border-radius:8px;
+    cursor:pointer;
+}
+
+.main{
+    margin-left:240px;
+    min-height:100vh;
+}
+
+.topbar{
+    height:65px;
+    background:white;
+    border-bottom:1px solid var(--border);
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    padding:0 30px;
+}
+
+.topbar h2{
+    font-size:18px;
+}
+
+.role-badge{
+    background:#eef2ff;
+    color:#4338ca;
+    padding:7px 12px;
+    border-radius:20px;
+    font-size:12px;
+}
+
+.content{
+    padding:30px;
+}
+
+.section{
+    display:none;
+}
+
+.section.active{
+    display:block;
+}
+
+.header{
+    margin-bottom:25px;
+}
+
+.header h1{
+    font-size:25px;
+}
+
+.header p{
+    color:var(--muted);
+    font-size:13px;
+    margin-top:5px;
+}
+
+/* ================= CARDS ================= */
+
+.stats{
+    display:grid;
+    grid-template-columns:repeat(4,1fr);
+    gap:18px;
+    margin-bottom:25px;
+}
+
+.stat{
+    background:white;
+    border:1px solid var(--border);
+    border-radius:14px;
+    padding:20px;
+}
+
+.stat small{
+    color:var(--muted);
+}
+
+.stat h2{
+    font-size:30px;
+    margin-top:8px;
+}
+
+.green{
+    color:var(--green);
+}
+
+.red{
+    color:var(--red);
+}
+
+.orange{
+    color:var(--orange);
+}
+
+/* ================= TABLE ================= */
+
+.table-card{
+    background:white;
+    border:1px solid var(--border);
+    border-radius:14px;
+    overflow:hidden;
+}
+
+.table-title{
+    padding:18px;
+    border-bottom:1px solid var(--border);
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+}
+
+table{
+    width:100%;
+    border-collapse:collapse;
+}
+
+th,
+td{
+    padding:14px 18px;
+    border-bottom:1px solid #f0f1f3;
+    text-align:left;
+    font-size:13px;
+}
+
+th{
+    color:var(--muted);
+    font-size:11px;
+    text-transform:uppercase;
+}
+
+.badge{
+    padding:5px 9px;
+    border-radius:20px;
+    font-size:10px;
+    font-weight:bold;
+}
+
+.badge.green{
+    background:#dcfce7;
+    color:#15803d;
+}
+
+.badge.orange{
+    background:#ffedd5;
+    color:#c2410c;
+}
+
+.badge.red{
+    background:#fee2e2;
+    color:#b91c1c;
+}
+
+/* ================= BUTTONS ================= */
+
+.btn{
+    padding:10px 15px;
+    border-radius:8px;
+    border:1px solid var(--border);
+    background:white;
+    cursor:pointer;
+    font-size:12px;
+}
+
+.btn-primary{
+    background:var(--primary);
+    color:white;
+    border-color:var(--primary);
+}
+
+.btn-danger{
+    background:#fff1f2;
+    color:#be123c;
+    border-color:#fecdd3;
+}
+
+/* ================= EVALUATION ================= */
+
+.evaluation-grid{
+    display:grid;
+    grid-template-columns:1fr 1fr;
+    gap:20px;
+}
+
+.card{
+    background:white;
+    border:1px solid var(--border);
+    border-radius:14px;
+    padding:20px;
+}
+
+.card h3{
+    margin-bottom:18px;
+}
+
+.audio-area{
+    background:#111827;
+    color:white;
+    border-radius:12px;
+    padding:25px;
+    text-align:center;
+}
+
+.audio-area input{
+    width:100%;
+    margin-top:20px;
+}
+
+.audio-area audio{
+    width:100%;
+    margin-top:20px;
+}
+
+.agent-details{
+    margin-top:20px;
+    padding:15px;
+    background:#f8fafc;
+    border-radius:10px;
+    font-size:13px;
+    line-height:1.9;
+}
+
+.criteria{
+    display:flex;
+    flex-direction:column;
+    gap:12px;
+}
+
+.criterion{
+    background:#f8fafc;
+    border:1px solid #edf0f4;
+    padding:13px;
+    border-radius:9px;
+}
+
+.criterion-top{
+    display:flex;
+    justify-content:space-between;
+    margin-bottom:8px;
+}
+
+.criterion select{
+    width:100%;
+    padding:9px;
+    border:1px solid var(--border);
+    border-radius:7px;
+}
+
+.critical{
+    background:#fff7f7;
+    border-color:#fecaca;
+}
+
+.score-box{
+    text-align:center;
+    padding:20px;
+    margin-top:18px;
+    background:#eef2ff;
+    border-radius:12px;
+}
+
+.score-number{
+    font-size:45px;
+    font-weight:bold;
+    color:var(--primary);
+}
+
+textarea{
+    width:100%;
+    min-height:110px;
+    padding:12px;
+    margin-top:15px;
+    border:1px solid var(--border);
+    border-radius:9px;
+    resize:vertical;
+    font-family:Arial;
+}
+
+.publish{
+    width:100%;
+    padding:14px;
+    margin-top:15px;
+    background:var(--primary);
+    color:white;
+    border:0;
+    border-radius:9px;
+    cursor:pointer;
+    font-weight:bold;
+}
+
+/* ================= AGENTS ================= */
+
+.agent-form{
+    display:grid;
+    grid-template-columns:1fr 1fr;
+    gap:12px;
+    margin-bottom:20px;
+}
+
+.agent-form input{
+    padding:12px;
+    border:1px solid var(--border);
+    border-radius:8px;
+}
+
+.agent-form button{
+    grid-column:span 2;
+}
+
+/* ================= AGENT VIEW ================= */
+
+.agent-banner{
+    background:linear-gradient(135deg,#4f46e5,#7c3aed);
+    color:white;
+    border-radius:16px;
+    padding:25px;
+    margin-bottom:20px;
+}
+
+.agent-banner h1{
+    font-size:25px;
+}
+
+.agent-score{
+    font-size:50px;
+    font-weight:bold;
+    margin-top:10px;
+}
+
+.feedback{
+    background:white;
+    border:1px solid var(--border);
+    border-radius:14px;
+    padding:20px;
+    margin-bottom:15px;
+}
+
+.feedback-text{
+    background:#f8fafc;
+    padding:15px;
+    border-radius:9px;
+    color:#4b5563;
+    line-height:1.7;
+    margin-top:15px;
+}
+
+.actions{
+    display:flex;
+    gap:10px;
+    margin-top:15px;
+}
+
+/* ================= REPORTS ================= */
+
+.report-grid{
+    display:grid;
+    grid-template-columns:1fr 1fr;
+    gap:20px;
+}
+
+.bar{
+    margin-bottom:18px;
+}
+
+.bar-label{
+    display:flex;
+    justify-content:space-between;
+    font-size:12px;
+    margin-bottom:6px;
+}
+
+.bar-track{
+    height:9px;
+    background:#eef0f4;
+    border-radius:20px;
+    overflow:hidden;
+}
+
+.bar-fill{
+    height:100%;
+    background:linear-gradient(90deg,#4f46e5,#818cf8);
+}
+
+/* ================= TOAST ================= */
+
+.toast{
+    position:fixed;
+    right:25px;
+    bottom:25px;
+    background:#111827;
+    color:white;
+    padding:14px 20px;
+    border-radius:10px;
+    opacity:0;
+    transform:translateY(80px);
+    transition:.3s;
+    z-index:100;
+}
+
+.toast.show{
+    opacity:1;
+    transform:translateY(0);
+}
+
+/* ================= RESPONSIVE ================= */
+
+@media(max-width:1000px){
+
+    .stats{
+        grid-template-columns:1fr 1fr;
+    }
+
+    .evaluation-grid,
+    .report-grid{
+        grid-template-columns:1fr;
+    }
+}
+
+@media(max-width:700px){
+
+    .sidebar{
+        width:65px;
+    }
+
+    .brand{
+        font-size:0;
+    }
+
+    .brand span{
+        font-size:17px;
+    }
+
+    .nav button{
+        font-size:0;
+        text-align:center;
+    }
+
+    .main{
+        margin-left:65px;
+    }
+
+    .content{
+        padding:18px;
+    }
+
+    .stats{
+        grid-template-columns:1fr 1fr;
+    }
+
+    .agent-form{
+        grid-template-columns:1fr;
+    }
+
+    .agent-form button{
+        grid-column:auto;
+    }
+
+    .table-card{
+        overflow-x:auto;
+    }
+
+    table{
+        min-width:700px;
+    }
+}
+</style>
+</head>
+
+<body>
+
+<!-- ================= LOGIN ================= -->
+
+<div class="login" id="loginScreen">
+
+    <div class="login-box">
+
+        <div class="logo">
+
+            <div class="logo-icon">
+                ✓
+            </div>
+
+            <h1>QA Monitor</h1>
+
+            <p>Call Quality Management System</p>
+
+        </div>
+
+        <div class="role-buttons">
+
+            <button
+                class="role-btn active"
+                id="qaRole"
+                onclick="selectRole('qa')"
+            >
+                👨‍💼 QA / Admin
+            </button>
+
+            <button
+                class="role-btn"
+                id="agentRole"
+                onclick="selectRole('agent')"
+            >
+                👤 Agent
+            </button>
+
+        </div>
+
+        <input
+            id="loginName"
+            placeholder="Name"
+            value="Admin"
+        >
+
+        <input
+            id="loginEmail"
+            placeholder="Email"
+            value="admin@qamonitor.com"
+        >
+
+        <input
+            id="loginPassword"
+            type="password"
+            placeholder="Password"
+            value="admin123"
+        >
+
+        <button
+            class="login-btn"
+            onclick="login()"
+        >
+            LOGIN
+        </button>
+
+        <div class="login-note">
+            Demo login • Admin password: admin123
+        </div>
+
+    </div>
+
+</div>
+
+
+<!-- ================= APP ================= -->
+
+<div class="app" id="app">
+
+    <aside class="sidebar">
+
+        <div class="brand">
+            QA <span>Monitor</span>
+        </div>
+
+        <div class="nav">
+
+            <button
+                class="active"
+                onclick="showSection('dashboard',this)"
+            >
+                📊 Dashboard
+            </button>
+
+            <button
+                onclick="showSection('evaluations',this)"
+            >
+                📋 Evaluations
+            </button>
+
+            <button
+                onclick="showSection('newEvaluation',this)"
+            >
+                🎧 New Evaluation
+            </button>
+
+            <button
+                onclick="showSection('agents',this)"
+            >
+                👥 Agents
+            </button>
+
+            <button
+                onclick="showSection('reports',this)"
+            >
+                📈 Reports
+            </button>
+
+            <button
+                onclick="showSection('agentView',this)"
+            >
+                👤 Agent View
+            </button>
+
+        </div>
+
+        <div class="logout">
+
+            <button onclick="logout()">
+                Logout
+            </button>
+
+        </div>
+
+    </aside>
+
+
+    <main class="main">
+
+        <header class="topbar">
+
+            <h2 id="pageTitle">
+                Dashboard
+            </h2>
+
+            <div class="role-badge"
+                 id="roleDisplay">
+                QA / Admin
+            </div>
+
+        </header>
+
+
+        <div class="content">
+
+
+            <!-- ================= DASHBOARD ================= -->
+
+            <section
+                class="section active"
+                id="dashboard"
+            >
+
+                <div class="header">
+
+                    <h1>
+                        Quality Dashboard
+                    </h1>
+
+                    <p>
+                        Monitor call quality and agent performance.
+                    </p>
+
+                </div>
+
+
+                <div class="stats">
+
+                    <div class="stat">
+
+                        <small>
+                            Total Evaluations
+                        </small>
+
+                        <h2 id="totalEvaluations">
+                            124
+                        </h2>
+
+                    </div>
+
+
+                    <div class="stat">
+
+                        <small>
+                            Average Score
+                        </small>
+
+                        <h2 class="green"
+                            id="averageScore">
+                            91%
+                        </h2>
+
+                    </div>
+
+
+                    <div class="stat">
+
+                        <small>
+                            Pending
+                        </small>
+
+                        <h2 class="orange"
+                            id="pendingCount">
+                            8
+                        </h2>
+
+                    </div>
+
+
+                    <div class="stat">
+
+                        <small>
+                            Disputes
+                        </small>
+
+                        <h2 class="red"
+                            id="disputeCount">
+                            3
+                        </h2>
+
+                    </div>
+
+                </div>
+
+
+                <div class="table-card">
+
+                    <div class="table-title">
+
+                        <strong>
+                            Recent Evaluations
+                        </strong>
+
+                        <button
+                            class="btn btn-primary"
+                            onclick="goTo('newEvaluation')"
+                        >
+                            + New Evaluation
+                        </button>
+
+                    </div>
+
+                    <table>
+
+                        <thead>
+
+                            <tr>
+                                <th>Agent</th>
+                                <th>Channel</th>
+                                <th>Score</th>
+                                <th>Status</th>
+                                <th>Date</th>
+                            </tr>
+
+                        </thead>
+
+                        <tbody id="recentTable">
+
+                            <tr>
+                                <td>Sarah Johnson</td>
+                                <td>Voice</td>
+                                <td class="green">96%</td>
+                                <td>
+                                    <span class="badge green">
+                                        Completed
+                                    </span>
+                                </td>
+                                <td>Today</td>
+                            </tr>
+
+                            <tr>
+                                <td>Michael Chen</td>
+                                <td>Voice</td>
+                                <td class="orange">78%</td>
+                                <td>
+                                    <span class="badge orange">
+                                        Pending
+                                    </span>
+                                </td>
+                                <td>Today</td>
+                            </tr>
+
+                        </tbody>
+
+                    </table>
+
+                </div>
+
+            </section>
+
+
+            <!-- ================= EVALUATIONS ================= -->
+
+            <section
+                class="section"
+                id="evaluations"
+            >
+
+                <div class="header">
+
+                    <h1>
+                        Evaluations
+                    </h1>
+
+                    <p>
+                        Manage call quality evaluations.
+                    </p>
+
+                </div>
+
+
+                <div class="table-card">
+
+                    <table>
+
+                        <thead>
+
+                            <tr>
+                                <th>ID</th>
+                                <th>Agent</th>
+                                <th>QA</th>
+                                <th>Score</th>
+                                <th>Status</th>
+                                <th>Action</th>
+                            </tr>
+
+                        </thead>
+
+                        <tbody id="evaluationTable">
+
+                            <tr>
+                                <td>#QA-1001</td>
+                                <td>Sarah Johnson</td>
+                                <td>Chris Morgan</td>
+                                <td class="green">96%</td>
+                                <td>
+                                    <span class="badge green">
+                                        Signed
+                                    </span>
+                                </td>
+                                <td>
+                                    <button
+                                        class="btn"
+                                        onclick="showToast('Evaluation opened')"
+                                    >
+                                        View
+                                    </button>
+                                </td>
+                            </tr>
+
+                        </tbody>
+
+                    </table>
+
+                </div>
+
+            </section>
+
+
+            <!-- ================= NEW EVALUATION ================= -->
+
+            <section
+                class="section"
+                id="newEvaluation"
+            >
+
+                <div class="header">
+
+                    <h1>
+                        New Call Evaluation
+                    </h1>
+
+                    <p>
+                        Listen to the recording and score the agent.
+                    </p>
+
+                </div>
+
+
+                <div class="evaluation-grid">
+
+
+                    <div class="card">
+
+                        <h3>
+                            🎧 Call Recording
+                        </h3>
+
+                        <div class="audio-area">
+
+                            <div style="font-size:35px;">
+                                🎙️
+                            </div>
+
+                            <p>
+                                Upload a call recording
+                            </p>
+
+                            <input
+                                type="file"
+                                id="audioUpload"
+                                accept="audio/*"
+                            >
+
+                            <audio
+                                id="audioPlayer"
+                                controls
+                            ></audio>
+
+                        </div>
+
+
+                        <div class="agent-details">
+
+                            <strong>Agent:</strong>
+                            Sarah Johnson
+
+                            <br>
+
+                            <strong>Customer:</strong>
+                            Rahul Sharma
+
+                            <br>
+
+                            <strong>Channel:</strong>
+                            Voice
+
+                            <br>
+
+                            <strong>Duration:</strong>
+                            08:42
+
+                        </div>
+
+                    </div>
+
+
+                    <div class="card">
+
+                        <h3>
+                            📋 QA Scorecard
+                        </h3>
+
+
+                        <div class="criteria">
+
+
+                            <div class="criterion">
+                                <div class="criterion-top">
+                                    <strong>
+                                        Greeting & Introduction
+                                    </strong>
+                                    <span>10%</span>
+                                </div>
+
+                                <select
+                                    class="criterion-select"
+                                    data-weight="10"
+                                >
+                                    <option value="1">
+                                        Excellent
+                                    </option>
+                                    <option value=".8">
+                                        Good
+                                    </option>
+                                    <option value=".5">
+                                        Needs Improvement
+                                    </option>
+                                    <option value="0">
+                                        Not Met
+                                    </option>
+                                </select>
+                            </div>
+
+
+                            <div class="criterion">
+                                <div class="criterion-top">
+                                    <strong>
+                                        Verification
+                                    </strong>
+                                    <span>10%</span>
+                                </div>
+
+                                <select
+                                    class="criterion-select"
+                                    data-weight="10"
+                                >
+                                    <option value="1">
+                                        Excellent
+                                    </option>
+                                    <option value=".8">
+                                        Good
+                                    </option>
+                                    <option value=".5">
+                                        Needs Improvement
+                                    </option>
+                                    <option value="0">
+                                        Not Met
+                                    </option>
+                                </select>
+                            </div>
+
+
+                            <div class="criterion">
+                                <div class="criterion-top">
+                                    <strong>
+                                        Active Listening
+                                    </strong>
+                                    <span>10%</span>
+                                </div>
+
+                                <select
+                                    class="criterion-select"
+                                    data-weight="10"
+                                >
+                                    <option value="1">
+                                        Excellent
+                                    </option>
+                                    <option value=".8">
+                                        Good
+                                    </option>
+                                    <option value=".5">
+                                        Needs Improvement
+                                    </option>
+                                    <option value="0">
+                                        Not Met
+                                    </option>
+                                </select>
+                            </div>
+
+
+                            <div class="criterion">
+                                <div class="criterion-top">
+                                    <strong>
+                                        Probing
+                                    </strong>
+                                    <span>15%</span>
+                                </div>
+
+                                <select
+                                    class="criterion-select"
+                                    data-weight="15"
+                                >
+                                    <option value="1">
+                                        Excellent
+                                    </option>
+                                    <option value=".8">
+                                        Good
+                                    </option>
+                                    <option value=".5">
+                                        Needs Improvement
+                                    </option>
+                                    <option value="0">
+                                        Not Met
+                                    </option>
+                                </select>
+                            </div>
+
+
+                            <div class="criterion">
+                                <div class="criterion-top">
+                                    <strong>
+                                        Empathy & Communication
+                                    </strong>
+                                    <span>15%</span>
+                                </div>
+
+                                <select
+                                    class="criterion-select"
+                                    data-weight="15"
+                                >
+                                    <option value="1">
+                                        Excellent
+                                    </option>
+                                    <option value=".8">
+                                        Good
+                                    </option>
+                                    <option value=".5">
+                                        Needs Improvement
+                                    </option>
+                                    <option value="0">
+                                        Not Met
+                                    </option>
+                                </select>
+                            </div>
+
+
+                            <div class="criterion">
+                                <div class="criterion-top">
+                                    <strong>
+                                        Resolution & Accuracy
+                                    </strong>
+                                    <span>20%</span>
+                                </div>
+
+                                <select
+                                    class="criterion-select"
+                                    data-weight="20"
+                                >
+                                    <option value="1">
+                                        Excellent
+                                    </option>
+                                    <option value=".8">
+                                        Good
+                                    </option>
+                                    <option value=".5">
+                                        Needs Improvement
+                                    </option>
+                                    <option value="0">
+                                        Not Met
+                                    </option>
+                                </select>
+                            </div>
+
+
+                            <div class="criterion">
+                                <div class="criterion-top">
+                                    <strong>
+                                        Call Control
+                                    </strong>
+                                    <span>10%</span>
+                                </div>
+
+                                <select
+                                    class="criterion-select"
+                                    data-weight="10"
+                                >
+                                    <option value="1">
+                                        Excellent
+                                    </option>
+                                    <option value=".8">
+                                        Good
+                                    </option>
+                                    <option value=".5">
+                                        Needs Improvement
+                                    </option>
+                                    <option value="0">
+                                        Not Met
+                                    </option>
+                                </select>
+                            </div>
+
+
+                            <div class="criterion">
+                                <div class="criterion-top">
+                                    <strong>
+                                        Closing
+                                    </strong>
+                                    <span>10%</span>
+                                </div>
+
+                                <select
+                                    class="criterion-select"
+                                    data-weight="10"
+                                >
+                                    <option value="1">
+                                        Excellent
+                                    </option>
+                                    <option value=".8">
+                                        Good
+                                    </option>
+                                    <option value=".5">
+                                        Needs Improvement
+                                    </option>
+                                    <option value="0">
+                                        Not Met
+                                    </option>
+                                </select>
+                            </div>
+
+
+                            <div class="criterion critical">
+
+                                <div class="criterion-top">
+
+                                    <strong>
+                                        🚨 Critical Error
+                                    </strong>
+
+                                    <span class="red">
+                                        Zero Score
+                                    </span>
+
+                                </div>
+
+                                <select id="criticalError">
+
+                                    <option value="no">
+                                        No Critical Error
+                                    </option>
+
+                                    <option value="yes">
+                                        Critical Error Found
+                                    </option>
+
+                                </select>
+
+                            </div>
+
+                        </div>
+
+
+                        <div class="score-box">
+
+                            <div
+                                class="score-number"
+                                id="liveScore"
+                            >
+                                100%
+                            </div>
+
+                            <small>
+                                Current QA Score
+                            </small>
+
+                        </div>
+
+
+                        <textarea
+                            id="feedback"
+                            placeholder="Write feedback and coaching comments for the agent..."
+                        ></textarea>
+
+
+                        <button
+                            class="publish"
+                            onclick="publishEvaluation()"
+                        >
+                            PUBLISH EVALUATION
+                        </button>
+
+                    </div>
+
+                </div>
+
+            </section>
+
+
+            <!-- ================= AGENTS ================= -->
+
+            <section
+                class="section"
+                id="agents"
+            >
+
+                <div class="header">
+
+                    <h1>
+                        Agent Management
+                    </h1>
+
+                    <p>
+                        Add, edit and manage your agents.
+                    </p>
+
+                </div>
+
+
+                <div class="card">
+
+                    <h3>
+                        Add New Agent
+                    </h3>
+
+
+                    <div class="agent-form">
+
+                        <input
+                            id="agentName"
+                            placeholder="Agent Name"
+                        >
+
+                        <input
+                            id="agentEmail"
+                            placeholder="Agent Email"
+                        >
+
+                        <input
+                            id="agentPassword"
+                            placeholder="Temporary Password"
+                        >
+
+                        <input
+                            id="agentTeam"
+                            placeholder="Team"
+                        >
+
+                        <button
+                            class="btn btn-primary"
+                            onclick="addAgent()"
+                        >
+                            + CREATE AGENT
+                        </button>
+
+                    </div>
+
+                </div>
+
+
+                <br>
+
+
+                <div class="table-card">
+
+                    <div class="table-title">
+
+                        <strong>
+                            Agents
+                        </strong>
+
+                    </div>
+
+
+                    <table>
+
+                        <thead>
+
+                            <tr>
+                                <th>Name</th>
+                                <th>Email</th>
+                                <th>Team</th>
+                                <th>Status</th>
+                                <th>Action</th>
+                            </tr>
+
+                        </thead>
+
+
+                        <tbody id="agentTable">
+
+                            <tr>
+                                <td>Sarah Johnson</td>
+                                <td>sarah@company.com</td>
+                                <td>Sales</td>
+                                <td>
+                                    <span class="badge green">
+                                        Active
+                                    </span>
+                                </td>
+                                <td>
+                                    <button
+                                        class="btn"
+                                        onclick="editAgent('Sarah Johnson')"
+                                    >
+                                        Edit
+                                    </button>
+                                </td>
+                            </tr>
+
+                        </tbody>
+
+                    </table>
+
+                </div>
+
+            </section>
+
+
+            <!-- ================= REPORTS ================= -->
+
+            <section
+                class="section"
+                id="reports"
+            >
+
+                <div class="header">
+
+                    <h1>
+                        Reports
+                    </h1>
+
+                    <p>
+                        Team quality performance.
+                    </p>
+
+                </div>
+
+
+                <div class="report-grid">
+
+                    <div class="card">
+
+                        <h3>
+                            Agent Scores
+                        </h3>
+
+
+                        <div class="bar">
+
+                            <div class="bar-label">
+                                <span>Sarah Johnson</span>
+                                <span>96%</span>
+                            </div>
+
+                            <div class="bar-track">
+                                <div
+                                    class="bar-fill"
+                                    style="width:96%"
+                                ></div>
+                            </div>
+
+                        </div>
+
+
+                        <div class="bar">
+
+                            <div class="bar-label">
+                                <span>Michael Chen</span>
+                                <span>91%</span>
+                            </div>
+
+                            <div class="bar-track">
+                                <div
+                                    class="bar-fill"
+                                    style="width:91%"
+                                ></div>
+                            </div>
+
+                        </div>
+
+
+                        <div class="bar">
+
+                            <div class="bar-label">
+                                <span>Emily Davis</span>
+                                <span>87%</span>
+                            </div>
+
+                            <div class="bar-track">
+                                <div
+                                    class="bar-fill"
+                                    style="width:87%"
+                                ></div>
+                            </div>
+
+                        </div>
+
+                    </div>
+
+
+                    <div class="card">
+
+                        <h3>
+                            Common Errors
+                        </h3>
+
+
+                        <div class="bar">
+
+                            <div class="bar-label">
+                                <span>Probing</span>
+                                <span>68%</span>
+                            </div>
+
+                            <div class="bar-track">
+                                <div
+                                    class="bar-fill"
+                                    style="width:68%"
+                                ></div>
+                            </div>
+
+                        </div>
+
+
+                        <div class="bar">
+
+                            <div class="bar-label">
+                                <span>Verification</span>
+                                <span>52%</span>
+                            </div>
+
+                            <div class="bar-track">
+                                <div
+                                    class="bar-fill"
+                                    style="width:52%"
+                                ></div>
+                            </div>
+
+                        </div>
+
+
+                        <div class="bar">
+
+                            <div class="bar-label">
+                                <span>Closing</span>
+                                <span>35%</span>
+                            </div>
+
+                            <div class="bar-track">
+                                <div
+                                    class="bar-fill"
+                                    style="width:35%"
+                                ></div>
+                            </div>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </section>
+
+
+            <!-- ================= AGENT VIEW ================= -->
+
+            <section
+                class="section"
+                id="agentView"
+            >
+
+                <div class="agent-banner">
+
+                    <h1>
+                        Hello, Sarah 👋
+                    </h1>
+
+                    <p>
+                        Your current quality score
+                    </p>
+
+                    <div class="agent-score">
+                        91%
+                    </div>
+
+                </div>
+
+
+                <div class="feedback">
+
+                    <h3>
+                        Latest QA Evaluation
+                    </h3>
+
+                    <p style="color:#777;margin-top:5px;">
+                        Evaluation #QA-1001
+                    </p>
+
+
+                    <div
+                        class="score green"
+                        style="font-size:30px;margin-top:15px;"
+                    >
+                        96%
+                    </div>
+
+
+                    <div class="feedback-text">
+
+                        <strong>
+                            QA Feedback
+                        </strong>
+
+                        <br><br>
+
+                        Excellent customer handling.
+                        The greeting, verification and
+                        resolution were completed correctly.
+
+                        <br><br>
+
+                        <strong>
+                            Coaching:
+                        </strong>
+
+                        Improve probing by asking one
+                        additional requirement-based question.
+
+                    </div>
+
+
+                    <div class="actions">
+
+                        <button
+                            class="btn btn-primary"
+                            onclick="acknowledge()"
+                        >
+                            ✓ Acknowledge
+                        </button>
+
+                        <button
+                            class="btn btn-danger"
+                            onclick="dispute()"
+                        >
+                            ⚖ Dispute
+                        </button>
+
+                    </div>
+
+                </div>
+
+            </section>
+
+        </div>
+
+    </main>
+
+</div>
+
+
+<div
+    class="toast"
+    id="toast"
+>
+    Done
+</div>
+
+
+<script>
+
+/* ================================
+   LOGIN
+================================ */
+
+let selectedRole = "qa";
+
+
+function selectRole(role){
+
+    selectedRole = role;
+
+    document
+        .getElementById("qaRole")
+        .classList.toggle(
+            "active",
+            role === "qa"
+        );
+
+    document
+        .getElementById("agentRole")
+        .classList.toggle(
+            "active",
+            role === "agent"
+        );
+
+
+    if(role === "qa"){
+
+        document.getElementById(
+            "loginName"
+        ).value = "Admin";
+
+        document.getElementById(
+            "loginEmail"
+        ).value = "admin@qamonitor.com";
+
+    }
+    else{
+
+        document.getElementById(
+            "loginName"
+        ).value = "Sarah Johnson";
+
+        document.getElementById(
+            "loginEmail"
+        ).value = "sarah@company.com";
+
+    }
+
+}
+
+
+function login(){
+
+    const name =
+        document.getElementById(
+            "loginName"
+        ).value;
+
+
+    if(!name){
+
+        alert("Please enter your name.");
+
+        return;
+
+    }
+
+
+    document.getElementById(
+        "loginScreen"
+    ).style.display = "none";
+
+
+    document.getElementById(
+        "app"
+    ).style.display = "block";
+
+
+    document.getElementById(
+        "roleDisplay"
+    ).textContent =
+        selectedRole === "qa"
+        ? "QA / Admin"
+        : "Agent";
+
+
+    if(selectedRole === "agent"){
+
+        goTo("agentView");
+
+    }
+
+}
+
+
+/* ================================
+   LOGOUT
+================================ */
+
+function logout(){
+
+    document.getElementById(
+        "app"
+    ).style.display = "none";
+
+
+    document.getElementById(
+        "loginScreen"
+    ).style.display = "flex";
+
+}
+
+
+/* ================================
+   NAVIGATION
+================================ */
+
+function showSection(id,button){
+
+    document
+        .querySelectorAll(".section")
+        .forEach(
+            section =>
+                section.classList.remove("active")
+        );
+
+
+    document
+        .getElementById(id)
+        .classList.add("active");
+
+
+    document
+        .querySelectorAll(".nav button")
+        .forEach(
+            btn =>
+                btn.classList.remove("active")
+        );
+
+
+    if(button){
+
+        button.classList.add("active");
+
+    }
+
+
+    const titles = {
+
+        dashboard:"Dashboard",
+
+        evaluations:"Evaluations",
+
+        newEvaluation:"New Evaluation",
+
+        agents:"Agent Management",
+
+        reports:"Reports",
+
+        agentView:"Agent Dashboard"
+
+    };
+
+
+    document.getElementById(
+        "pageTitle"
+    ).textContent =
+        titles[id];
+
+}
+
+
+function goTo(id){
+
+    const button =
+        [...document.querySelectorAll(".nav button")]
+        .find(
+            b =>
+                b.getAttribute("onclick") &&
+                b.getAttribute("onclick").includes(
+                    "'" + id + "'"
+                )
+        );
+
+
+    showSection(id,button);
+
+}
+
+
+/* ================================
+   AUDIO
+================================ */
+
+document
+    .getElementById("audioUpload")
+    .addEventListener(
+        "change",
+        function(){
+
+            const file =
+                this.files[0];
+
+            if(!file)
+                return;
+
+
+            document.getElementById(
+                "audioPlayer"
+            ).src =
+                URL.createObjectURL(file);
+
+
+            showToast(
+                "Recording loaded successfully."
+            );
+
+        }
+    );
+
+
+/* ================================
+   SCORE
+================================ */
+
+document
+    .querySelectorAll(
+        ".criterion-select"
+    )
+    .forEach(
+        select =>
+            select.addEventListener(
+                "change",
+                calculateScore
+            )
+    );
+
+
+document
+    .getElementById(
+        "criticalError"
+    )
+    .addEventListener(
+        "change",
+        calculateScore
+    );
+
+
+function calculateScore(){
+
+    const critical =
+        document.getElementById(
+            "criticalError"
+        ).value;
+
+
+    if(critical === "yes"){
+
+        document.getElementById(
+            "liveScore"
+        ).textContent = "0%";
+
+        return;
+
+    }
+
+
+    let total = 0;
+
+
+    document
+        .querySelectorAll(
+            ".criterion-select"
+        )
+        .forEach(
+            select => {
+
+                const weight =
+                    Number(
+                        select.dataset.weight
+                    );
+
+                const value =
+                    Number(
+                        select.value
+                    );
+
+                total +=
+                    weight * value;
+
+            }
+        );
+
+
+    document.getElementById(
+        "liveScore"
+    ).textContent =
+        Math.round(total) + "%";
+
+}
+
+
+/* ================================
+   PUBLISH EVALUATION
+================================ */
+
+function publishEvaluation(){
+
+    const score =
+        document.getElementById(
+            "liveScore"
+        ).textContent;
+
+
+    const feedback =
+        document.getElementById(
+            "feedback"
+        ).value.trim();
+
+
+    if(!feedback){
+
+        alert(
+            "Please enter feedback before publishing."
+        );
+
+        return;
+
+    }
+
+
+    const evaluations =
+        JSON.parse(
+            localStorage.getItem(
+                "evaluations"
+            ) || "[]"
+        );
+
+
+    evaluations.push({
+
+        id:
+            "QA-" +
+            Math.floor(
+                Math.random()*9000 + 1000
+            ),
+
+        agent:
+            "Sarah Johnson",
+
+        score:
+            score,
+
+        feedback:
+            feedback,
+
+        date:
+            new Date().toLocaleDateString(),
+
+        status:
+            "Pending"
+
+    });
+
+
+    localStorage.setItem(
+        "evaluations",
+        JSON.stringify(
+            evaluations
+        )
+    );
+
+
+    showToast(
+        "Evaluation published to agent."
+    );
+
+
+    document.getElementById(
+        "feedback"
+    ).value = "";
+
+}
+
+
+/* ================================
+   ADD AGENT
+================================ */
+
+function addAgent(){
+
+    const name =
+        document.getElementById(
+            "agentName"
+        ).value.trim();
+
+
+    const email =
+        document.getElementById(
+            "agentEmail"
+        ).value.trim();
+
+
+    const password =
+        document.getElementById(
+            "agentPassword"
+        ).value.trim();
+
+
+    const team =
+        document.getElementById(
+            "agentTeam"
+        ).value.trim();
+
+
+    if(
+        !name ||
+        !email ||
+        !password ||
+        !team
+    ){
+
+        alert(
+            "Please fill all agent details."
+        );
+
+        return;
+
+    }
+
+
+    const agents =
+        JSON.parse(
+            localStorage.getItem(
+                "agents"
+            ) || "[]"
+        );
+
+
+    agents.push({
+
+        name:name,
+
+        email:email,
+
+        password:password,
+
+        team:team,
+
+        status:"Active"
+
+    });
+
+
+    localStorage.setItem(
+        "agents",
+        JSON.stringify(
+            agents
+        )
+    );
+
+
+    renderAgents();
+
+
+    document.getElementById(
+        "agentName"
+    ).value = "";
+
+    document.getElementById(
+        "agentEmail"
+    ).value = "";
+
+    document.getElementById(
+        "agentPassword"
+    ).value = "";
+
+    document.getElementById(
+        "agentTeam"
+    ).value = "";
+
+
+    showToast(
+        "Agent account created."
+    );
+
+}
+
+
+/* ================================
+   RENDER AGENTS
+================================ */
+
+function renderAgents(){
+
+    const agents =
+        JSON.parse(
+            localStorage.getItem(
+                "agents"
+            ) || "[]"
+        );
+
+
+    const table =
+        document.getElementById(
+            "agentTable"
+        );
+
+
+    agents.forEach(
+        agent => {
+
+            const row =
+                document.createElement(
+                    "tr"
+                );
+
+
+            row.innerHTML = `
+
+                <td>${agent.name}</td>
+
+                <td>${agent.email}</td>
+
+                <td>${agent.team}</td>
+
+                <td>
+                    <span class="badge green">
+                        ${agent.status}
+                    </span>
+                </td>
+
+                <td>
+
+                    <button
+                        class="btn"
+                        onclick="editAgent('${agent.email}')"
+                    >
+                        Edit
+                    </button>
+
+                    <button
+                        class="btn btn-danger"
+                        onclick="deleteAgent('${agent.email}')"
+                    >
+                        Delete
+                    </button>
+
+                </td>
+
+            `;
+
+
+            table.appendChild(row);
+
+        }
+    );
+
+}
+
+
+/* ================================
+   EDIT AGENT
+================================ */
+
+function editAgent(email){
+
+    const agents =
+        JSON.parse(
+            localStorage.getItem(
+                "agents"
+            ) || "[]"
+        );
+
+
+    const agent =
+        agents.find(
+            a => a.email === email
+        );
+
+
+    if(!agent){
+
+        alert(
+            "Agent not found."
+        );
+
+        return;
+
+    }
+
+
+    const newName =
+        prompt(
+            "Agent name:",
+            agent.name
+        );
+
+
+    if(newName){
+
+        agent.name =
+            newName;
+
+    }
+
+
+    const newTeam =
+        prompt(
+            "Team:",
+            agent.team
+        );
+
+
+    if(newTeam){
+
+        agent.team =
+            newTeam;
+
+    }
+
+
+    localStorage.setItem(
+        "agents",
+        JSON.stringify(
+            agents
+        )
+    );
+
+
+    location.reload();
+
+}
+
+
+/* ================================
+   DELETE AGENT
+================================ */
+
+function deleteAgent(email){
+
+    if(
+        !confirm(
+            "Delete this agent?"
+        )
+    ){
+
+        return;
+
+    }
+
+
+    let agents =
+        JSON.parse(
+            localStorage.getItem(
+                "agents"
+            ) || "[]"
+        );
+
+
+    agents =
+        agents.filter(
+            agent =>
+                agent.email !== email
+        );
+
+
+    localStorage.setItem(
+        "agents",
+        JSON.stringify(
+            agents
+        )
+    );
+
+
+    location.reload();
+
+}
+
+
+/* ================================
+   AGENT FEEDBACK
+================================ */
+
+function acknowledge(){
+
+    showToast(
+        "Feedback acknowledged ✓"
+    );
+
+}
+
+
+function dispute(){
+
+    const reason =
+        prompt(
+            "Enter dispute reason:"
+        );
+
+
+    if(reason){
+
+        showToast(
+            "Dispute sent to QA."
+        );
+
+    }
+
+}
+
+
+/* ================================
+   TOAST
+================================ */
+
+let toastTimer;
+
+
+function showToast(message){
+
+    const toast =
+        document.getElementById(
+            "toast"
+        );
+
+
+    toast.textContent =
+        message;
+
+
+    toast.classList.add(
+        "show"
+    );
+
+
+    clearTimeout(
+        toastTimer
+    );
+
+
+    toastTimer =
+        setTimeout(
+            () => {
+
+                toast.classList.remove(
+                    "show"
+                );
+
+            },
+            3000
+        );
+
+}
+
+
+/* ================================
+   INITIALIZE
+================================ */
+
+calculateScore();
+
+</script>
+
+</body>
+</html>
