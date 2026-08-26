@@ -1,8 +1,8 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
 <title>Shaktimaan Dark Battle</title>
 
 <style>
@@ -25,200 +25,286 @@ canvas{
     display:block;
 }
 
+/* ================= TOP UI ================= */
+
 #ui{
     position:fixed;
-    top:10px;
-    left:10px;
-    right:10px;
+    top:12px;
+    left:12px;
+    right:12px;
     display:flex;
     justify-content:space-between;
     z-index:10;
+    pointer-events:none;
 }
 
-.box{
-    background:rgba(0,0,0,.8);
+.panel{
+    background:rgba(0,0,0,.82);
     border:1px solid #333;
-    border-radius:12px;
+    border-radius:14px;
     padding:10px 15px;
+    box-shadow:0 5px 25px #000;
 }
 
-#hpbar,#bossbar{
+.bar{
     width:260px;
     height:18px;
-    background:#350606;
+    background:#320505;
     border-radius:20px;
     overflow:hidden;
     margin-top:5px;
 }
 
-#hp{
+#heroHP{
     width:100%;
     height:100%;
     background:#22c55e;
-}
-
-#bosshp{
-    width:100%;
-    height:100%;
-    background:#ef1111;
+    transition:.1s;
 }
 
 #bossUI{
     position:fixed;
-    top:70px;
+    top:75px;
     left:50%;
     transform:translateX(-50%);
-    width:360px;
+    width:400px;
     text-align:center;
     display:none;
     z-index:10;
 }
 
 #bossName{
-    color:#ff2020;
-    font-size:21px;
+    font-size:22px;
     font-weight:bold;
-    text-shadow:0 0 15px red;
-    margin-bottom:5px;
+    color:#ff2222;
+    text-shadow:0 0 10px red,0 0 25px red;
+    margin-bottom:6px;
 }
+
+#bossHP{
+    width:100%;
+    height:20px;
+    background:#300000;
+    border-radius:20px;
+    overflow:hidden;
+}
+
+#bossHPFill{
+    width:100%;
+    height:100%;
+    background:#ef1111;
+    transition:.1s;
+}
+
+/* ================= MESSAGE ================= */
 
 #message{
     position:fixed;
-    top:43%;
+    top:42%;
     left:50%;
     transform:translate(-50%,-50%);
-    z-index:20;
+    z-index:30;
     display:none;
     text-align:center;
-    font-size:42px;
+    font-size:45px;
     font-weight:bold;
-    text-shadow:0 0 20px red;
+    white-space:nowrap;
+    text-shadow:0 0 15px red,0 0 35px red;
 }
+
+/* ================= RETRY ================= */
 
 #retry{
     position:fixed;
     top:58%;
     left:50%;
     transform:translateX(-50%);
-    z-index:21;
+    z-index:31;
     display:none;
+    padding:15px 45px;
     border:0;
-    padding:14px 42px;
     border-radius:30px;
-    background:#b91c1c;
+    background:linear-gradient(90deg,#dc2626,#7f1d1d);
     color:white;
-    font-size:18px;
+    font-size:19px;
     font-weight:bold;
     cursor:pointer;
 }
 
 #retry:hover{
-    background:#ef4444;
-    box-shadow:0 0 30px red;
+    transform:translateX(-50%) scale(1.08);
+    box-shadow:0 0 35px red;
 }
+
+/* ================= CONTROLS ================= */
 
 #controls{
     position:fixed;
     bottom:10px;
     left:10px;
     z-index:10;
-    padding:8px 12px;
-    border-radius:8px;
-    background:rgba(0,0,0,.7);
+    background:rgba(0,0,0,.75);
+    padding:9px 13px;
+    border-radius:10px;
     font-size:13px;
 }
 
-#start{
+/* ================= START SCREEN ================= */
+
+#startScreen{
     position:fixed;
     inset:0;
-    z-index:50;
+    z-index:100;
     display:flex;
     justify-content:center;
     align-items:center;
-    background:radial-gradient(circle,#350707,#020204 70%);
+    background:
+        radial-gradient(circle at center,#380707,#030305 70%);
 }
 
 .startBox{
     text-align:center;
     padding:50px;
+    border-radius:28px;
     background:#ffffff08;
-    border:1px solid #ff222244;
-    border-radius:25px;
+    border:1px solid #ff222233;
+    box-shadow:0 0 100px #ff000022;
 }
 
 .startBox h1{
     margin:0;
+    font-size:58px;
     color:#ff2222;
-    font-size:52px;
-    text-shadow:0 0 25px red;
+    text-shadow:0 0 15px red,0 0 40px red;
 }
 
-.startBox button{
+.startBox h2{
+    color:#ddd;
+}
+
+.startBox p{
+    color:#aaa;
+}
+
+.startBtn{
     margin-top:20px;
-    padding:14px 40px;
+    padding:15px 45px;
     border:0;
     border-radius:30px;
-    background:#b91c1c;
+    background:linear-gradient(90deg,#dc2626,#7f1d1d);
     color:white;
     font-size:18px;
     font-weight:bold;
     cursor:pointer;
+}
+
+.startBtn:hover{
+    transform:scale(1.07);
+    box-shadow:0 0 35px red;
 }
 </style>
 </head>
 
 <body>
 
-<div id="start">
+<!-- ================= START ================= -->
+
+<div id="startScreen">
+
     <div class="startBox">
+
         <h1>⚡ SHAKTIMAAN ⚡</h1>
+
         <h2>DARK POWER BATTLE</h2>
-        <p>10 Levels • 10 Bosses • Increasing Difficulty</p>
-        <button onclick="startGame()">START BATTLE</button>
+
+        <p>10 Levels • Different Enemies • Powerful Bosses</p>
+
+        <p>Defeat every boss and reach The Dark God.</p>
+
+        <button class="startBtn" onclick="startGame()">
+            START BATTLE
+        </button>
+
     </div>
+
 </div>
+
+
+<!-- ================= UI ================= -->
 
 <div id="ui">
 
-    <div class="box">
+    <div class="panel">
+
         ❤️ HERO HP
-        <div id="hpbar">
-            <div id="hp"></div>
+
+        <div class="bar">
+            <div id="heroHP"></div>
         </div>
+
     </div>
 
-    <div class="box">
-        LEVEL <b id="level">1</b> / 10
+
+    <div class="panel">
+
+        LEVEL <b id="levelText">1</b> / 10
+
         &nbsp;&nbsp;
-        SCORE <b id="score">0</b>
+
+        SCORE <b id="scoreText">0</b>
+
         <br>
-        ⚡ <span id="power">READY</span>
+
+        ⚡ <span id="powerText">READY</span>
+
     </div>
 
 </div>
+
+
+<!-- ================= BOSS UI ================= -->
 
 <div id="bossUI">
 
-    <div id="bossName">BOSS</div>
+    <div id="bossName">
+        BOSS
+    </div>
 
-    <div id="bossbar">
-        <div id="bosshp"></div>
+    <div id="bossHP">
+
+        <div id="bossHPFill"></div>
+
     </div>
 
 </div>
 
+
+<!-- ================= MESSAGE ================= -->
+
 <div id="message"></div>
+
+
+<!-- ================= RETRY ================= -->
 
 <button id="retry" onclick="retryGame()">
     🔄 RETRY
 </button>
 
+
+<!-- ================= CONTROLS ================= -->
+
 <div id="controls">
-    <b>W A S D</b> Move |
-    <b>SPACE / CLICK</b> Sword |
-    <b>T</b> Spin |
+
+    <b>W A S D</b> Move &nbsp;|&nbsp;
+
+    <b>SPACE / CLICK</b> Sword &nbsp;|&nbsp;
+
+    <b>T</b> Spin &nbsp;|&nbsp;
+
     <b>K</b> Ultra
+
 </div>
+
 
 <canvas id="game"></canvas>
 
@@ -232,23 +318,26 @@ canvas{
 const canvas = document.getElementById("game");
 const ctx = canvas.getContext("2d");
 
-let W = innerWidth;
-let H = innerHeight;
+let W = window.innerWidth;
+let H = window.innerHeight;
 
 function resize(){
-    W = canvas.width = innerWidth;
-    H = canvas.height = innerHeight;
+
+    W = canvas.width = window.innerWidth;
+    H = canvas.height = window.innerHeight;
+
 }
 
 resize();
-addEventListener("resize",resize);
+
+window.addEventListener("resize",resize);
 
 
 /* =====================================================
    GAME STATE
 ===================================================== */
 
-let gameRunning = false;
+let running = false;
 
 let level = 1;
 
@@ -258,9 +347,9 @@ let enemies = [];
 
 let boss = null;
 
-let particles = [];
-
 let bullets = [];
+
+let particles = [];
 
 let keys = {};
 
@@ -268,7 +357,7 @@ let levelTime = 0;
 
 let spawnTimer = 0;
 
-let bossWaiting = false;
+let bossCountdown = false;
 
 let swordActive = false;
 
@@ -278,7 +367,7 @@ let ultra = false;
 
 let spinAngle = 0;
 
-let lastTime = 0;
+let animationId = null;
 
 
 /* =====================================================
@@ -288,14 +377,17 @@ let lastTime = 0;
 const hero = {
 
     x:W/2,
+
     y:H/2,
 
-    r:24,
+    r:25,
 
     speed:5.5,
 
     hp:100,
+
     maxHp:100
+
 };
 
 
@@ -303,54 +395,54 @@ const hero = {
    ENEMY TYPES
 ===================================================== */
 
-const types = {
+const enemyTypes = {
 
     beast:{
         hp:45,
         speed:2.2,
         damage:7,
-        r:22,
-        color:"#991b1b"
+        r:23,
+        color:"#8f1111"
     },
 
     hunter:{
         hp:75,
         speed:3.3,
         damage:9,
-        r:20,
-        color:"#4c1d95"
+        r:21,
+        color:"#4b1d80"
     },
 
     demon:{
         hp:120,
         speed:2.8,
         damage:12,
-        r:27,
-        color:"#7f1d1d"
+        r:28,
+        color:"#701111"
     },
 
     brute:{
         hp:260,
         speed:1.25,
-        damage:17,
-        r:35,
-        color:"#3f3f46"
+        damage:18,
+        r:36,
+        color:"#39393f"
     },
 
     shadow:{
         hp:170,
-        speed:3.7,
-        damage:14,
-        r:23,
-        color:"#111827"
+        speed:3.8,
+        damage:15,
+        r:25,
+        color:"#10131d"
     },
 
     monster:{
         hp:350,
         speed:1.8,
-        damage:22,
-        r:42,
-        color:"#581c87"
+        damage:23,
+        r:43,
+        color:"#54177c"
     }
 
 };
@@ -362,16 +454,75 @@ const types = {
 
 const bossData = [
 
-    ["BLOOD REAPER",1800,.75,25],
-    ["DARK HUNTER",2400,.82,28],
-    ["SKULL LORD",3200,.88,31],
-    ["HELL BRUTE",4200,.75,35],
-    ["DEMON KING",5400,.92,38],
-    ["NIGHTMARE",6800,1.0,42],
-    ["VOID WARRIOR",8500,1.05,46],
-    ["DARK TITAN",10500,.92,50],
-    ["HELL EMPEROR",13000,1.08,55],
-    ["THE DARK GOD",18000,1.12,65]
+    {
+        name:"BLOOD REAPER",
+        hp:1800,
+        speed:.75,
+        damage:25
+    },
+
+    {
+        name:"DARK HUNTER",
+        hp:2400,
+        speed:.82,
+        damage:28
+    },
+
+    {
+        name:"SKULL LORD",
+        hp:3200,
+        speed:.88,
+        damage:31
+    },
+
+    {
+        name:"HELL BRUTE",
+        hp:4200,
+        speed:.75,
+        damage:35
+    },
+
+    {
+        name:"DEMON KING",
+        hp:5400,
+        speed:.92,
+        damage:38
+    },
+
+    {
+        name:"NIGHTMARE",
+        hp:6800,
+        speed:1,
+        damage:42
+    },
+
+    {
+        name:"VOID WARRIOR",
+        hp:8500,
+        speed:1.05,
+        damage:46
+    },
+
+    {
+        name:"DARK TITAN",
+        hp:10500,
+        speed:.92,
+        damage:50
+    },
+
+    {
+        name:"HELL EMPEROR",
+        hp:13000,
+        speed:1.08,
+        damage:55
+    },
+
+    {
+        name:"THE DARK GOD",
+        hp:18000,
+        speed:1.12,
+        damage:65
+    }
 
 ];
 
@@ -380,116 +531,177 @@ const bossData = [
    INPUT
 ===================================================== */
 
-addEventListener("keydown",e=>{
+window.addEventListener("keydown",function(e){
 
-    const k=e.key.toLowerCase();
+    let key = e.key.toLowerCase();
 
-    keys[k]=true;
+    keys[key] = true;
 
-    if(k==="t"){
+
+    if(key === "t"){
+
         startSpin();
+
     }
 
-    if(k==="k"){
+
+    if(key === "k"){
+
         ultraAttack();
+
     }
 
-    if(e.code==="Space"){
+
+    if(e.code === "Space"){
+
         e.preventDefault();
+
         swordAttack();
+
     }
 
 });
 
-addEventListener("keyup",e=>{
 
-    const k=e.key.toLowerCase();
+window.addEventListener("keyup",function(e){
 
-    keys[k]=false;
+    let key = e.key.toLowerCase();
 
-    if(k==="k"){
-        ultra=false;
-        document.getElementById("power").innerText="READY";
+    keys[key] = false;
+
+
+    if(key === "k"){
+
+        ultra = false;
+
+        document.getElementById("powerText").innerText =
+            "READY";
+
     }
 
 });
 
-canvas.addEventListener("mousedown",swordAttack);
+
+canvas.addEventListener("mousedown",function(){
+
+    swordAttack();
+
+});
 
 
 /* =====================================================
-   START
+   START GAME
 ===================================================== */
 
 function startGame(){
 
-    document.getElementById("start").style.display="none";
+    document.getElementById("startScreen").style.display =
+        "none";
 
     resetGame();
 
-    gameRunning=true;
+    running = true;
 
-    lastTime=performance.now();
+    startLevel();
 
-    requestAnimationFrame(loop);
-}
+    animationId =
+        requestAnimationFrame(gameLoop);
 
-
-function resetGame(){
-
-    level=1;
-    score=0;
-
-    enemies=[];
-    bullets=[];
-    particles=[];
-
-    boss=null;
-
-    levelTime=0;
-    spawnTimer=0;
-
-    bossWaiting=false;
-
-    swordActive=false;
-    spinning=false;
-    ultra=false;
-
-    hero.x=W/2;
-    hero.y=H/2;
-    hero.hp=100;
-
-    document.getElementById("retry").style.display="none";
-
-    document.getElementById("message").style.display="none";
-
-    document.getElementById("bossUI").style.display="none";
-
-    document.getElementById("power").innerText="READY";
 }
 
 
 /* =====================================================
-   LEVEL START
+   RESET GAME
+===================================================== */
+
+function resetGame(){
+
+    running = false;
+
+    level = 1;
+
+    score = 0;
+
+    enemies = [];
+
+    bullets = [];
+
+    particles = [];
+
+    boss = null;
+
+    levelTime = 0;
+
+    spawnTimer = 0;
+
+    bossCountdown = false;
+
+    swordActive = false;
+
+    spinning = false;
+
+    ultra = false;
+
+    spinAngle = 0;
+
+
+    hero.x = W/2;
+
+    hero.y = H/2;
+
+    hero.hp = hero.maxHp;
+
+
+    document.getElementById("retry").style.display =
+        "none";
+
+    document.getElementById("message").style.display =
+        "none";
+
+    document.getElementById("bossUI").style.display =
+        "none";
+
+    document.getElementById("powerText").innerText =
+        "READY";
+
+}
+
+
+/* =====================================================
+   START LEVEL
 ===================================================== */
 
 function startLevel(){
 
-    enemies=[];
+    enemies = [];
 
-    bullets=[];
+    bullets = [];
 
-    boss=null;
+    boss = null;
 
-    bossWaiting=false;
+    levelTime = 0;
 
-    levelTime=0;
+    spawnTimer = 0;
 
-    spawnTimer=0;
+    bossCountdown = false;
 
-    document.getElementById("bossUI").style.display="none";
+    swordActive = false;
 
-    showMessage("LEVEL "+level);
+    spinning = false;
+
+    ultra = false;
+
+
+    document.getElementById("bossUI").style.display =
+        "none";
+
+
+    document.getElementById("powerText").innerText =
+        "READY";
+
+
+    showMessage("LEVEL " + level);
+
 }
 
 
@@ -497,36 +709,64 @@ function startLevel(){
    ENEMY POOL
 ===================================================== */
 
-function enemyPool(){
+function getEnemyPool(){
 
-    if(level===1)
+    if(level === 1){
+
         return ["beast"];
 
-    if(level===2)
+    }
+
+    if(level === 2){
+
         return ["beast","hunter"];
 
-    if(level===3)
+    }
+
+    if(level === 3){
+
         return ["hunter","demon"];
 
-    if(level===4)
+    }
+
+    if(level === 4){
+
         return ["beast","hunter","demon"];
 
-    if(level===5)
+    }
+
+    if(level === 5){
+
         return ["demon","brute"];
 
-    if(level===6)
+    }
+
+    if(level === 6){
+
         return ["hunter","brute","shadow"];
 
-    if(level===7)
+    }
+
+    if(level === 7){
+
         return ["demon","brute","shadow"];
 
-    if(level===8)
+    }
+
+    if(level === 8){
+
         return ["brute","shadow","monster"];
 
-    if(level===9)
+    }
+
+    if(level === 9){
+
         return ["shadow","monster","demon","brute"];
 
+    }
+
     return ["shadow","monster","brute"];
+
 }
 
 
@@ -536,58 +776,86 @@ function enemyPool(){
 
 function spawnEnemy(){
 
-    const pool=enemyPool();
+    const pool = getEnemyPool();
 
-    const type=pool[
-        Math.floor(Math.random()*pool.length)
-    ];
+    const type =
+        pool[
+            Math.floor(
+                Math.random()*pool.length
+            )
+        ];
 
-    const d=types[type];
+    const data = enemyTypes[type];
 
-    const side=Math.floor(Math.random()*4);
 
-    let x,y;
+    let x;
+    let y;
 
-    if(side===0){
-        x=-70;
-        y=Math.random()*H;
+    const side =
+        Math.floor(
+            Math.random()*4
+        );
+
+
+    if(side === 0){
+
+        x = -80;
+        y = Math.random()*H;
+
     }
 
-    if(side===1){
-        x=W+70;
-        y=Math.random()*H;
+    else if(side === 1){
+
+        x = W+80;
+        y = Math.random()*H;
+
     }
 
-    if(side===2){
-        x=Math.random()*W;
-        y=-70;
+    else if(side === 2){
+
+        x = Math.random()*W;
+        y = -80;
+
     }
 
-    if(side===3){
-        x=Math.random()*W;
-        y=H+70;
+    else{
+
+        x = Math.random()*W;
+        y = H+80;
+
     }
 
-    const difficulty=1+(level-1)*.18;
+
+    const difficulty =
+        1 + (level-1)*0.18;
+
 
     enemies.push({
 
         x:x,
+
         y:y,
 
-        r:d.r,
+        r:data.r,
 
-        hp:d.hp*difficulty,
-        maxHp:d.hp*difficulty,
+        hp:data.hp*difficulty,
 
-        speed:d.speed*(1+(level-1)*.06),
+        maxHp:data.hp*difficulty,
 
-        damage:d.damage*difficulty,
+        speed:
+            data.speed*
+            (1+(level-1)*.06),
 
-        color:d.color,
+        damage:
+            data.damage*
+            difficulty,
+
+        color:data.color,
 
         flash:0
+
     });
+
 }
 
 
@@ -597,45 +865,61 @@ function spawnEnemy(){
 
 function spawnBoss(){
 
-    if(boss)
+    if(boss !== null){
+
         return;
 
-    const d=bossData[level-1];
+    }
 
-    boss={
 
-        name:d[0],
+    const data =
+        bossData[level-1];
+
+
+    boss = {
+
+        name:data.name,
 
         x:W/2,
 
-        y:130,
+        y:140,
 
-        r:70+level*3,
+        r:75 + level*3,
 
-        hp:d[1],
+        hp:data.hp,
 
-        maxHp:d[1],
+        maxHp:data.hp,
 
-        speed:d[2],
+        speed:data.speed,
 
-        damage:d[3],
+        damage:data.damage,
 
         attackTimer:0,
 
         chargeTimer:0,
 
-        charge:0,
+        chargeTime:0,
 
         flash:0
+
     };
 
-    document.getElementById("bossName").innerText=
-        "☠ "+boss.name+" ☠";
 
-    document.getElementById("bossUI").style.display=
+    document.getElementById("bossName").innerText =
+        "☠ " + boss.name + " ☠";
+
+
+    document.getElementById("bossUI").style.display =
         "block";
 
-    showMessage("☠ "+boss.name+" ☠");
+
+    updateBossBar();
+
+
+    showMessage(
+        "☠ " + boss.name + " ☠"
+    );
+
 }
 
 
@@ -645,249 +929,460 @@ function spawnBoss(){
 
 function moveHero(){
 
-    let dx=0;
-    let dy=0;
+    let dx = 0;
 
-    if(keys.w) dy--;
-    if(keys.s) dy++;
-    if(keys.a) dx--;
-    if(keys.d) dy++;
+    let dy = 0;
 
-    /* FIX typo-safe movement */
 
-    if(keys.d) dx++;
-    if(keys.a) dx--;
+    if(keys.w){
 
-    if(dx!==0 || dy!==0){
+        dy -= 1;
 
-        const len=Math.hypot(dx,dy);
-
-        dx/=len;
-        dy/=len;
-
-        hero.x+=dx*hero.speed;
-        hero.y+=dy*hero.speed;
     }
 
-    hero.x=Math.max(hero.r,Math.min(W-hero.r,hero.x));
+    if(keys.s){
 
-    hero.y=Math.max(75,Math.min(H-hero.r,hero.y));
+        dy += 1;
+
+    }
+
+    if(keys.a){
+
+        dx -= 1;
+
+    }
+
+    if(keys.d){
+
+        dx += 1;
+
+    }
+
+
+    if(dx !== 0 || dy !== 0){
+
+        const length =
+            Math.hypot(dx,dy);
+
+        dx /= length;
+
+        dy /= length;
+
+
+        hero.x +=
+            dx*hero.speed;
+
+        hero.y +=
+            dy*hero.speed;
+
+    }
+
+
+    hero.x =
+        Math.max(
+            hero.r,
+            Math.min(
+                W-hero.r,
+                hero.x
+            )
+        );
+
+
+    hero.y =
+        Math.max(
+            80,
+            Math.min(
+                H-hero.r,
+                hero.y
+            )
+        );
+
 }
 
 
 /* =====================================================
-   SWORD
+   SWORD ATTACK
 ===================================================== */
 
 function swordAttack(){
 
-    if(!gameRunning || spinning)
+    if(!running){
+
         return;
 
-    swordActive=true;
+    }
 
-    setTimeout(()=>{
-        swordActive=false;
+
+    if(spinning){
+
+        return;
+
+    }
+
+
+    swordActive = true;
+
+
+    setTimeout(function(){
+
+        swordActive = false;
+
     },180);
 
-    /* Normal enemies */
 
-    for(const e of enemies){
+    /* DAMAGE NORMAL ENEMIES */
 
-        if(distance(hero,e)<120){
+    for(let i=enemies.length-1;i>=0;i--){
 
-            e.hp-=35;
+        const enemy = enemies[i];
 
-            e.flash=5;
 
-            hitParticles(e.x,e.y);
+        if(distance(hero,enemy) < 120){
 
-            if(e.hp<=0){
+            enemy.hp -= 35;
 
-                score+=100;
+            enemy.flash = 5;
+
+            createHit(
+                enemy.x,
+                enemy.y
+            );
+
+
+            if(enemy.hp <= 0){
+
+                score += 100;
+
+                enemies.splice(i,1);
 
             }
+
         }
+
     }
 
-    enemies=enemies.filter(e=>e.hp>0);
+
+    /* DAMAGE BOSS */
+
+    if(boss !== null){
+
+        if(
+            distance(hero,boss)
+            <
+            150
+        ){
+
+            boss.hp -= 35;
+
+            boss.flash = 5;
+
+            createHit(
+                boss.x,
+                boss.y
+            );
 
 
-    /* BOSS */
+            if(boss.hp <= 0){
 
-    if(boss && distance(hero,boss)<145){
+                defeatBoss();
 
-        boss.hp-=35;
+            }
 
-        boss.flash=5;
-
-        hitParticles(boss.x,boss.y);
-
-        if(boss.hp<=0){
-
-            defeatBoss();
         }
+
     }
+
 }
 
 
 /* =====================================================
-   SPIN
+   SPIN ATTACK - T
 ===================================================== */
 
 function startSpin(){
 
-    if(spinning || !gameRunning)
+    if(!running){
+
         return;
 
-    spinning=true;
-
-    document.getElementById("power").innerText=
-        "🌀 SPINNING";
-
-    const start=performance.now();
-
-    function spin(){
-
-        if(!spinning)
-            return;
-
-        spinAngle+=.5;
-
-        /* VERY LOW DAMAGE */
-
-        for(const e of enemies){
-
-            if(distance(hero,e)<165){
-
-                e.hp-=2;
-
-                e.flash=3;
-            }
-        }
-
-        enemies=enemies.filter(e=>{
-
-            if(e.hp<=0){
-
-                score+=100;
-                return false;
-            }
-
-            return true;
-        });
-
-
-        /* Boss only 2 damage per hit */
-
-        if(boss && distance(hero,boss)<165){
-
-            boss.hp-=2;
-
-            boss.flash=3;
-
-            if(boss.hp<=0){
-
-                defeatBoss();
-                return;
-            }
-        }
-
-
-        if(performance.now()-start<1500){
-
-            requestAnimationFrame(spin);
-
-        }else{
-
-            spinning=false;
-
-            document.getElementById("power").innerText=
-                "READY";
-        }
     }
 
-    requestAnimationFrame(spin);
+
+    if(spinning){
+
+        return;
+
+    }
+
+
+    spinning = true;
+
+
+    document.getElementById("powerText").innerText =
+        "🌀 SPINNING";
+
+
+    const startTime =
+        performance.now();
+
+
+    function spinLoop(){
+
+        if(!running){
+
+            spinning = false;
+
+            return;
+
+        }
+
+
+        spinAngle += .5;
+
+
+        /* LOW NORMAL DAMAGE */
+
+        for(let i=enemies.length-1;i>=0;i--){
+
+            const enemy = enemies[i];
+
+
+            if(
+                distance(hero,enemy)
+                <
+                165
+            ){
+
+                enemy.hp -= 2;
+
+                enemy.flash = 2;
+
+
+                if(enemy.hp <= 0){
+
+                    score += 100;
+
+                    enemies.splice(i,1);
+
+                }
+
+            }
+
+        }
+
+
+        /* LOW BOSS DAMAGE */
+
+        if(boss !== null){
+
+            if(
+                distance(hero,boss)
+                <
+                170
+            ){
+
+                boss.hp -= 2;
+
+                boss.flash = 2;
+
+
+                if(boss.hp <= 0){
+
+                    defeatBoss();
+
+                    return;
+
+                }
+
+            }
+
+        }
+
+
+        if(
+            performance.now()-
+            startTime
+            <
+            1500
+        ){
+
+            requestAnimationFrame(
+                spinLoop
+            );
+
+        }
+
+        else{
+
+            spinning = false;
+
+            document.getElementById(
+                "powerText"
+            ).innerText =
+                "READY";
+
+        }
+
+    }
+
+
+    requestAnimationFrame(
+        spinLoop
+    );
+
 }
 
 
 /* =====================================================
-   ULTRA
+   ULTRA K
 ===================================================== */
 
 function ultraAttack(){
 
-    if(!gameRunning)
+    if(!running){
+
         return;
 
-    ultra=true;
+    }
 
-    document.getElementById("power").innerText=
+
+    ultra = true;
+
+
+    document.getElementById("powerText").innerText =
         "🔥 ULTRA ACTIVE";
 
 
-    /* NORMAL = 100% */
+    /*
+        NORMAL ENEMIES:
+        100% DAMAGE
+    */
 
-    enemies.forEach(e=>{
-        e.hp=0;
-        explosion(e.x,e.y);
-        score+=100;
-    });
+    for(const enemy of enemies){
 
-    enemies=[];
+        enemy.hp = 0;
+
+        score += 100;
+
+        createExplosion(
+            enemy.x,
+            enemy.y
+        );
+
+    }
 
 
-    /* BOSS = 60% */
+    enemies = [];
 
-    if(boss){
 
-        boss.hp-=boss.maxHp*.60;
+    /*
+        BOSS:
+        60% DAMAGE
+    */
 
-        explosion(boss.x,boss.y);
+    if(boss !== null){
 
-        if(boss.hp<=0){
+        boss.hp -=
+            boss.maxHp * .60;
+
+
+        createExplosion(
+            boss.x,
+            boss.y
+        );
+
+
+        if(boss.hp <= 0){
 
             defeatBoss();
+
         }
+
+        else{
+
+            updateBossBar();
+
+        }
+
     }
+
 }
 
 
 /* =====================================================
-   UPDATE ENEMIES
+   UPDATE NORMAL ENEMIES
 ===================================================== */
 
 function updateEnemies(){
 
-    for(const e of enemies){
+    for(let i=enemies.length-1;i>=0;i--){
 
-        const dx=hero.x-e.x;
-        const dy=hero.y-e.y;
+        const enemy =
+            enemies[i];
 
-        const dist=Math.hypot(dx,dy);
 
-        if(dist>1){
+        const dx =
+            hero.x-enemy.x;
 
-            e.x+=(dx/dist)*e.speed;
-            e.y+=(dy/dist)*e.speed;
+        const dy =
+            hero.y-enemy.y;
+
+        const dist =
+            Math.hypot(dx,dy);
+
+
+        if(dist > 1){
+
+            enemy.x +=
+                (dx/dist)*
+                enemy.speed;
+
+            enemy.y +=
+                (dy/dist)*
+                enemy.speed;
+
         }
 
-        if(e.flash>0)
-            e.flash--;
+
+        if(enemy.flash > 0){
+
+            enemy.flash--;
+
+        }
 
 
         /*
-            GUARANTEED CONTACT DAMAGE
+            ENEMY TOUCH DAMAGE
         */
 
-        if(dist <= hero.r+e.r*.65){
+        if(
+            dist
+            <=
+            hero.r +
+            enemy.r*.65
+        ){
 
-            hero.hp-=e.damage*.025;
+            hero.hp -=
+                enemy.damage *
+                .025;
 
         }
+
+
+        /*
+            Remove dead enemy
+        */
+
+        if(enemy.hp <= 0){
+
+            score += 100;
+
+            enemies.splice(i,1);
+
+        }
+
     }
 
-    enemies=enemies.filter(e=>e.hp>0);
 }
 
 
@@ -897,134 +1392,224 @@ function updateEnemies(){
 
 function updateBoss(){
 
-    if(!boss)
+    if(boss === null){
+
         return;
 
+    }
 
-    const dx=hero.x-boss.x;
-    const dy=hero.y-boss.y;
 
-    const dist=Math.hypot(dx,dy);
+    const dx =
+        hero.x-boss.x;
+
+    const dy =
+        hero.y-boss.y;
+
+    const dist =
+        Math.hypot(dx,dy);
 
 
     /*
         BOSS MOVEMENT
     */
 
-    if(dist>110){
+    if(dist > 120){
 
-        boss.x+=(dx/dist)*boss.speed;
-        boss.y+=(dy/dist)*boss.speed;
+        boss.x +=
+            (dx/dist)*
+            boss.speed;
+
+        boss.y +=
+            (dy/dist)*
+            boss.speed;
+
     }
 
 
     /*
-        Keep boss on screen
+        Keep boss inside screen
     */
 
-    boss.x=Math.max(
-        boss.r,
-        Math.min(
-            W-boss.r,
-            boss.x
-        )
-    );
+    boss.x =
+        Math.max(
+            boss.r,
+            Math.min(
+                W-boss.r,
+                boss.x
+            )
+        );
 
-    boss.y=Math.max(
-        110,
-        Math.min(
-            H-boss.r,
-            boss.y
-        )
-    );
+
+    boss.y =
+        Math.max(
+            105,
+            Math.min(
+                H-boss.r,
+                boss.y
+            )
+        );
 
 
     /*
-        TOUCH DAMAGE
+        BOSS TOUCH DAMAGE
     */
 
-    if(dist<=hero.r+boss.r*.55){
+    if(
+        dist
+        <=
+        hero.r +
+        boss.r*.55
+    ){
 
-        hero.hp-=boss.damage*.035;
+        hero.hp -=
+            boss.damage *
+            .035;
+
     }
 
 
     /*
-        RANGED ATTACK
+        BOSS RANGED ATTACK
     */
 
     boss.attackTimer++;
 
-    if(boss.attackTimer>90){
 
-        boss.attackTimer=0;
+    if(
+        boss.attackTimer
+        >=
+        90
+    ){
 
-        const angle=Math.atan2(
-            hero.y-boss.y,
-            hero.x-boss.x
-        );
+        boss.attackTimer = 0;
 
-        for(let i=-2;i<=2;i++){
 
-            const a=angle+i*.16;
+        const angle =
+            Math.atan2(
+                hero.y-boss.y,
+                hero.x-boss.x
+            );
+
+
+        for(
+            let i=-2;
+            i<=2;
+            i++
+        ){
+
+            const a =
+                angle +
+                i*.16;
+
 
             bullets.push({
 
                 x:boss.x,
+
                 y:boss.y,
 
-                vx:Math.cos(a)*5,
-                vy:Math.sin(a)*5,
+                vx:
+                    Math.cos(a)*5,
+
+                vy:
+                    Math.sin(a)*5,
 
                 life:180,
 
-                damage:8+level
+                damage:
+                    8+level
+
             });
+
         }
+
     }
 
 
     /*
-        CHARGE
+        BOSS CHARGE
     */
 
     boss.chargeTimer++;
 
-    if(boss.chargeTimer>320){
 
-        boss.chargeTimer=0;
+    if(
+        boss.chargeTimer
+        >=
+        330
+    ){
 
-        boss.charge=45;
+        boss.chargeTimer = 0;
+
+        boss.chargeTime = 45;
+
     }
 
-    if(boss.charge>0){
 
-        boss.charge--;
+    if(
+        boss.chargeTime > 0
+    ){
 
-        if(dist>1){
+        boss.chargeTime--;
 
-            boss.x+=(dx/dist)*3.5;
-            boss.y+=(dy/dist)*3.5;
+
+        if(dist > 1){
+
+            boss.x +=
+                (dx/dist)*3.5;
+
+            boss.y +=
+                (dy/dist)*3.5;
+
         }
+
     }
 
 
-    if(boss.flash>0)
+    if(boss.flash > 0){
+
         boss.flash--;
 
+    }
 
-    /*
-        HP BAR
-    */
 
-    const percent=
+    updateBossBar();
+
+}
+
+
+/* =====================================================
+   BOSS HP BAR
+===================================================== */
+
+function updateBossBar(){
+
+    if(boss === null){
+
+        document.getElementById(
+            "bossUI"
+        ).style.display =
+            "none";
+
+        return;
+
+    }
+
+
+    const percent =
         Math.max(
             0,
-            boss.hp/boss.maxHp*100
+            boss.hp/
+            boss.maxHp*
+            100
         );
 
-    document.getElementById("bosshp").style.width=
+
+    document.getElementById(
+        "bossHPFill"
+    ).style.width =
         percent+"%";
+
 }
 
 
@@ -1034,179 +1619,285 @@ function updateBoss(){
 
 function updateBullets(){
 
-    for(const b of bullets){
+    for(let i=bullets.length-1;i>=0;i--){
 
-        b.x+=b.vx;
-        b.y+=b.vy;
+        const bullet =
+            bullets[i];
 
-        b.life--;
+
+        bullet.x +=
+            bullet.vx;
+
+        bullet.y +=
+            bullet.vy;
+
+        bullet.life--;
+
+
+        /*
+            BULLET HITS HERO
+        */
 
         if(
-            distance(hero,b)<30
+            distance(hero,bullet)
+            <
+            30
         ){
 
-            hero.hp-=b.damage;
+            hero.hp -=
+                bullet.damage;
 
-            b.life=0;
-
-            explosion(
+            createExplosion(
                 hero.x,
                 hero.y
             );
+
+            bullets.splice(i,1);
+
+            continue;
+
         }
+
+
+        /*
+            Remove old bullets
+        */
+
+        if(
+            bullet.life <= 0 ||
+            bullet.x < -100 ||
+            bullet.x > W+100 ||
+            bullet.y < -100 ||
+            bullet.y > H+100
+        ){
+
+            bullets.splice(i,1);
+
+        }
+
     }
 
-    bullets=bullets.filter(b=>
-        b.life>0 &&
-        b.x>-100 &&
-        b.x<W+100 &&
-        b.y>-100 &&
-        b.y<H+100
-    );
 }
 
 
 /* =====================================================
-   LEVEL UPDATE
+   LEVEL SYSTEM
 ===================================================== */
 
 function updateLevel(dt){
 
     /*
-        Boss fight:
-        nothing else spawns.
+        During boss fight:
+        STOP NORMAL LEVEL LOGIC
     */
 
-    if(boss)
-        return;
-
-
-    levelTime+=dt;
-
-
-    /*
-        20 seconds enemy spawning
-    */
-
-    if(levelTime<20){
-
-        spawnTimer+=dt;
-
-        const rate=
-            Math.max(
-                .18,
-                .65-level*.035
-            );
-
-
-        if(spawnTimer>=rate){
-
-            spawnTimer=0;
-
-
-            let count=
-                1+
-                Math.floor(level/2);
-
-
-            if(Math.random()<.5)
-                count++;
-
-
-            for(let i=0;i<count;i++){
-
-                spawnEnemy();
-            }
-        }
+    if(boss !== null){
 
         return;
+
     }
 
 
     /*
-        After 20 sec:
-        wait for all enemies.
+        Boss already coming
+    */
+
+    if(bossCountdown){
+
+        return;
+
+    }
+
+
+    levelTime += dt;
+
+
+    /*
+        FIRST 20 SECONDS:
+        Spawn enemies
     */
 
     if(
-        enemies.length===0 &&
-        !bossWaiting
+        levelTime <
+        20
     ){
 
-        bossWaiting=true;
+        spawnTimer += dt;
 
-        showMessage("⚠ BOSS INCOMING ⚠");
 
-        setTimeout(()=>{
+        const spawnRate =
+            Math.max(
+                .18,
+                .65 -
+                level*.035
+            );
+
+
+        if(
+            spawnTimer >=
+            spawnRate
+        ){
+
+            spawnTimer = 0;
+
+
+            /*
+                Quantity increases
+            */
+
+            let amount =
+                1+
+                Math.floor(
+                    level/2
+                );
+
 
             if(
-                gameRunning &&
-                !boss
+                Math.random()<.5
+            ){
+
+                amount++;
+
+            }
+
+
+            for(
+                let i=0;
+                i<amount;
+                i++
+            ){
+
+                spawnEnemy();
+
+            }
+
+        }
+
+
+        return;
+
+    }
+
+
+    /*
+        20 seconds completed.
+
+        Wait until all normal
+        enemies are dead.
+    */
+
+    if(
+        enemies.length === 0
+    ){
+
+        bossCountdown = true;
+
+
+        showMessage(
+            "⚠ BOSS INCOMING ⚠"
+        );
+
+
+        setTimeout(function(){
+
+            /*
+                Check game is still alive
+            */
+
+            if(
+                running &&
+                boss === null
             ){
 
                 spawnBoss();
+
             }
 
         },1200);
+
     }
+
 }
 
 
 /* =====================================================
-   BOSS DEFEAT
+   BOSS DEFEATED
 ===================================================== */
 
 function defeatBoss(){
 
-    if(!boss)
+    if(boss === null){
+
         return;
 
+    }
 
-    explosion(
+
+    createExplosion(
         boss.x,
         boss.y
     );
 
-    score+=5000;
 
-    boss=null;
+    score += 5000;
 
-    bullets=[];
 
-    document.getElementById("bossUI").style.display=
+    boss = null;
+
+    bullets = [];
+
+
+    document.getElementById(
+        "bossUI"
+    ).style.display =
         "none";
 
 
-    if(level>=10){
+    /*
+        FINAL BOSS
+    */
+
+    if(level >= 10){
 
         victory();
 
         return;
+
     }
 
 
-    showMessage("👑 BOSS DEFEATED");
+    showMessage(
+        "👑 BOSS DEFEATED"
+    );
 
 
-    setTimeout(()=>{
+    /*
+        Small HP reward
+    */
 
-        if(!gameRunning)
-            return;
-
-        level++;
-
-        /*
-            Recover 25 HP
-        */
-
-        hero.hp=Math.min(
+    hero.hp =
+        Math.min(
             hero.maxHp,
             hero.hp+25
         );
 
+
+    setTimeout(function(){
+
+        if(!running){
+
+            return;
+
+        }
+
+
+        level++;
+
+
         startLevel();
 
     },2000);
+
 }
 
 
@@ -1214,62 +1905,96 @@ function defeatBoss(){
    PARTICLES
 ===================================================== */
 
-function hitParticles(x,y){
+function createHit(x,y){
 
-    for(let i=0;i<5;i++){
+    for(
+        let i=0;
+        i<5;
+        i++
+    ){
 
         particles.push({
 
             x:x,
+
             y:y,
 
-            vx:(Math.random()-.5)*7,
-            vy:(Math.random()-.5)*7,
+            vx:
+                (Math.random()-.5)*7,
+
+            vy:
+                (Math.random()-.5)*7,
 
             life:25,
 
-            size:3+Math.random()*4
+            size:
+                3+
+                Math.random()*4
+
         });
+
     }
+
 }
 
 
-function explosion(x,y){
+function createExplosion(x,y){
 
-    for(let i=0;i<25;i++){
+    for(
+        let i=0;
+        i<25;
+        i++
+    ){
 
         particles.push({
 
             x:x,
+
             y:y,
 
-            vx:(Math.random()-.5)*14,
-            vy:(Math.random()-.5)*14,
+            vx:
+                (Math.random()-.5)*14,
+
+            vy:
+                (Math.random()-.5)*14,
 
             life:45,
 
-            size:3+Math.random()*7
+            size:
+                3+
+                Math.random()*7
+
         });
+
     }
+
 }
 
 
 function updateParticles(){
 
-    for(const p of particles){
+    for(
+        const p of particles
+    ){
 
-        p.x+=p.vx;
-        p.y+=p.vy;
+        p.x += p.vx;
 
-        p.vx*=.96;
-        p.vy*=.96;
+        p.y += p.vy;
+
+        p.vx *= .96;
+
+        p.vy *= .96;
 
         p.life--;
+
     }
 
-    particles=particles.filter(
-        p=>p.life>0
-    );
+
+    particles =
+        particles.filter(
+            p=>p.life>0
+        );
+
 }
 
 
@@ -1283,16 +2008,19 @@ function distance(a,b){
         a.x-b.x,
         a.y-b.y
     );
+
 }
 
 
 /* =====================================================
-   DRAW BACKGROUND
+   BACKGROUND
 ===================================================== */
 
 function drawBackground(){
 
-    ctx.fillStyle="#030305";
+    ctx.fillStyle =
+        "#020205";
+
 
     ctx.fillRect(
         0,
@@ -1302,27 +2030,32 @@ function drawBackground(){
     );
 
 
-    const g=
+    const gradient =
         ctx.createRadialGradient(
             W/2,
             H/2,
-            20,
+            30,
             W/2,
             H/2,
             Math.max(W,H)
         );
 
-    g.addColorStop(
+
+    gradient.addColorStop(
         0,
         "#300707"
     );
 
-    g.addColorStop(
+
+    gradient.addColorStop(
         1,
         "#020205"
     );
 
-    ctx.fillStyle=g;
+
+    ctx.fillStyle =
+        gradient;
+
 
     ctx.fillRect(
         0,
@@ -1333,15 +2066,25 @@ function drawBackground(){
 
 
     /*
-        stars
+        Stars
     */
 
-    for(let i=0;i<70;i++){
+    for(
+        let i=0;
+        i<80;
+        i++
+    ){
 
-        const x=(i*137)%W;
-        const y=(i*83)%H;
+        const x =
+            (i*137)%W;
 
-        ctx.fillStyle="#ffffff15";
+        const y =
+            (i*83)%H;
+
+
+        ctx.fillStyle =
+            "#ffffff15";
+
 
         ctx.fillRect(
             x,
@@ -1349,7 +2092,9 @@ function drawBackground(){
             2,
             2
         );
+
     }
+
 }
 
 
@@ -1361,6 +2106,7 @@ function drawHero(){
 
     ctx.save();
 
+
     ctx.translate(
         hero.x,
         hero.y
@@ -1368,7 +2114,7 @@ function drawHero(){
 
 
     /*
-        ULTRA
+        ULTRA AURA
     */
 
     if(ultra){
@@ -1378,21 +2124,30 @@ function drawHero(){
         ctx.arc(
             0,
             0,
-            70+
-            Math.sin(Date.now()/80)*10,
+            75+
+            Math.sin(
+                Date.now()/80
+            )*10,
             0,
             Math.PI*2
         );
 
-        ctx.fillStyle="#00eaff18";
+
+        ctx.fillStyle =
+            "#00eaff18";
+
 
         ctx.fill();
 
-        ctx.strokeStyle="#00eaff";
 
-        ctx.lineWidth=5;
+        ctx.strokeStyle =
+            "#00eaff";
+
+
+        ctx.lineWidth = 5;
 
         ctx.stroke();
+
     }
 
 
@@ -1402,23 +2157,30 @@ function drawHero(){
 
     if(spinning){
 
-        ctx.rotate(spinAngle);
+        ctx.rotate(
+            spinAngle
+        );
+
 
         ctx.beginPath();
 
         ctx.arc(
             0,
             0,
-            100,
+            105,
             0,
             Math.PI*2
         );
 
-        ctx.strokeStyle="#ffd000";
 
-        ctx.lineWidth=6;
+        ctx.strokeStyle =
+            "#ffd000";
+
+
+        ctx.lineWidth = 6;
 
         ctx.stroke();
+
     }
 
 
@@ -1426,14 +2188,20 @@ function drawHero(){
         CAPE
     */
 
-    ctx.fillStyle="#991b1b";
+    ctx.fillStyle =
+        "#991b1b";
+
 
     ctx.beginPath();
 
     ctx.moveTo(-17,5);
+
     ctx.lineTo(-55,55);
+
     ctx.lineTo(0,35);
+
     ctx.lineTo(55,55);
+
     ctx.lineTo(17,5);
 
     ctx.closePath();
@@ -1445,16 +2213,21 @@ function drawHero(){
         LEGS
     */
 
-    ctx.strokeStyle="#111";
+    ctx.strokeStyle =
+        "#111";
 
-    ctx.lineWidth=11;
+
+    ctx.lineWidth = 11;
+
 
     ctx.beginPath();
 
-    ctx.moveTo(-9,25);
+    ctx.moveTo(-9,27);
+
     ctx.lineTo(-14,55);
 
-    ctx.moveTo(9,25);
+    ctx.moveTo(9,27);
+
     ctx.lineTo(14,55);
 
     ctx.stroke();
@@ -1464,7 +2237,9 @@ function drawHero(){
         BODY
     */
 
-    ctx.fillStyle="#dc2626";
+    ctx.fillStyle =
+        "#dc2626";
+
 
     ctx.beginPath();
 
@@ -1483,16 +2258,21 @@ function drawHero(){
         ARMS
     */
 
-    ctx.strokeStyle="#f1b092";
+    ctx.strokeStyle =
+        "#f1b092";
 
-    ctx.lineWidth=10;
+
+    ctx.lineWidth = 10;
+
 
     ctx.beginPath();
 
     ctx.moveTo(-18,-2);
+
     ctx.lineTo(-40,18);
 
     ctx.moveTo(18,-2);
+
     ctx.lineTo(40,18);
 
     ctx.stroke();
@@ -1502,7 +2282,9 @@ function drawHero(){
         HEAD
     */
 
-    ctx.fillStyle="#f1b092";
+    ctx.fillStyle =
+        "#f1b092";
+
 
     ctx.beginPath();
 
@@ -1521,7 +2303,9 @@ function drawHero(){
         HAIR
     */
 
-    ctx.fillStyle="#111";
+    ctx.fillStyle =
+        "#111";
+
 
     ctx.beginPath();
 
@@ -1540,7 +2324,9 @@ function drawHero(){
         EYES
     */
 
-    ctx.fillStyle="#111";
+    ctx.fillStyle =
+        "#111";
+
 
     ctx.beginPath();
 
@@ -1564,16 +2350,21 @@ function drawHero(){
 
 
     /*
-        CHEST
+        CHEST SYMBOL
     */
 
-    ctx.fillStyle="#ffd000";
+    ctx.fillStyle =
+        "#ffd000";
+
 
     ctx.beginPath();
 
     ctx.moveTo(0,-5);
+
     ctx.lineTo(8,8);
+
     ctx.lineTo(0,4);
+
     ctx.lineTo(-8,8);
 
     ctx.closePath();
@@ -1587,7 +2378,9 @@ function drawHero(){
 
     if(swordActive){
 
-        ctx.fillStyle="#eee";
+        ctx.fillStyle =
+            "#eee";
+
 
         ctx.fillRect(
             25,
@@ -1596,7 +2389,10 @@ function drawHero(){
             9
         );
 
-        ctx.fillStyle="#ffd000";
+
+        ctx.fillStyle =
+            "#ffd000";
+
 
         ctx.fillRect(
             20,
@@ -1604,62 +2400,107 @@ function drawHero(){
             10,
             18
         );
+
     }
 
 
     ctx.restore();
+
 }
 
 
 /* =====================================================
-   DRAW ENEMY
+   DRAW NORMAL ENEMY
 ===================================================== */
 
-function drawEnemy(e){
+function drawEnemy(enemy){
 
     ctx.save();
 
+
     ctx.translate(
-        e.x,
-        e.y
+        enemy.x,
+        enemy.y
     );
-
-
-    ctx.fillStyle=
-        e.flash>0
-        ?"white"
-        :e.color;
 
 
     /*
         BODY
     */
 
+    ctx.fillStyle =
+        enemy.flash>0
+        ?
+        "white"
+        :
+        enemy.color;
+
+
     ctx.beginPath();
 
     ctx.roundRect(
-        -e.r*.6,
-        -e.r*.15,
-        e.r*1.2,
-        e.r*1.1,
-        8
+        -enemy.r*.6,
+        -enemy.r*.15,
+        enemy.r*1.2,
+        enemy.r*1.1,
+        9
     );
 
     ctx.fill();
 
 
     /*
+        ARMS
+    */
+
+    ctx.strokeStyle =
+        enemy.color;
+
+
+    ctx.lineWidth = 10;
+
+
+    ctx.beginPath();
+
+    ctx.moveTo(
+        -enemy.r*.5,
+        0
+    );
+
+    ctx.lineTo(
+        -enemy.r,
+        enemy.r*.45
+    );
+
+
+    ctx.moveTo(
+        enemy.r*.5,
+        0
+    );
+
+    ctx.lineTo(
+        enemy.r,
+        enemy.r*.45
+    );
+
+
+    ctx.stroke();
+
+
+    /*
         HEAD
     */
 
-    ctx.fillStyle="#63372b";
+    ctx.fillStyle =
+        "#63372b";
+
 
     ctx.beginPath();
 
     ctx.arc(
         0,
-        -e.r*.55,
-        e.r*.48,
+        -enemy.r*.55,
+        enemy.r*.48,
         0,
         Math.PI*2
     );
@@ -1671,23 +2512,25 @@ function drawEnemy(e){
         HORNS
     */
 
-    ctx.fillStyle="#ddd";
+    ctx.fillStyle =
+        "#ddd";
+
 
     ctx.beginPath();
 
     ctx.moveTo(
-        -e.r*.25,
-        -e.r*.75
+        -enemy.r*.25,
+        -enemy.r*.75
     );
 
     ctx.lineTo(
-        -e.r*.65,
-        -e.r*1.35
+        -enemy.r*.65,
+        -enemy.r*1.35
     );
 
     ctx.lineTo(
-        -e.r*.05,
-        -e.r*.9
+        -enemy.r*.05,
+        -enemy.r*.9
     );
 
     ctx.fill();
@@ -1696,46 +2539,50 @@ function drawEnemy(e){
     ctx.beginPath();
 
     ctx.moveTo(
-        e.r*.25,
-        -e.r*.75
+        enemy.r*.25,
+        -enemy.r*.75
     );
 
     ctx.lineTo(
-        e.r*.65,
-        -e.r*1.35
+        enemy.r*.65,
+        -enemy.r*1.35
     );
 
     ctx.lineTo(
-        e.r*.05,
-        -e.r*.9
+        enemy.r*.05,
+        -enemy.r*.9
     );
 
     ctx.fill();
 
 
     /*
-        EYES
+        RED EYES
     */
 
-    ctx.fillStyle="#ff0000";
+    ctx.fillStyle =
+        "#ff0000";
 
-    ctx.shadowBlur=15;
 
-    ctx.shadowColor="red";
+    ctx.shadowBlur = 15;
+
+    ctx.shadowColor =
+        "red";
+
 
     ctx.beginPath();
 
     ctx.arc(
-        -e.r*.17,
-        -e.r*.55,
+        -enemy.r*.17,
+        -enemy.r*.55,
         4,
         0,
         Math.PI*2
     );
 
     ctx.arc(
-        e.r*.17,
-        -e.r*.55,
+        enemy.r*.17,
+        -enemy.r*.55,
         4,
         0,
         Math.PI*2
@@ -1743,37 +2590,45 @@ function drawEnemy(e){
 
     ctx.fill();
 
-    ctx.shadowBlur=0;
+
+    ctx.shadowBlur = 0;
 
 
     /*
-        HP
+        HP BAR
     */
 
-    ctx.fillStyle="#250000";
+    ctx.fillStyle =
+        "#200000";
+
 
     ctx.fillRect(
-        -e.r,
-        e.r*1.2,
-        e.r*2,
+        -enemy.r,
+        enemy.r*1.2,
+        enemy.r*2,
         6
     );
 
-    ctx.fillStyle="#22c55e";
+
+    ctx.fillStyle =
+        "#22c55e";
+
 
     ctx.fillRect(
-        -e.r,
-        e.r*1.2,
-        e.r*2*
+        -enemy.r,
+        enemy.r*1.2,
+        enemy.r*2*
         Math.max(
             0,
-            e.hp/e.maxHp
+            enemy.hp/
+            enemy.maxHp
         ),
         6
     );
 
 
     ctx.restore();
+
 }
 
 
@@ -1783,11 +2638,15 @@ function drawEnemy(e){
 
 function drawBoss(){
 
-    if(!boss)
+    if(boss === null){
+
         return;
+
+    }
 
 
     ctx.save();
+
 
     ctx.translate(
         boss.x,
@@ -1796,16 +2655,21 @@ function drawBoss(){
 
 
     /*
-        MASSIVE AURA
+        HUGE AURA
     */
 
-    ctx.shadowBlur=40;
+    ctx.shadowBlur = 40;
 
-    ctx.shadowColor="red";
+    ctx.shadowColor =
+        "red";
 
-    ctx.strokeStyle="#ff000055";
 
-    ctx.lineWidth=12;
+    ctx.strokeStyle =
+        "#ff000055";
+
+
+    ctx.lineWidth = 12;
+
 
     ctx.beginPath();
 
@@ -1813,7 +2677,9 @@ function drawBoss(){
         0,
         0,
         boss.r*1.35+
-        Math.sin(Date.now()/100)*10,
+        Math.sin(
+            Date.now()/100
+        )*10,
         0,
         Math.PI*2
     );
@@ -1821,17 +2687,20 @@ function drawBoss(){
     ctx.stroke();
 
 
-    ctx.shadowBlur=0;
+    ctx.shadowBlur = 0;
 
 
     /*
         BODY
     */
 
-    ctx.fillStyle=
+    ctx.fillStyle =
         boss.flash>0
-        ?"white"
-        :"#260000";
+        ?
+        "white"
+        :
+        "#260000";
+
 
     ctx.beginPath();
 
@@ -1850,7 +2719,9 @@ function drawBoss(){
         SHOULDERS
     */
 
-    ctx.fillStyle="#4b0000";
+    ctx.fillStyle =
+        "#4d0000";
+
 
     ctx.beginPath();
 
@@ -1877,7 +2748,9 @@ function drawBoss(){
         HEAD
     */
 
-    ctx.fillStyle="#51251d";
+    ctx.fillStyle =
+        "#51251d";
+
 
     ctx.beginPath();
 
@@ -1896,7 +2769,9 @@ function drawBoss(){
         HORNS
     */
 
-    ctx.fillStyle="#ddd";
+    ctx.fillStyle =
+        "#ddd";
+
 
     ctx.beginPath();
 
@@ -1912,7 +2787,7 @@ function drawBoss(){
 
     ctx.lineTo(
         -boss.r*.05,
-        -boss.r*1.0
+        -boss.r
     );
 
     ctx.fill();
@@ -1932,21 +2807,25 @@ function drawBoss(){
 
     ctx.lineTo(
         boss.r*.05,
-        -boss.r*1.0
+        -boss.r
     );
 
     ctx.fill();
 
 
     /*
-        EYES
+        BOSS EYES
     */
 
-    ctx.fillStyle="#ff0000";
+    ctx.fillStyle =
+        "#ff0000";
 
-    ctx.shadowBlur=25;
 
-    ctx.shadowColor="red";
+    ctx.shadowBlur = 25;
+
+    ctx.shadowColor =
+        "red";
+
 
     ctx.beginPath();
 
@@ -1968,14 +2847,17 @@ function drawBoss(){
 
     ctx.fill();
 
-    ctx.shadowBlur=0;
+
+    ctx.shadowBlur = 0;
 
 
     /*
         CROWN
     */
 
-    ctx.fillStyle="#ffd000";
+    ctx.fillStyle =
+        "#ffd000";
+
 
     ctx.beginPath();
 
@@ -2013,7 +2895,9 @@ function drawBoss(){
         BOSS HP
     */
 
-    ctx.fillStyle="#190000";
+    ctx.fillStyle =
+        "#180000";
+
 
     ctx.fillRect(
         -boss.r*1.2,
@@ -2022,7 +2906,10 @@ function drawBoss(){
         10
     );
 
-    ctx.fillStyle="#ef1111";
+
+    ctx.fillStyle =
+        "#ef1111";
+
 
     ctx.fillRect(
         -boss.r*1.2,
@@ -2030,13 +2917,15 @@ function drawBoss(){
         boss.r*2.4*
         Math.max(
             0,
-            boss.hp/boss.maxHp
+            boss.hp/
+            boss.maxHp
         ),
         10
     );
 
 
     ctx.restore();
+
 }
 
 
@@ -2046,28 +2935,41 @@ function drawBoss(){
 
 function drawBullets(){
 
-    for(const b of bullets){
+    for(
+        const bullet
+        of bullets
+    ){
 
-        ctx.fillStyle="#ff2222";
+        ctx.save();
 
-        ctx.shadowBlur=15;
 
-        ctx.shadowColor="red";
+        ctx.shadowBlur = 20;
+
+        ctx.shadowColor =
+            "red";
+
+
+        ctx.fillStyle =
+            "#ff2222";
+
 
         ctx.beginPath();
 
         ctx.arc(
-            b.x,
-            b.y,
-            7,
+            bullet.x,
+            bullet.y,
+            8,
             0,
             Math.PI*2
         );
 
         ctx.fill();
 
-        ctx.shadowBlur=0;
+
+        ctx.restore();
+
     }
+
 }
 
 
@@ -2077,16 +2979,21 @@ function drawBullets(){
 
 function drawParticles(){
 
-    for(const p of particles){
+    for(
+        const p
+        of particles
+    ){
 
-        ctx.globalAlpha=
+        ctx.globalAlpha =
             Math.max(
                 0,
                 p.life/45
             );
 
-        ctx.fillStyle=
+
+        ctx.fillStyle =
             "#ff5b22";
+
 
         ctx.beginPath();
 
@@ -2099,41 +3006,64 @@ function drawParticles(){
         );
 
         ctx.fill();
+
     }
 
-    ctx.globalAlpha=1;
+
+    ctx.globalAlpha = 1;
+
 }
 
 
 /* =====================================================
-   UI
+   UPDATE UI
 ===================================================== */
 
 function updateUI(){
 
-    document.getElementById("level").innerText=
+    document.getElementById(
+        "levelText"
+    ).innerText =
         level;
 
-    document.getElementById("score").innerText=
+
+    document.getElementById(
+        "scoreText"
+    ).innerText =
         score;
 
-    document.getElementById("hp").style.width=
+
+    const hp =
         Math.max(
             0,
             hero.hp
-        )+"%";
+        );
 
 
-    if(hero.hp<30){
+    document.getElementById(
+        "heroHP"
+    ).style.width =
+        hp+"%";
 
-        document.getElementById("hp").style.background=
+
+    if(hp < 30){
+
+        document.getElementById(
+            "heroHP"
+        ).style.background =
             "#ef4444";
 
-    }else{
-
-        document.getElementById("hp").style.background=
-            "#22c55e";
     }
+
+    else{
+
+        document.getElementById(
+            "heroHP"
+        ).style.background =
+            "#22c55e";
+
+    }
+
 }
 
 
@@ -2143,18 +3073,27 @@ function updateUI(){
 
 function showMessage(text){
 
-    const m=
-        document.getElementById("message");
+    const message =
+        document.getElementById(
+            "message"
+        );
 
-    m.innerHTML=text;
 
-    m.style.display="block";
+    message.innerHTML =
+        text;
 
-    setTimeout(()=>{
 
-        m.style.display="none";
+    message.style.display =
+        "block";
+
+
+    setTimeout(function(){
+
+        message.style.display =
+            "none";
 
     },1700);
+
 }
 
 
@@ -2164,24 +3103,43 @@ function showMessage(text){
 
 function gameOver(){
 
-    gameRunning=false;
+    running = false;
 
-    boss=null;
 
-    document.getElementById("bossUI").style.display=
+    boss = null;
+
+    enemies = [];
+
+    bullets = [];
+
+
+    document.getElementById(
+        "bossUI"
+    ).style.display =
         "none";
 
-    document.getElementById("message").innerHTML=
+
+    document.getElementById(
+        "message"
+    ).innerHTML =
         "💀 YOU DIED 💀"+
-        "<br><small>SCORE: "+
+        "<br>"+
+        "<small>SCORE: "+
         score+
         "</small>";
 
-    document.getElementById("message").style.display=
+
+    document.getElementById(
+        "message"
+    ).style.display =
         "block";
 
-    document.getElementById("retry").style.display=
+
+    document.getElementById(
+        "retry"
+    ).style.display =
         "block";
+
 }
 
 
@@ -2191,19 +3149,32 @@ function gameOver(){
 
 function retryGame(){
 
-    document.getElementById("message").style.display=
+    document.getElementById(
+        "message"
+    ).style.display =
         "none";
 
-    document.getElementById("retry").style.display=
+
+    document.getElementById(
+        "retry"
+    ).style.display =
         "none";
+
 
     resetGame();
 
-    gameRunning=true;
 
-    lastTime=performance.now();
+    running = true;
 
-    requestAnimationFrame(loop);
+
+    startLevel();
+
+
+    animationId =
+        requestAnimationFrame(
+            gameLoop
+        );
+
 }
 
 
@@ -2213,52 +3184,75 @@ function retryGame(){
 
 function victory(){
 
-    gameRunning=false;
+    running = false;
 
-    boss=null;
+    boss = null;
 
-    document.getElementById("bossUI").style.display=
+
+    document.getElementById(
+        "bossUI"
+    ).style.display =
         "none";
 
-    document.getElementById("message").innerHTML=
+
+    document.getElementById(
+        "message"
+    ).innerHTML =
         "🏆 THE DARK GOD IS DEFEATED 🏆"+
-        "<br><small>ALL 10 LEVELS COMPLETED</small>"+
-        "<br><small>SCORE: "+
+        "<br>"+
+        "<small>ALL 10 LEVELS COMPLETED</small>"+
+        "<br>"+
+        "<small>SCORE: "+
         score+
         "</small>";
 
-    document.getElementById("message").style.display=
+
+    document.getElementById(
+        "message"
+    ).style.display =
         "block";
+
 }
 
 
 /* =====================================================
-   MAIN LOOP
+   MAIN GAME LOOP
 ===================================================== */
 
-function loop(time){
+let lastTime = 0;
 
-    if(!gameRunning)
+
+function gameLoop(time){
+
+    if(!running){
+
         return;
 
+    }
 
-    /*
-        Delta time
-    */
 
-    let dt=
+    let dt =
         (time-lastTime)/1000;
 
-    lastTime=time;
+
+    lastTime = time;
 
 
     /*
-        Prevent huge jumps
-        if browser lags.
+        Prevent lag from causing
+        huge time jump.
     */
 
-    dt=Math.min(dt,.05);
+    dt =
+        Math.min(
+            dt,
+            .05
+        );
 
+
+    /*
+        GAME UPDATE
+    */
 
     moveHero();
 
@@ -2284,13 +3278,22 @@ function loop(time){
         H
     );
 
+
     drawBackground();
 
     drawParticles();
 
     drawBullets();
 
-    drawEnemies();
+    for(
+        const enemy
+        of enemies
+    ){
+
+        drawEnemy(enemy);
+
+    }
+
 
     drawBoss();
 
@@ -2301,30 +3304,37 @@ function loop(time){
 
 
     /*
-        DEATH
+        DEATH CHECK
     */
 
-    if(hero.hp<=0){
+    if(
+        hero.hp <= 0
+    ){
 
-        hero.hp=0;
+        hero.hp = 0;
 
         updateUI();
 
         gameOver();
 
         return;
+
     }
 
 
-    requestAnimationFrame(loop);
+    animationId =
+        requestAnimationFrame(
+            gameLoop
+        );
+
 }
 
 
 /* =====================================================
-   START FIRST LEVEL
+   INITIAL UI
 ===================================================== */
 
-startLevel();
+updateUI();
 
 </script>
 
