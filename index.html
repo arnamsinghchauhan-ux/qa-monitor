@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1.0">
-<title>Shaktimaan Dark Battle</title>
+<title>Ghumi Ghumi Dark Battle</title>
 
 <style>
 *{
@@ -25,8 +25,7 @@ canvas{
     display:block;
 }
 
-/* ================= TOP UI ================= */
-
+/* TOP UI */
 #ui{
     position:fixed;
     top:12px;
@@ -62,6 +61,7 @@ canvas{
     transition:.1s;
 }
 
+/* BOSS UI */
 #bossUI{
     position:fixed;
     top:75px;
@@ -93,11 +93,9 @@ canvas{
     width:100%;
     height:100%;
     background:#ef1111;
-    transition:.1s;
 }
 
-/* ================= MESSAGE ================= */
-
+/* MESSAGE */
 #message{
     position:fixed;
     top:42%;
@@ -112,8 +110,7 @@ canvas{
     text-shadow:0 0 15px red,0 0 35px red;
 }
 
-/* ================= RETRY ================= */
-
+/* RETRY */
 #retry{
     position:fixed;
     top:58%;
@@ -136,8 +133,7 @@ canvas{
     box-shadow:0 0 35px red;
 }
 
-/* ================= CONTROLS ================= */
-
+/* CONTROLS */
 #controls{
     position:fixed;
     bottom:10px;
@@ -149,8 +145,7 @@ canvas{
     font-size:13px;
 }
 
-/* ================= START SCREEN ================= */
-
+/* START SCREEN */
 #startScreen{
     position:fixed;
     inset:0;
@@ -207,15 +202,15 @@ canvas{
 
 <body>
 
-<!-- ================= START ================= -->
+<!-- START SCREEN -->
 
 <div id="startScreen">
 
     <div class="startBox">
 
-        <h1>⚡ SHAKTIMAAN ⚡</h1>
+        <h1>🌀 GHUMI GHUMI 🌀</h1>
 
-        <h2>DARK POWER BATTLE</h2>
+        <h2>GHUMI GHUMI DARK BATTLE</h2>
 
         <p>10 Levels • Different Enemies • Powerful Bosses</p>
 
@@ -230,7 +225,7 @@ canvas{
 </div>
 
 
-<!-- ================= UI ================= -->
+<!-- UI -->
 
 <div id="ui">
 
@@ -262,7 +257,7 @@ canvas{
 </div>
 
 
-<!-- ================= BOSS UI ================= -->
+<!-- BOSS -->
 
 <div id="bossUI">
 
@@ -279,19 +274,19 @@ canvas{
 </div>
 
 
-<!-- ================= MESSAGE ================= -->
+<!-- MESSAGE -->
 
 <div id="message"></div>
 
 
-<!-- ================= RETRY ================= -->
+<!-- RETRY -->
 
 <button id="retry" onclick="retryGame()">
     🔄 RETRY
 </button>
 
 
-<!-- ================= CONTROLS ================= -->
+<!-- CONTROLS -->
 
 <div id="controls">
 
@@ -299,7 +294,7 @@ canvas{
 
     <b>SPACE / CLICK</b> Sword &nbsp;|&nbsp;
 
-    <b>T</b> Spin &nbsp;|&nbsp;
+    <b>T</b> Ghumi Spin &nbsp;|&nbsp;
 
     <b>K</b> Ultra
 
@@ -315,26 +310,43 @@ canvas{
    CANVAS
 ===================================================== */
 
-const canvas = document.getElementById("game");
-const ctx = canvas.getContext("2d");
+const canvas =
+    document.getElementById("game");
 
-let W = window.innerWidth;
-let H = window.innerHeight;
+const ctx =
+    canvas.getContext("2d");
+
+let W =
+    window.innerWidth;
+
+let H =
+    window.innerHeight;
+
 
 function resize(){
 
-    W = canvas.width = window.innerWidth;
-    H = canvas.height = window.innerHeight;
+    W =
+        canvas.width =
+        window.innerWidth;
+
+    H =
+        canvas.height =
+        window.innerHeight;
 
 }
 
+
 resize();
 
-window.addEventListener("resize",resize);
+
+window.addEventListener(
+    "resize",
+    resize
+);
 
 
 /* =====================================================
-   GAME STATE
+   GAME VARIABLES
 ===================================================== */
 
 let running = false;
@@ -367,7 +379,7 @@ let ultra = false;
 
 let spinAngle = 0;
 
-let animationId = null;
+let lastTime = 0;
 
 
 /* =====================================================
@@ -528,65 +540,78 @@ const bossData = [
 
 
 /* =====================================================
-   INPUT
+   KEYBOARD
 ===================================================== */
 
-window.addEventListener("keydown",function(e){
+window.addEventListener(
+    "keydown",
+    function(e){
 
-    let key = e.key.toLowerCase();
+        const key =
+            e.key.toLowerCase();
 
-    keys[key] = true;
+        keys[key] = true;
 
 
-    if(key === "t"){
+        if(key === "t"){
 
-        startSpin();
+            startSpin();
+
+        }
+
+
+        if(key === "k"){
+
+            ultraAttack();
+
+        }
+
+
+        if(e.code === "Space"){
+
+            e.preventDefault();
+
+            swordAttack();
+
+        }
 
     }
+);
 
 
-    if(key === "k"){
+window.addEventListener(
+    "keyup",
+    function(e){
 
-        ultraAttack();
+        const key =
+            e.key.toLowerCase();
+
+        keys[key] = false;
+
+
+        if(key === "k"){
+
+            ultra = false;
+
+            document.getElementById(
+                "powerText"
+            ).innerText =
+                "READY";
+
+        }
 
     }
+);
 
 
-    if(e.code === "Space"){
-
-        e.preventDefault();
+canvas.addEventListener(
+    "mousedown",
+    function(){
 
         swordAttack();
 
     }
-
-});
-
-
-window.addEventListener("keyup",function(e){
-
-    let key = e.key.toLowerCase();
-
-    keys[key] = false;
-
-
-    if(key === "k"){
-
-        ultra = false;
-
-        document.getElementById("powerText").innerText =
-            "READY";
-
-    }
-
-});
-
-
-canvas.addEventListener("mousedown",function(){
-
-    swordAttack();
-
-});
+);
 
 
 /* =====================================================
@@ -595,8 +620,11 @@ canvas.addEventListener("mousedown",function(){
 
 function startGame(){
 
-    document.getElementById("startScreen").style.display =
+    document.getElementById(
+        "startScreen"
+    ).style.display =
         "none";
+
 
     resetGame();
 
@@ -604,14 +632,18 @@ function startGame(){
 
     startLevel();
 
-    animationId =
-        requestAnimationFrame(gameLoop);
+    lastTime =
+        performance.now();
+
+    requestAnimationFrame(
+        gameLoop
+    );
 
 }
 
 
 /* =====================================================
-   RESET GAME
+   RESET
 ===================================================== */
 
 function resetGame(){
@@ -645,30 +677,44 @@ function resetGame(){
     spinAngle = 0;
 
 
-    hero.x = W/2;
+    hero.x =
+        W/2;
 
-    hero.y = H/2;
+    hero.y =
+        H/2;
 
-    hero.hp = hero.maxHp;
+    hero.hp =
+        hero.maxHp;
 
 
-    document.getElementById("retry").style.display =
+    document.getElementById(
+        "retry"
+    ).style.display =
         "none";
 
-    document.getElementById("message").style.display =
+
+    document.getElementById(
+        "message"
+    ).style.display =
         "none";
 
-    document.getElementById("bossUI").style.display =
+
+    document.getElementById(
+        "bossUI"
+    ).style.display =
         "none";
 
-    document.getElementById("powerText").innerText =
+
+    document.getElementById(
+        "powerText"
+    ).innerText =
         "READY";
 
 }
 
 
 /* =====================================================
-   START LEVEL
+   LEVEL START
 ===================================================== */
 
 function startLevel(){
@@ -692,15 +738,21 @@ function startLevel(){
     ultra = false;
 
 
-    document.getElementById("bossUI").style.display =
+    document.getElementById(
+        "bossUI"
+    ).style.display =
         "none";
 
 
-    document.getElementById("powerText").innerText =
+    document.getElementById(
+        "powerText"
+    ).innerText =
         "READY";
 
 
-    showMessage("LEVEL " + level);
+    showMessage(
+        "LEVEL " + level
+    );
 
 }
 
@@ -711,59 +763,32 @@ function startLevel(){
 
 function getEnemyPool(){
 
-    if(level === 1){
-
+    if(level === 1)
         return ["beast"];
 
-    }
-
-    if(level === 2){
-
+    if(level === 2)
         return ["beast","hunter"];
 
-    }
-
-    if(level === 3){
-
+    if(level === 3)
         return ["hunter","demon"];
 
-    }
-
-    if(level === 4){
-
+    if(level === 4)
         return ["beast","hunter","demon"];
 
-    }
-
-    if(level === 5){
-
+    if(level === 5)
         return ["demon","brute"];
 
-    }
-
-    if(level === 6){
-
+    if(level === 6)
         return ["hunter","brute","shadow"];
 
-    }
-
-    if(level === 7){
-
+    if(level === 7)
         return ["demon","brute","shadow"];
 
-    }
-
-    if(level === 8){
-
+    if(level === 8)
         return ["brute","shadow","monster"];
 
-    }
-
-    if(level === 9){
-
+    if(level === 9)
         return ["shadow","monster","demon","brute"];
-
-    }
 
     return ["shadow","monster","brute"];
 
@@ -776,7 +801,9 @@ function getEnemyPool(){
 
 function spawnEnemy(){
 
-    const pool = getEnemyPool();
+    const pool =
+        getEnemyPool();
+
 
     const type =
         pool[
@@ -785,16 +812,19 @@ function spawnEnemy(){
             )
         ];
 
-    const data = enemyTypes[type];
 
+    const data =
+        enemyTypes[type];
 
-    let x;
-    let y;
 
     const side =
         Math.floor(
             Math.random()*4
         );
+
+
+    let x;
+    let y;
 
 
     if(side === 0){
@@ -827,7 +857,8 @@ function spawnEnemy(){
 
 
     const difficulty =
-        1 + (level-1)*0.18;
+        1+
+        (level-1)*.18;
 
 
     enemies.push({
@@ -838,9 +869,13 @@ function spawnEnemy(){
 
         r:data.r,
 
-        hp:data.hp*difficulty,
+        hp:
+            data.hp*
+            difficulty,
 
-        maxHp:data.hp*difficulty,
+        maxHp:
+            data.hp*
+            difficulty,
 
         speed:
             data.speed*
@@ -865,11 +900,8 @@ function spawnEnemy(){
 
 function spawnBoss(){
 
-    if(boss !== null){
-
+    if(boss !== null)
         return;
-
-    }
 
 
     const data =
@@ -884,7 +916,9 @@ function spawnBoss(){
 
         y:140,
 
-        r:75 + level*3,
+        r:
+            75+
+            level*3,
 
         hp:data.hp,
 
@@ -905,11 +939,17 @@ function spawnBoss(){
     };
 
 
-    document.getElementById("bossName").innerText =
-        "☠ " + boss.name + " ☠";
+    document.getElementById(
+        "bossName"
+    ).innerText =
+        "☠ " +
+        boss.name +
+        " ☠";
 
 
-    document.getElementById("bossUI").style.display =
+    document.getElementById(
+        "bossUI"
+    ).style.display =
         "block";
 
 
@@ -917,63 +957,63 @@ function spawnBoss(){
 
 
     showMessage(
-        "☠ " + boss.name + " ☠"
+        "☠ " +
+        boss.name +
+        " ☠"
     );
 
 }
 
 
 /* =====================================================
-   MOVEMENT
+   HERO MOVEMENT
 ===================================================== */
 
 function moveHero(){
 
-    let dx = 0;
+    let dx=0;
 
-    let dy = 0;
-
-
-    if(keys.w){
-
-        dy -= 1;
-
-    }
-
-    if(keys.s){
-
-        dy += 1;
-
-    }
-
-    if(keys.a){
-
-        dx -= 1;
-
-    }
-
-    if(keys.d){
-
-        dx += 1;
-
-    }
+    let dy=0;
 
 
-    if(dx !== 0 || dy !== 0){
+    if(keys.w)
+        dy--;
+
+    if(keys.s)
+        dy++;
+
+    if(keys.a)
+        dx--;
+
+    if(keys.d)
+        dx++;
+
+
+    if(
+        dx !== 0 ||
+        dy !== 0
+    ){
 
         const length =
-            Math.hypot(dx,dy);
+            Math.hypot(
+                dx,
+                dy
+            );
 
-        dx /= length;
 
-        dy /= length;
+        dx/=length;
+
+        dy/=length;
 
 
         hero.x +=
-            dx*hero.speed;
+            dx*
+            hero.speed;
+
 
         hero.y +=
-            dy*hero.speed;
+            dy*
+            hero.speed;
 
     }
 
@@ -1001,43 +1041,63 @@ function moveHero(){
 
 
 /* =====================================================
-   SWORD ATTACK
+   DISTANCE
+===================================================== */
+
+function distance(a,b){
+
+    return Math.hypot(
+        a.x-b.x,
+        a.y-b.y
+    );
+
+}
+
+
+/* =====================================================
+   SWORD
 ===================================================== */
 
 function swordAttack(){
 
-    if(!running){
-
+    if(
+        !running ||
+        spinning
+    )
         return;
-
-    }
-
-
-    if(spinning){
-
-        return;
-
-    }
 
 
     swordActive = true;
 
 
-    setTimeout(function(){
+    setTimeout(
+        function(){
 
-        swordActive = false;
+            swordActive = false;
 
-    },180);
-
-
-    /* DAMAGE NORMAL ENEMIES */
-
-    for(let i=enemies.length-1;i>=0;i--){
-
-        const enemy = enemies[i];
+        },
+        180
+    );
 
 
-        if(distance(hero,enemy) < 120){
+    for(
+        let i=enemies.length-1;
+        i>=0;
+        i--
+    ){
+
+        const enemy =
+            enemies[i];
+
+
+        if(
+            distance(
+                hero,
+                enemy
+            )
+            <
+            120
+        ){
 
             enemy.hp -= 35;
 
@@ -1049,11 +1109,16 @@ function swordAttack(){
             );
 
 
-            if(enemy.hp <= 0){
+            if(
+                enemy.hp<=0
+            ){
 
                 score += 100;
 
-                enemies.splice(i,1);
+                enemies.splice(
+                    i,
+                    1
+                );
 
             }
 
@@ -1062,12 +1127,13 @@ function swordAttack(){
     }
 
 
-    /* DAMAGE BOSS */
-
     if(boss !== null){
 
         if(
-            distance(hero,boss)
+            distance(
+                hero,
+                boss
+            )
             <
             150
         ){
@@ -1082,7 +1148,9 @@ function swordAttack(){
             );
 
 
-            if(boss.hp <= 0){
+            if(
+                boss.hp<=0
+            ){
 
                 defeatBoss();
 
@@ -1096,33 +1164,28 @@ function swordAttack(){
 
 
 /* =====================================================
-   SPIN ATTACK - T
+   T = GHUMI SPIN
 ===================================================== */
 
 function startSpin(){
 
-    if(!running){
-
+    if(
+        !running ||
+        spinning
+    )
         return;
-
-    }
-
-
-    if(spinning){
-
-        return;
-
-    }
 
 
     spinning = true;
 
 
-    document.getElementById("powerText").innerText =
-        "🌀 SPINNING";
+    document.getElementById(
+        "powerText"
+    ).innerText =
+        "🌀 GHUMI GHUMI";
 
 
-    const startTime =
+    const start =
         performance.now();
 
 
@@ -1140,29 +1203,42 @@ function startSpin(){
         spinAngle += .5;
 
 
-        /* LOW NORMAL DAMAGE */
+        /*
+            LOW DAMAGE
+        */
 
-        for(let i=enemies.length-1;i>=0;i--){
+        for(
+            let i=enemies.length-1;
+            i>=0;
+            i--
+        ){
 
-            const enemy = enemies[i];
+            const enemy =
+                enemies[i];
 
 
             if(
-                distance(hero,enemy)
+                distance(
+                    hero,
+                    enemy
+                )
                 <
                 165
             ){
 
                 enemy.hp -= 2;
 
-                enemy.flash = 2;
 
-
-                if(enemy.hp <= 0){
+                if(
+                    enemy.hp<=0
+                ){
 
                     score += 100;
 
-                    enemies.splice(i,1);
+                    enemies.splice(
+                        i,
+                        1
+                    );
 
                 }
 
@@ -1171,28 +1247,30 @@ function startSpin(){
         }
 
 
-        /* LOW BOSS DAMAGE */
+        /*
+            BOSS LOW DAMAGE
+        */
 
-        if(boss !== null){
+        if(
+            boss !== null &&
+            distance(
+                hero,
+                boss
+            )
+            <
+            170
+        ){
+
+            boss.hp -= 2;
+
 
             if(
-                distance(hero,boss)
-                <
-                170
+                boss.hp<=0
             ){
 
-                boss.hp -= 2;
+                defeatBoss();
 
-                boss.flash = 2;
-
-
-                if(boss.hp <= 0){
-
-                    defeatBoss();
-
-                    return;
-
-                }
+                return;
 
             }
 
@@ -1201,7 +1279,7 @@ function startSpin(){
 
         if(
             performance.now()-
-            startTime
+            start
             <
             1500
         ){
@@ -1215,6 +1293,7 @@ function startSpin(){
         else{
 
             spinning = false;
+
 
             document.getElementById(
                 "powerText"
@@ -1234,22 +1313,21 @@ function startSpin(){
 
 
 /* =====================================================
-   ULTRA K
+   K = ULTRA
 ===================================================== */
 
 function ultraAttack(){
 
-    if(!running){
-
+    if(!running)
         return;
-
-    }
 
 
     ultra = true;
 
 
-    document.getElementById("powerText").innerText =
+    document.getElementById(
+        "powerText"
+    ).innerText =
         "🔥 ULTRA ACTIVE";
 
 
@@ -1258,7 +1336,10 @@ function ultraAttack(){
         100% DAMAGE
     */
 
-    for(const enemy of enemies){
+    for(
+        const enemy
+        of enemies
+    ){
 
         enemy.hp = 0;
 
@@ -1280,10 +1361,13 @@ function ultraAttack(){
         60% DAMAGE
     */
 
-    if(boss !== null){
+    if(
+        boss !== null
+    ){
 
         boss.hp -=
-            boss.maxHp * .60;
+            boss.maxHp*
+            .60;
 
 
         createExplosion(
@@ -1292,7 +1376,9 @@ function ultraAttack(){
         );
 
 
-        if(boss.hp <= 0){
+        if(
+            boss.hp<=0
+        ){
 
             defeatBoss();
 
@@ -1310,32 +1396,46 @@ function ultraAttack(){
 
 
 /* =====================================================
-   UPDATE NORMAL ENEMIES
+   NORMAL ENEMIES UPDATE
 ===================================================== */
 
 function updateEnemies(){
 
-    for(let i=enemies.length-1;i>=0;i--){
+    for(
+        let i=enemies.length-1;
+        i>=0;
+        i--
+    ){
 
         const enemy =
             enemies[i];
 
 
         const dx =
-            hero.x-enemy.x;
+            hero.x-
+            enemy.x;
+
 
         const dy =
-            hero.y-enemy.y;
+            hero.y-
+            enemy.y;
+
 
         const dist =
-            Math.hypot(dx,dy);
+            Math.hypot(
+                dx,
+                dy
+            );
 
 
-        if(dist > 1){
+        if(
+            dist>1
+        ){
 
             enemy.x +=
                 (dx/dist)*
                 enemy.speed;
+
 
             enemy.y +=
                 (dy/dist)*
@@ -1344,7 +1444,9 @@ function updateEnemies(){
         }
 
 
-        if(enemy.flash > 0){
+        if(
+            enemy.flash>0
+        ){
 
             enemy.flash--;
 
@@ -1358,26 +1460,27 @@ function updateEnemies(){
         if(
             dist
             <=
-            hero.r +
+            hero.r+
             enemy.r*.65
         ){
 
             hero.hp -=
-                enemy.damage *
+                enemy.damage*
                 .025;
 
         }
 
 
-        /*
-            Remove dead enemy
-        */
-
-        if(enemy.hp <= 0){
+        if(
+            enemy.hp<=0
+        ){
 
             score += 100;
 
-            enemies.splice(i,1);
+            enemies.splice(
+                i,
+                1
+            );
 
         }
 
@@ -1387,37 +1490,46 @@ function updateEnemies(){
 
 
 /* =====================================================
-   UPDATE BOSS
+   BOSS UPDATE
 ===================================================== */
 
 function updateBoss(){
 
-    if(boss === null){
-
+    if(
+        boss===null
+    )
         return;
-
-    }
 
 
     const dx =
-        hero.x-boss.x;
+        hero.x-
+        boss.x;
+
 
     const dy =
-        hero.y-boss.y;
+        hero.y-
+        boss.y;
+
 
     const dist =
-        Math.hypot(dx,dy);
+        Math.hypot(
+            dx,
+            dy
+        );
 
 
     /*
-        BOSS MOVEMENT
+        MOVE TOWARD HERO
     */
 
-    if(dist > 120){
+    if(
+        dist>120
+    ){
 
         boss.x +=
             (dx/dist)*
             boss.speed;
+
 
         boss.y +=
             (dy/dist)*
@@ -1427,7 +1539,7 @@ function updateBoss(){
 
 
     /*
-        Keep boss inside screen
+        KEEP ON SCREEN
     */
 
     boss.x =
@@ -1442,7 +1554,7 @@ function updateBoss(){
 
     boss.y =
         Math.max(
-            105,
+            110,
             Math.min(
                 H-boss.r,
                 boss.y
@@ -1451,37 +1563,35 @@ function updateBoss(){
 
 
     /*
-        BOSS TOUCH DAMAGE
+        TOUCH DAMAGE
     */
 
     if(
         dist
         <=
-        hero.r +
+        hero.r+
         boss.r*.55
     ){
 
         hero.hp -=
-            boss.damage *
+            boss.damage*
             .035;
 
     }
 
 
     /*
-        BOSS RANGED ATTACK
+        PROJECTILE ATTACK
     */
 
     boss.attackTimer++;
 
 
     if(
-        boss.attackTimer
-        >=
-        90
+        boss.attackTimer>=90
     ){
 
-        boss.attackTimer = 0;
+        boss.attackTimer=0;
 
 
         const angle =
@@ -1498,7 +1608,7 @@ function updateBoss(){
         ){
 
             const a =
-                angle +
+                angle+
                 i*.16;
 
 
@@ -1509,10 +1619,12 @@ function updateBoss(){
                 y:boss.y,
 
                 vx:
-                    Math.cos(a)*5,
+                    Math.cos(a)*
+                    5,
 
                 vy:
-                    Math.sin(a)*5,
+                    Math.sin(a)*
+                    5,
 
                 life:180,
 
@@ -1527,46 +1639,51 @@ function updateBoss(){
 
 
     /*
-        BOSS CHARGE
+        CHARGE ATTACK
     */
 
     boss.chargeTimer++;
 
 
     if(
-        boss.chargeTimer
-        >=
-        330
+        boss.chargeTimer>=330
     ){
 
-        boss.chargeTimer = 0;
+        boss.chargeTimer=0;
 
-        boss.chargeTime = 45;
+        boss.chargeTime=45;
 
     }
 
 
     if(
-        boss.chargeTime > 0
+        boss.chargeTime>0
     ){
 
         boss.chargeTime--;
 
 
-        if(dist > 1){
+        if(
+            dist>1
+        ){
 
             boss.x +=
-                (dx/dist)*3.5;
+                (dx/dist)*
+                3.5;
+
 
             boss.y +=
-                (dy/dist)*3.5;
+                (dy/dist)*
+                3.5;
 
         }
 
     }
 
 
-    if(boss.flash > 0){
+    if(
+        boss.flash>0
+    ){
 
         boss.flash--;
 
@@ -1579,12 +1696,14 @@ function updateBoss(){
 
 
 /* =====================================================
-   BOSS HP BAR
+   BOSS BAR
 ===================================================== */
 
 function updateBossBar(){
 
-    if(boss === null){
+    if(
+        boss===null
+    ){
 
         document.getElementById(
             "bossUI"
@@ -1619,7 +1738,11 @@ function updateBossBar(){
 
 function updateBullets(){
 
-    for(let i=bullets.length-1;i>=0;i--){
+    for(
+        let i=bullets.length-1;
+        i>=0;
+        i--
+    ){
 
         const bullet =
             bullets[i];
@@ -1634,12 +1757,11 @@ function updateBullets(){
         bullet.life--;
 
 
-        /*
-            BULLET HITS HERO
-        */
-
         if(
-            distance(hero,bullet)
+            distance(
+                hero,
+                bullet
+            )
             <
             30
         ){
@@ -1647,31 +1769,36 @@ function updateBullets(){
             hero.hp -=
                 bullet.damage;
 
+
             createExplosion(
                 hero.x,
                 hero.y
             );
 
-            bullets.splice(i,1);
+
+            bullets.splice(
+                i,
+                1
+            );
+
 
             continue;
 
         }
 
 
-        /*
-            Remove old bullets
-        */
-
         if(
-            bullet.life <= 0 ||
-            bullet.x < -100 ||
-            bullet.x > W+100 ||
-            bullet.y < -100 ||
-            bullet.y > H+100
+            bullet.life<=0 ||
+            bullet.x<-100 ||
+            bullet.x>W+100 ||
+            bullet.y<-100 ||
+            bullet.y>H+100
         ){
 
-            bullets.splice(i,1);
+            bullets.splice(
+                i,
+                1
+            );
 
         }
 
@@ -1687,39 +1814,31 @@ function updateBullets(){
 function updateLevel(dt){
 
     /*
-        During boss fight:
-        STOP NORMAL LEVEL LOGIC
+        Boss active:
+        no normal level logic.
     */
 
-    if(boss !== null){
-
+    if(
+        boss!==null
+    )
         return;
 
-    }
 
-
-    /*
-        Boss already coming
-    */
-
-    if(bossCountdown){
-
+    if(
+        bossCountdown
+    )
         return;
-
-    }
 
 
     levelTime += dt;
 
 
     /*
-        FIRST 20 SECONDS:
-        Spawn enemies
+        20 seconds of enemies
     */
 
     if(
-        levelTime <
-        20
+        levelTime<20
     ){
 
         spawnTimer += dt;
@@ -1728,21 +1847,21 @@ function updateLevel(dt){
         const spawnRate =
             Math.max(
                 .18,
-                .65 -
+                .65-
                 level*.035
             );
 
 
         if(
-            spawnTimer >=
-            spawnRate
+            spawnTimer>=spawnRate
         ){
 
-            spawnTimer = 0;
+            spawnTimer=0;
 
 
             /*
-                Quantity increases
+                More enemies
+                at higher levels.
             */
 
             let amount =
@@ -1780,17 +1899,14 @@ function updateLevel(dt){
 
 
     /*
-        20 seconds completed.
-
-        Wait until all normal
-        enemies are dead.
+        Wait for all enemies
     */
 
     if(
-        enemies.length === 0
+        enemies.length===0
     ){
 
-        bossCountdown = true;
+        bossCountdown=true;
 
 
         showMessage(
@@ -1798,22 +1914,21 @@ function updateLevel(dt){
         );
 
 
-        setTimeout(function(){
+        setTimeout(
+            function(){
 
-            /*
-                Check game is still alive
-            */
+                if(
+                    running &&
+                    boss===null
+                ){
 
-            if(
-                running &&
-                boss === null
-            ){
+                    spawnBoss();
 
-                spawnBoss();
+                }
 
-            }
-
-        },1200);
+            },
+            1200
+        );
 
     }
 
@@ -1821,16 +1936,15 @@ function updateLevel(dt){
 
 
 /* =====================================================
-   BOSS DEFEATED
+   DEFEAT BOSS
 ===================================================== */
 
 function defeatBoss(){
 
-    if(boss === null){
-
+    if(
+        boss===null
+    )
         return;
-
-    }
 
 
     createExplosion(
@@ -1842,9 +1956,9 @@ function defeatBoss(){
     score += 5000;
 
 
-    boss = null;
+    boss=null;
 
-    bullets = [];
+    bullets=[];
 
 
     document.getElementById(
@@ -1857,7 +1971,9 @@ function defeatBoss(){
         FINAL BOSS
     */
 
-    if(level >= 10){
+    if(
+        level>=10
+    ){
 
         victory();
 
@@ -1872,7 +1988,7 @@ function defeatBoss(){
 
 
     /*
-        Small HP reward
+        HP reward
     */
 
     hero.hp =
@@ -1882,21 +1998,23 @@ function defeatBoss(){
         );
 
 
-    setTimeout(function(){
+    setTimeout(
+        function(){
 
-        if(!running){
-
-            return;
-
-        }
-
-
-        level++;
+            if(
+                !running
+            )
+                return;
 
 
-        startLevel();
+            level++;
 
-    },2000);
+
+            startLevel();
+
+        },
+        2000
+    );
 
 }
 
@@ -1920,10 +2038,12 @@ function createHit(x,y){
             y:y,
 
             vx:
-                (Math.random()-.5)*7,
+                (Math.random()-.5)*
+                7,
 
             vy:
-                (Math.random()-.5)*7,
+                (Math.random()-.5)*
+                7,
 
             life:25,
 
@@ -1953,10 +2073,12 @@ function createExplosion(x,y){
             y:y,
 
             vx:
-                (Math.random()-.5)*14,
+                (Math.random()-.5)*
+                14,
 
             vy:
-                (Math.random()-.5)*14,
+                (Math.random()-.5)*
+                14,
 
             life:45,
 
@@ -1974,7 +2096,8 @@ function createExplosion(x,y){
 function updateParticles(){
 
     for(
-        const p of particles
+        const p
+        of particles
     ){
 
         p.x += p.vx;
@@ -1994,20 +2117,6 @@ function updateParticles(){
         particles.filter(
             p=>p.life>0
         );
-
-}
-
-
-/* =====================================================
-   DISTANCE
-===================================================== */
-
-function distance(a,b){
-
-    return Math.hypot(
-        a.x-b.x,
-        a.y-b.y
-    );
 
 }
 
@@ -2065,10 +2174,6 @@ function drawBackground(){
     );
 
 
-    /*
-        Stars
-    */
-
     for(
         let i=0;
         i<80;
@@ -2077,6 +2182,7 @@ function drawBackground(){
 
         const x =
             (i*137)%W;
+
 
         const y =
             (i*83)%H;
@@ -2117,9 +2223,12 @@ function drawHero(){
         ULTRA AURA
     */
 
-    if(ultra){
+    if(
+        ultra
+    ){
 
         ctx.beginPath();
+
 
         ctx.arc(
             0,
@@ -2144,7 +2253,8 @@ function drawHero(){
             "#00eaff";
 
 
-        ctx.lineWidth = 5;
+        ctx.lineWidth=5;
+
 
         ctx.stroke();
 
@@ -2152,10 +2262,12 @@ function drawHero(){
 
 
     /*
-        SPIN
+        GHUMI GHUMI SPIN
     */
 
-    if(spinning){
+    if(
+        spinning
+    ){
 
         ctx.rotate(
             spinAngle
@@ -2163,6 +2275,7 @@ function drawHero(){
 
 
         ctx.beginPath();
+
 
         ctx.arc(
             0,
@@ -2177,7 +2290,8 @@ function drawHero(){
             "#ffd000";
 
 
-        ctx.lineWidth = 6;
+        ctx.lineWidth=6;
+
 
         ctx.stroke();
 
@@ -2194,17 +2308,39 @@ function drawHero(){
 
     ctx.beginPath();
 
-    ctx.moveTo(-17,5);
 
-    ctx.lineTo(-55,55);
+    ctx.moveTo(
+        -17,
+        5
+    );
 
-    ctx.lineTo(0,35);
 
-    ctx.lineTo(55,55);
+    ctx.lineTo(
+        -55,
+        55
+    );
 
-    ctx.lineTo(17,5);
+
+    ctx.lineTo(
+        0,
+        35
+    );
+
+
+    ctx.lineTo(
+        55,
+        55
+    );
+
+
+    ctx.lineTo(
+        17,
+        5
+    );
+
 
     ctx.closePath();
+
 
     ctx.fill();
 
@@ -2217,18 +2353,35 @@ function drawHero(){
         "#111";
 
 
-    ctx.lineWidth = 11;
+    ctx.lineWidth=11;
 
 
     ctx.beginPath();
 
-    ctx.moveTo(-9,27);
 
-    ctx.lineTo(-14,55);
+    ctx.moveTo(
+        -9,
+        27
+    );
 
-    ctx.moveTo(9,27);
 
-    ctx.lineTo(14,55);
+    ctx.lineTo(
+        -14,
+        55
+    );
+
+
+    ctx.moveTo(
+        9,
+        27
+    );
+
+
+    ctx.lineTo(
+        14,
+        55
+    );
+
 
     ctx.stroke();
 
@@ -2243,6 +2396,7 @@ function drawHero(){
 
     ctx.beginPath();
 
+
     ctx.roundRect(
         -21,
         -10,
@@ -2250,6 +2404,7 @@ function drawHero(){
         45,
         10
     );
+
 
     ctx.fill();
 
@@ -2262,18 +2417,35 @@ function drawHero(){
         "#f1b092";
 
 
-    ctx.lineWidth = 10;
+    ctx.lineWidth=10;
 
 
     ctx.beginPath();
 
-    ctx.moveTo(-18,-2);
 
-    ctx.lineTo(-40,18);
+    ctx.moveTo(
+        -18,
+        -2
+    );
 
-    ctx.moveTo(18,-2);
 
-    ctx.lineTo(40,18);
+    ctx.lineTo(
+        -40,
+        18
+    );
+
+
+    ctx.moveTo(
+        18,
+        -2
+    );
+
+
+    ctx.lineTo(
+        40,
+        18
+    );
+
 
     ctx.stroke();
 
@@ -2288,6 +2460,7 @@ function drawHero(){
 
     ctx.beginPath();
 
+
     ctx.arc(
         0,
         -29,
@@ -2295,6 +2468,7 @@ function drawHero(){
         0,
         Math.PI*2
     );
+
 
     ctx.fill();
 
@@ -2309,6 +2483,7 @@ function drawHero(){
 
     ctx.beginPath();
 
+
     ctx.arc(
         0,
         -36,
@@ -2316,6 +2491,7 @@ function drawHero(){
         Math.PI,
         Math.PI*2
     );
+
 
     ctx.fill();
 
@@ -2330,6 +2506,7 @@ function drawHero(){
 
     ctx.beginPath();
 
+
     ctx.arc(
         -6,
         -29,
@@ -2337,6 +2514,7 @@ function drawHero(){
         0,
         Math.PI*2
     );
+
 
     ctx.arc(
         6,
@@ -2346,11 +2524,12 @@ function drawHero(){
         Math.PI*2
     );
 
+
     ctx.fill();
 
 
     /*
-        CHEST SYMBOL
+        CHEST
     */
 
     ctx.fillStyle =
@@ -2359,15 +2538,33 @@ function drawHero(){
 
     ctx.beginPath();
 
-    ctx.moveTo(0,-5);
 
-    ctx.lineTo(8,8);
+    ctx.moveTo(
+        0,
+        -5
+    );
 
-    ctx.lineTo(0,4);
 
-    ctx.lineTo(-8,8);
+    ctx.lineTo(
+        8,
+        8
+    );
+
+
+    ctx.lineTo(
+        0,
+        4
+    );
+
+
+    ctx.lineTo(
+        -8,
+        8
+    );
+
 
     ctx.closePath();
+
 
     ctx.fill();
 
@@ -2376,7 +2573,9 @@ function drawHero(){
         SWORD
     */
 
-    if(swordActive){
+    if(
+        swordActive
+    ){
 
         ctx.fillStyle =
             "#eee";
@@ -2410,7 +2609,7 @@ function drawHero(){
 
 
 /* =====================================================
-   DRAW NORMAL ENEMY
+   DRAW ENEMY
 ===================================================== */
 
 function drawEnemy(enemy){
@@ -2438,6 +2637,7 @@ function drawEnemy(enemy){
 
     ctx.beginPath();
 
+
     ctx.roundRect(
         -enemy.r*.6,
         -enemy.r*.15,
@@ -2445,6 +2645,7 @@ function drawEnemy(enemy){
         enemy.r*1.1,
         9
     );
+
 
     ctx.fill();
 
@@ -2457,15 +2658,17 @@ function drawEnemy(enemy){
         enemy.color;
 
 
-    ctx.lineWidth = 10;
+    ctx.lineWidth=10;
 
 
     ctx.beginPath();
+
 
     ctx.moveTo(
         -enemy.r*.5,
         0
     );
+
 
     ctx.lineTo(
         -enemy.r,
@@ -2477,6 +2680,7 @@ function drawEnemy(enemy){
         enemy.r*.5,
         0
     );
+
 
     ctx.lineTo(
         enemy.r,
@@ -2497,6 +2701,7 @@ function drawEnemy(enemy){
 
     ctx.beginPath();
 
+
     ctx.arc(
         0,
         -enemy.r*.55,
@@ -2504,6 +2709,7 @@ function drawEnemy(enemy){
         0,
         Math.PI*2
     );
+
 
     ctx.fill();
 
@@ -2518,59 +2724,68 @@ function drawEnemy(enemy){
 
     ctx.beginPath();
 
+
     ctx.moveTo(
         -enemy.r*.25,
         -enemy.r*.75
     );
+
 
     ctx.lineTo(
         -enemy.r*.65,
         -enemy.r*1.35
     );
 
+
     ctx.lineTo(
         -enemy.r*.05,
         -enemy.r*.9
     );
 
+
     ctx.fill();
 
 
     ctx.beginPath();
+
 
     ctx.moveTo(
         enemy.r*.25,
         -enemy.r*.75
     );
 
+
     ctx.lineTo(
         enemy.r*.65,
         -enemy.r*1.35
     );
+
 
     ctx.lineTo(
         enemy.r*.05,
         -enemy.r*.9
     );
 
+
     ctx.fill();
 
 
     /*
-        RED EYES
+        EYES
     */
 
     ctx.fillStyle =
         "#ff0000";
 
 
-    ctx.shadowBlur = 15;
+    ctx.shadowBlur=15;
 
     ctx.shadowColor =
         "red";
 
 
     ctx.beginPath();
+
 
     ctx.arc(
         -enemy.r*.17,
@@ -2580,6 +2795,7 @@ function drawEnemy(enemy){
         Math.PI*2
     );
 
+
     ctx.arc(
         enemy.r*.17,
         -enemy.r*.55,
@@ -2588,14 +2804,15 @@ function drawEnemy(enemy){
         Math.PI*2
     );
 
+
     ctx.fill();
 
 
-    ctx.shadowBlur = 0;
+    ctx.shadowBlur=0;
 
 
     /*
-        HP BAR
+        ENEMY HP
     */
 
     ctx.fillStyle =
@@ -2638,11 +2855,10 @@ function drawEnemy(enemy){
 
 function drawBoss(){
 
-    if(boss === null){
-
+    if(
+        boss===null
+    )
         return;
-
-    }
 
 
     ctx.save();
@@ -2655,10 +2871,10 @@ function drawBoss(){
 
 
     /*
-        HUGE AURA
+        MASSIVE AURA
     */
 
-    ctx.shadowBlur = 40;
+    ctx.shadowBlur=40;
 
     ctx.shadowColor =
         "red";
@@ -2668,10 +2884,11 @@ function drawBoss(){
         "#ff000055";
 
 
-    ctx.lineWidth = 12;
+    ctx.lineWidth=12;
 
 
     ctx.beginPath();
+
 
     ctx.arc(
         0,
@@ -2684,10 +2901,11 @@ function drawBoss(){
         Math.PI*2
     );
 
+
     ctx.stroke();
 
 
-    ctx.shadowBlur = 0;
+    ctx.shadowBlur=0;
 
 
     /*
@@ -2704,6 +2922,7 @@ function drawBoss(){
 
     ctx.beginPath();
 
+
     ctx.roundRect(
         -boss.r*.65,
         -boss.r*.05,
@@ -2711,6 +2930,7 @@ function drawBoss(){
         boss.r*1.25,
         15
     );
+
 
     ctx.fill();
 
@@ -2725,6 +2945,7 @@ function drawBoss(){
 
     ctx.beginPath();
 
+
     ctx.arc(
         -boss.r*.75,
         0,
@@ -2733,6 +2954,7 @@ function drawBoss(){
         Math.PI*2
     );
 
+
     ctx.arc(
         boss.r*.75,
         0,
@@ -2740,6 +2962,7 @@ function drawBoss(){
         0,
         Math.PI*2
     );
+
 
     ctx.fill();
 
@@ -2754,6 +2977,7 @@ function drawBoss(){
 
     ctx.beginPath();
 
+
     ctx.arc(
         0,
         -boss.r*.65,
@@ -2761,6 +2985,7 @@ function drawBoss(){
         0,
         Math.PI*2
     );
+
 
     ctx.fill();
 
@@ -2775,40 +3000,48 @@ function drawBoss(){
 
     ctx.beginPath();
 
+
     ctx.moveTo(
         -boss.r*.35,
         -boss.r*.85
     );
+
 
     ctx.lineTo(
         -boss.r*.75,
         -boss.r*1.55
     );
 
+
     ctx.lineTo(
         -boss.r*.05,
         -boss.r
     );
+
 
     ctx.fill();
 
 
     ctx.beginPath();
 
+
     ctx.moveTo(
         boss.r*.35,
         -boss.r*.85
     );
+
 
     ctx.lineTo(
         boss.r*.75,
         -boss.r*1.55
     );
 
+
     ctx.lineTo(
         boss.r*.05,
         -boss.r
     );
+
 
     ctx.fill();
 
@@ -2821,13 +3054,14 @@ function drawBoss(){
         "#ff0000";
 
 
-    ctx.shadowBlur = 25;
+    ctx.shadowBlur=25;
 
     ctx.shadowColor =
         "red";
 
 
     ctx.beginPath();
+
 
     ctx.arc(
         -boss.r*.2,
@@ -2837,6 +3071,7 @@ function drawBoss(){
         Math.PI*2
     );
 
+
     ctx.arc(
         boss.r*.2,
         -boss.r*.65,
@@ -2845,10 +3080,11 @@ function drawBoss(){
         Math.PI*2
     );
 
+
     ctx.fill();
 
 
-    ctx.shadowBlur = 0;
+    ctx.shadowBlur=0;
 
 
     /*
@@ -2861,32 +3097,39 @@ function drawBoss(){
 
     ctx.beginPath();
 
+
     ctx.moveTo(
         -boss.r*.55,
         -boss.r*1.55
     );
+
 
     ctx.lineTo(
         -boss.r*.3,
         -boss.r*2.05
     );
 
+
     ctx.lineTo(
         0,
         -boss.r*1.6
     );
+
 
     ctx.lineTo(
         boss.r*.3,
         -boss.r*2.05
     );
 
+
     ctx.lineTo(
         boss.r*.55,
         -boss.r*1.55
     );
 
+
     ctx.closePath();
+
 
     ctx.fill();
 
@@ -2943,7 +3186,7 @@ function drawBullets(){
         ctx.save();
 
 
-        ctx.shadowBlur = 20;
+        ctx.shadowBlur=20;
 
         ctx.shadowColor =
             "red";
@@ -2955,6 +3198,7 @@ function drawBullets(){
 
         ctx.beginPath();
 
+
         ctx.arc(
             bullet.x,
             bullet.y,
@@ -2962,6 +3206,7 @@ function drawBullets(){
             0,
             Math.PI*2
         );
+
 
         ctx.fill();
 
@@ -2997,6 +3242,7 @@ function drawParticles(){
 
         ctx.beginPath();
 
+
         ctx.arc(
             p.x,
             p.y,
@@ -3005,12 +3251,13 @@ function drawParticles(){
             Math.PI*2
         );
 
+
         ctx.fill();
 
     }
 
 
-    ctx.globalAlpha = 1;
+    ctx.globalAlpha=1;
 
 }
 
@@ -3046,23 +3293,14 @@ function updateUI(){
         hp+"%";
 
 
-    if(hp < 30){
-
-        document.getElementById(
-            "heroHP"
-        ).style.background =
-            "#ef4444";
-
-    }
-
-    else{
-
-        document.getElementById(
-            "heroHP"
-        ).style.background =
-            "#22c55e";
-
-    }
+    document.getElementById(
+        "heroHP"
+    ).style.background =
+        hp<30
+        ?
+        "#ef4444"
+        :
+        "#22c55e";
 
 }
 
@@ -3087,12 +3325,15 @@ function showMessage(text){
         "block";
 
 
-    setTimeout(function(){
+    setTimeout(
+        function(){
 
-        message.style.display =
-            "none";
+            message.style.display =
+                "none";
 
-    },1700);
+        },
+        1700
+    );
 
 }
 
@@ -3103,14 +3344,13 @@ function showMessage(text){
 
 function gameOver(){
 
-    running = false;
+    running=false;
 
+    boss=null;
 
-    boss = null;
+    enemies=[];
 
-    enemies = [];
-
-    bullets = [];
+    bullets=[];
 
 
     document.getElementById(
@@ -3163,17 +3403,17 @@ function retryGame(){
 
     resetGame();
 
-
-    running = true;
-
+    running=true;
 
     startLevel();
 
+    lastTime =
+        performance.now();
 
-    animationId =
-        requestAnimationFrame(
-            gameLoop
-        );
+
+    requestAnimationFrame(
+        gameLoop
+    );
 
 }
 
@@ -3184,9 +3424,9 @@ function retryGame(){
 
 function victory(){
 
-    running = false;
+    running=false;
 
-    boss = null;
+    boss=null;
 
 
     document.getElementById(
@@ -3198,7 +3438,7 @@ function victory(){
     document.getElementById(
         "message"
     ).innerHTML =
-        "🏆 THE DARK GOD IS DEFEATED 🏆"+
+        "🏆 GHUMI GHUMI WINS 🏆"+
         "<br>"+
         "<small>ALL 10 LEVELS COMPLETED</small>"+
         "<br>"+
@@ -3219,29 +3459,18 @@ function victory(){
    MAIN GAME LOOP
 ===================================================== */
 
-let lastTime = 0;
-
-
 function gameLoop(time){
 
-    if(!running){
-
+    if(!running)
         return;
-
-    }
 
 
     let dt =
         (time-lastTime)/1000;
 
 
-    lastTime = time;
+    lastTime=time;
 
-
-    /*
-        Prevent lag from causing
-        huge time jump.
-    */
 
     dt =
         Math.min(
@@ -3251,7 +3480,7 @@ function gameLoop(time){
 
 
     /*
-        GAME UPDATE
+        UPDATE
     */
 
     moveHero();
@@ -3285,6 +3514,7 @@ function gameLoop(time){
 
     drawBullets();
 
+
     for(
         const enemy
         of enemies
@@ -3299,19 +3529,18 @@ function gameLoop(time){
 
     drawHero();
 
-
     updateUI();
 
 
     /*
-        DEATH CHECK
+        DEATH
     */
 
     if(
-        hero.hp <= 0
+        hero.hp<=0
     ){
 
-        hero.hp = 0;
+        hero.hp=0;
 
         updateUI();
 
@@ -3322,16 +3551,15 @@ function gameLoop(time){
     }
 
 
-    animationId =
-        requestAnimationFrame(
-            gameLoop
-        );
+    requestAnimationFrame(
+        gameLoop
+    );
 
 }
 
 
 /* =====================================================
-   INITIAL UI
+   INITIAL
 ===================================================== */
 
 updateUI();
