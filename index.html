@@ -1,3570 +1,1866 @@
 <!DOCTYPE html>
-<html lang="en">
+<html>
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1.0">
-<title>Ghumi Ghumi Dark Battle</title>
+<title>Ghumi Ghumi</title>
 
 <style>
-*{
-    box-sizing:border-box;
-    user-select:none;
-}
+*{box-sizing:border-box;user-select:none}
+html,body{margin:0;width:100%;height:100%;overflow:hidden;background:#03030a;font-family:Arial;color:white}
+canvas{display:block}
 
-html,body{
-    margin:0;
-    width:100%;
-    height:100%;
-    overflow:hidden;
-    background:#030305;
-    font-family:Arial,sans-serif;
-    color:white;
-}
-
-canvas{
-    display:block;
-}
-
-/* TOP UI */
 #ui{
-    position:fixed;
-    top:12px;
-    left:12px;
-    right:12px;
-    display:flex;
-    justify-content:space-between;
-    z-index:10;
-    pointer-events:none;
+ position:fixed;top:12px;left:12px;right:12px;z-index:20;
+ display:flex;justify-content:space-between;pointer-events:none
 }
-
 .panel{
-    background:rgba(0,0,0,.82);
-    border:1px solid #333;
-    border-radius:14px;
-    padding:10px 15px;
-    box-shadow:0 5px 25px #000;
+ background:rgba(0,0,0,.8);padding:10px 15px;border-radius:13px;
+ border:1px solid #333;box-shadow:0 5px 25px #000
 }
+.bar{width:240px;height:16px;background:#350505;border-radius:20px;overflow:hidden;margin-top:5px}
+#heroHP{width:100%;height:100%;background:#22c55e}
 
-.bar{
-    width:260px;
-    height:18px;
-    background:#320505;
-    border-radius:20px;
-    overflow:hidden;
-    margin-top:5px;
-}
-
-#heroHP{
-    width:100%;
-    height:100%;
-    background:#22c55e;
-    transition:.1s;
-}
-
-/* BOSS UI */
 #bossUI{
-    position:fixed;
-    top:75px;
-    left:50%;
-    transform:translateX(-50%);
-    width:400px;
-    text-align:center;
-    display:none;
-    z-index:10;
+ position:fixed;top:70px;left:50%;transform:translateX(-50%);
+ width:430px;z-index:20;display:none;text-align:center
+}
+#bossName{font-size:22px;color:#ff2222;font-weight:bold;text-shadow:0 0 20px red}
+#bossHP{height:20px;background:#300;border-radius:20px;overflow:hidden}
+#bossHPFill{height:100%;width:100%;background:#e11}
+
+#objective{
+ position:fixed;top:105px;left:50%;transform:translateX(-50%);
+ z-index:20;background:rgba(0,0,0,.65);padding:7px 18px;border-radius:20px
 }
 
-#bossName{
-    font-size:22px;
-    font-weight:bold;
-    color:#ff2222;
-    text-shadow:0 0 10px red,0 0 25px red;
-    margin-bottom:6px;
-}
-
-#bossHP{
-    width:100%;
-    height:20px;
-    background:#300000;
-    border-radius:20px;
-    overflow:hidden;
-}
-
-#bossHPFill{
-    width:100%;
-    height:100%;
-    background:#ef1111;
-}
-
-/* MESSAGE */
 #message{
-    position:fixed;
-    top:42%;
-    left:50%;
-    transform:translate(-50%,-50%);
-    z-index:30;
-    display:none;
-    text-align:center;
-    font-size:45px;
-    font-weight:bold;
-    white-space:nowrap;
-    text-shadow:0 0 15px red,0 0 35px red;
+ position:fixed;top:40%;left:50%;transform:translate(-50%,-50%);
+ z-index:70;display:none;text-align:center;font-size:42px;font-weight:bold;
+ text-shadow:0 0 20px red
 }
 
-/* RETRY */
 #retry{
-    position:fixed;
-    top:58%;
-    left:50%;
-    transform:translateX(-50%);
-    z-index:31;
-    display:none;
-    padding:15px 45px;
-    border:0;
-    border-radius:30px;
-    background:linear-gradient(90deg,#dc2626,#7f1d1d);
-    color:white;
-    font-size:19px;
-    font-weight:bold;
-    cursor:pointer;
+ position:fixed;top:58%;left:50%;transform:translateX(-50%);
+ z-index:71;display:none;padding:14px 45px;border:0;border-radius:30px;
+ background:#b91c1c;color:white;font-size:18px;font-weight:bold
 }
 
-#retry:hover{
-    transform:translateX(-50%) scale(1.08);
-    box-shadow:0 0 35px red;
-}
-
-/* CONTROLS */
-#controls{
-    position:fixed;
-    bottom:10px;
-    left:10px;
-    z-index:10;
-    background:rgba(0,0,0,.75);
-    padding:9px 13px;
-    border-radius:10px;
-    font-size:13px;
-}
-
-/* START SCREEN */
 #startScreen{
-    position:fixed;
-    inset:0;
-    z-index:100;
-    display:flex;
-    justify-content:center;
-    align-items:center;
-    background:
-        radial-gradient(circle at center,#380707,#030305 70%);
+ position:fixed;inset:0;z-index:100;display:flex;
+ align-items:center;justify-content:center;
+ background:radial-gradient(circle,#390817,#050208 70%)
 }
+.startBox{text-align:center;padding:45px;border:1px solid #522;border-radius:25px;background:#ffffff08}
+.startBox h1{font-size:58px;margin:0;color:#ff2929;text-shadow:0 0 20px red,0 0 50px red}
+.startBtn{margin-top:20px;padding:14px 42px;border:0;border-radius:30px;background:#b91c1c;color:white;font-size:18px;font-weight:bold}
 
-.startBox{
-    text-align:center;
-    padding:50px;
-    border-radius:28px;
-    background:#ffffff08;
-    border:1px solid #ff222233;
-    box-shadow:0 0 100px #ff000022;
-}
-
-.startBox h1{
-    margin:0;
-    font-size:58px;
-    color:#ff2222;
-    text-shadow:0 0 15px red,0 0 40px red;
-}
-
-.startBox h2{
-    color:#ddd;
-}
-
-.startBox p{
-    color:#aaa;
-}
-
-.startBtn{
-    margin-top:20px;
-    padding:15px 45px;
-    border:0;
-    border-radius:30px;
-    background:linear-gradient(90deg,#dc2626,#7f1d1d);
-    color:white;
-    font-size:18px;
-    font-weight:bold;
-    cursor:pointer;
-}
-
-.startBtn:hover{
-    transform:scale(1.07);
-    box-shadow:0 0 35px red;
+#controls{
+ position:fixed;bottom:10px;left:10px;z-index:20;
+ background:#000b;padding:9px 13px;border-radius:10px;font-size:13px
 }
 </style>
 </head>
 
 <body>
 
-<!-- START SCREEN -->
-
 <div id="startScreen">
-
-    <div class="startBox">
-
-        <h1>🌀 GHUMI GHUMI 🌀</h1>
-
-        <h2>GHUMI GHUMI DARK BATTLE</h2>
-
-        <p>10 Levels • Different Enemies • Powerful Bosses</p>
-
-        <p>Defeat every boss and reach The Dark God.</p>
-
-        <button class="startBtn" onclick="startGame()">
-            START BATTLE
-        </button>
-
-    </div>
-
+ <div class="startBox">
+  <h1>🌀 GHUMI GHUMI 🌀</h1>
+  <h2>DARK BATTLE</h2>
+  <p>10 Levels • Different Enemies • Powerful Bosses</p>
+  <p>⚔️ Sword &nbsp; 🌀 T Spin &nbsp; 🔱 K Ultra</p>
+  <button class="startBtn" onclick="startGame()">START BATTLE</button>
+ </div>
 </div>
-
-
-<!-- UI -->
 
 <div id="ui">
+ <div class="panel">
+  ❤️ HERO HP
+  <div class="bar"><div id="heroHP"></div></div>
+ </div>
 
-    <div class="panel">
-
-        ❤️ HERO HP
-
-        <div class="bar">
-            <div id="heroHP"></div>
-        </div>
-
-    </div>
-
-
-    <div class="panel">
-
-        LEVEL <b id="levelText">1</b> / 10
-
-        &nbsp;&nbsp;
-
-        SCORE <b id="scoreText">0</b>
-
-        <br>
-
-        ⚡ <span id="powerText">READY</span>
-
-    </div>
-
+ <div class="panel">
+  LEVEL <b id="levelText">1</b>/10 |
+  SCORE <b id="scoreText">0</b><br>
+  ⚡ <span id="powerText">READY</span>
+ </div>
 </div>
 
-
-<!-- BOSS -->
+<div id="objective">DARK FOREST</div>
 
 <div id="bossUI">
-
-    <div id="bossName">
-        BOSS
-    </div>
-
-    <div id="bossHP">
-
-        <div id="bossHPFill"></div>
-
-    </div>
-
+ <div id="bossName">BOSS</div>
+ <div id="bossHP"><div id="bossHPFill"></div></div>
 </div>
-
-
-<!-- MESSAGE -->
 
 <div id="message"></div>
 
-
-<!-- RETRY -->
-
-<button id="retry" onclick="retryGame()">
-    🔄 RETRY
-</button>
-
-
-<!-- CONTROLS -->
+<button id="retry" onclick="retryGame()">🔄 RETRY</button>
 
 <div id="controls">
-
-    <b>W A S D</b> Move &nbsp;|&nbsp;
-
-    <b>SPACE / CLICK</b> Sword &nbsp;|&nbsp;
-
-    <b>T</b> Ghumi Spin &nbsp;|&nbsp;
-
-    <b>K</b> Ultra
-
+ <b>W A S D</b> Move |
+ <b>SPACE / CLICK</b> Sword |
+ <b>T</b> GHUMI |
+ <b>K</b> 🔱 ULTRA
 </div>
-
 
 <canvas id="game"></canvas>
 
-
 <script>
 
-/* =====================================================
-   CANVAS
-===================================================== */
+const canvas=document.getElementById("game");
+const ctx=canvas.getContext("2d");
 
-const canvas =
-    document.getElementById("game");
+let W=innerWidth,H=innerHeight;
+canvas.width=W;canvas.height=H;
 
-const ctx =
-    canvas.getContext("2d");
+addEventListener("resize",()=>{
+ W=canvas.width=innerWidth;
+ H=canvas.height=innerHeight;
+});
 
-let W =
-    window.innerWidth;
+let running=false;
+let level=1;
+let score=0;
+let levelTime=0;
+let spawnTimer=0;
 
-let H =
-    window.innerHeight;
+let enemies=[];
+let bullets=[];
+let particles=[];
+let boss=null;
 
+let keys={};
+let lastTime=0;
 
-function resize(){
+let swordActive=false;
 
-    W =
-        canvas.width =
-        window.innerWidth;
+/* =========================
+   T SPIN STATE
+========================= */
 
-    H =
-        canvas.height =
-        window.innerHeight;
+let spinning=false;
+let spinTime=0;
+let spinAngle=0;
+let spinHeight=0;
 
-}
+/* =========================
+   K ULTRA
+========================= */
 
+let ultraMode=false;
+let trishulActive=false;
+let trishulTime=0;
+let trishulProgress=0;
 
-resize();
-
-
-window.addEventListener(
-    "resize",
-    resize
-);
-
-
-/* =====================================================
-   GAME VARIABLES
-===================================================== */
-
-let running = false;
-
-let level = 1;
-
-let score = 0;
-
-let enemies = [];
-
-let boss = null;
-
-let bullets = [];
-
-let particles = [];
-
-let keys = {};
-
-let levelTime = 0;
-
-let spawnTimer = 0;
-
-let bossCountdown = false;
-
-let swordActive = false;
-
-let spinning = false;
-
-let ultra = false;
-
-let spinAngle = 0;
-
-let lastTime = 0;
+let damageMultiplier=1;
+let speedMultiplier=1;
 
 
-/* =====================================================
+/* =========================
    HERO
-===================================================== */
+========================= */
 
-const hero = {
-
-    x:W/2,
-
-    y:H/2,
-
-    r:25,
-
-    speed:5.5,
-
-    hp:100,
-
-    maxHp:100
-
+const hero={
+ x:W/2,
+ y:H/2,
+ r:25,
+ speed:5,
+ hp:100,
+ maxHp:100
 };
 
 
-/* =====================================================
-   ENEMY TYPES
-===================================================== */
+/* =========================
+   ENEMIES
+========================= */
 
-const enemyTypes = {
-
-    beast:{
-        hp:45,
-        speed:2.2,
-        damage:7,
-        r:23,
-        color:"#8f1111"
-    },
-
-    hunter:{
-        hp:75,
-        speed:3.3,
-        damage:9,
-        r:21,
-        color:"#4b1d80"
-    },
-
-    demon:{
-        hp:120,
-        speed:2.8,
-        damage:12,
-        r:28,
-        color:"#701111"
-    },
-
-    brute:{
-        hp:260,
-        speed:1.25,
-        damage:18,
-        r:36,
-        color:"#39393f"
-    },
-
-    shadow:{
-        hp:170,
-        speed:3.8,
-        damage:15,
-        r:25,
-        color:"#10131d"
-    },
-
-    monster:{
-        hp:350,
-        speed:1.8,
-        damage:23,
-        r:43,
-        color:"#54177c"
-    }
-
+const types={
+ beast:{hp:60,speed:2,damage:8,r:23,color:"#991b1b"},
+ hunter:{hp:90,speed:3,damage:10,r:21,color:"#6320a0"},
+ demon:{hp:150,speed:2.5,damage:14,r:28,color:"#7f1111"},
+ brute:{hp:330,speed:1.2,damage:20,r:38,color:"#444"},
+ shadow:{hp:190,speed:3.5,damage:17,r:26,color:"#111827"},
+ monster:{hp:420,speed:1.6,damage:24,r:43,color:"#641786"},
+ bomber:{hp:110,speed:2.7,damage:30,r:24,color:"#b45309"},
+ vampire:{hp:180,speed:2.4,damage:16,r:27,color:"#9f1239"}
 };
 
+const pools=[
+ ["beast","hunter"],
+ ["beast","hunter","bomber"],
+ ["hunter","demon","brute"],
+ ["demon","brute","bomber"],
+ ["shadow","vampire"],
+ ["hunter","demon","brute"],
+ ["shadow","hunter","bomber"],
+ ["demon","brute","vampire"],
+ ["shadow","monster","brute","bomber"],
+ ["monster","brute","vampire"]
+];
 
-/* =====================================================
-   BOSS DATA
-===================================================== */
+const levelNames=[
+ "🌑 DARK FOREST",
+ "🏃 ENEMY RUSH",
+ "🏰 DEMON CASTLE",
+ "🌋 LAVA ARENA",
+ "👻 SHADOW WORLD",
+ "⚡ LIGHTNING TEMPLE",
+ "🌀 PORTAL WORLD",
+ "💀 BOSS HUNT",
+ "🔥 ENDLESS ARMY",
+ "👑 DARK GOD"
+];
 
-const bossData = [
+const bossNames=[
+ "BLOOD REAPER",
+ "DARK HUNTER",
+ "SKULL LORD",
+ "HELL BRUTE",
+ "DEMON KING",
+ "NIGHTMARE",
+ "VOID WARRIOR",
+ "DARK TITAN",
+ "HELL EMPEROR",
+ "THE DARK GOD"
+];
 
-    {
-        name:"BLOOD REAPER",
-        hp:1800,
-        speed:.75,
-        damage:25
-    },
-
-    {
-        name:"DARK HUNTER",
-        hp:2400,
-        speed:.82,
-        damage:28
-    },
-
-    {
-        name:"SKULL LORD",
-        hp:3200,
-        speed:.88,
-        damage:31
-    },
-
-    {
-        name:"HELL BRUTE",
-        hp:4200,
-        speed:.75,
-        damage:35
-    },
-
-    {
-        name:"DEMON KING",
-        hp:5400,
-        speed:.92,
-        damage:38
-    },
-
-    {
-        name:"NIGHTMARE",
-        hp:6800,
-        speed:1,
-        damage:42
-    },
-
-    {
-        name:"VOID WARRIOR",
-        hp:8500,
-        speed:1.05,
-        damage:46
-    },
-
-    {
-        name:"DARK TITAN",
-        hp:10500,
-        speed:.92,
-        damage:50
-    },
-
-    {
-        name:"HELL EMPEROR",
-        hp:13000,
-        speed:1.08,
-        damage:55
-    },
-
-    {
-        name:"THE DARK GOD",
-        hp:18000,
-        speed:1.12,
-        damage:65
-    }
-
+const bossHP=[
+ 1800,2500,3400,4500,5700,
+ 7000,9000,11500,14500,20000
 ];
 
 
-/* =====================================================
-   KEYBOARD
-===================================================== */
+/* =========================
+   INPUT
+========================= */
 
-window.addEventListener(
-    "keydown",
-    function(e){
+addEventListener("keydown",e=>{
 
-        const key =
-            e.key.toLowerCase();
+ const k=e.key.toLowerCase();
 
-        keys[key] = true;
+ keys[k]=true;
 
+ if(k==="t"){
+   e.preventDefault();
+   activateSpin();
+ }
 
-        if(key === "t"){
+ if(k==="k"){
+   e.preventDefault();
+   activateUltra();
+ }
 
-            startSpin();
+ if(e.code==="Space"){
+   e.preventDefault();
+   swordAttack();
+ }
+});
 
-        }
+addEventListener("keyup",e=>{
+ keys[e.key.toLowerCase()]=false;
+});
 
-
-        if(key === "k"){
-
-            ultraAttack();
-
-        }
-
-
-        if(e.code === "Space"){
-
-            e.preventDefault();
-
-            swordAttack();
-
-        }
-
-    }
-);
+canvas.addEventListener("mousedown",swordAttack);
 
 
-window.addEventListener(
-    "keyup",
-    function(e){
-
-        const key =
-            e.key.toLowerCase();
-
-        keys[key] = false;
-
-
-        if(key === "k"){
-
-            ultra = false;
-
-            document.getElementById(
-                "powerText"
-            ).innerText =
-                "READY";
-
-        }
-
-    }
-);
-
-
-canvas.addEventListener(
-    "mousedown",
-    function(){
-
-        swordAttack();
-
-    }
-);
-
-
-/* =====================================================
-   START GAME
-===================================================== */
+/* =========================
+   START
+========================= */
 
 function startGame(){
 
-    document.getElementById(
-        "startScreen"
-    ).style.display =
-        "none";
+ document.getElementById("startScreen").style.display="none";
 
+ resetGame();
 
-    resetGame();
+ running=true;
 
-    running = true;
+ startLevel();
 
-    startLevel();
+ lastTime=performance.now();
 
-    lastTime =
-        performance.now();
-
-    requestAnimationFrame(
-        gameLoop
-    );
-
+ requestAnimationFrame(loop);
 }
-
-
-/* =====================================================
-   RESET
-===================================================== */
 
 function resetGame(){
 
-    running = false;
+ level=1;
+ score=0;
+ levelTime=0;
+ spawnTimer=0;
 
-    level = 1;
+ enemies=[];
+ bullets=[];
+ particles=[];
+ boss=null;
 
-    score = 0;
+ spinning=false;
+ spinTime=0;
+ spinAngle=0;
 
-    enemies = [];
+ ultraMode=false;
+ trishulActive=false;
+ trishulTime=0;
 
-    bullets = [];
+ damageMultiplier=1;
+ speedMultiplier=1;
 
-    particles = [];
+ hero.x=W/2;
+ hero.y=H/2;
+ hero.hp=100;
 
-    boss = null;
-
-    levelTime = 0;
-
-    spawnTimer = 0;
-
-    bossCountdown = false;
-
-    swordActive = false;
-
-    spinning = false;
-
-    ultra = false;
-
-    spinAngle = 0;
-
-
-    hero.x =
-        W/2;
-
-    hero.y =
-        H/2;
-
-    hero.hp =
-        hero.maxHp;
-
-
-    document.getElementById(
-        "retry"
-    ).style.display =
-        "none";
-
-
-    document.getElementById(
-        "message"
-    ).style.display =
-        "none";
-
-
-    document.getElementById(
-        "bossUI"
-    ).style.display =
-        "none";
-
-
-    document.getElementById(
-        "powerText"
-    ).innerText =
-        "READY";
-
+ document.getElementById("retry").style.display="none";
+ document.getElementById("message").style.display="none";
 }
 
 
-/* =====================================================
-   LEVEL START
-===================================================== */
+/* =========================
+   LEVEL
+========================= */
 
 function startLevel(){
 
-    enemies = [];
+ enemies=[];
+ bullets=[];
+ boss=null;
 
-    bullets = [];
+ levelTime=0;
+ spawnTimer=0;
 
-    boss = null;
+ document.getElementById("levelText").innerText=level;
+ document.getElementById("objective").innerText=levelNames[level-1];
 
-    levelTime = 0;
+ document.getElementById("bossUI").style.display="none";
 
-    spawnTimer = 0;
-
-    bossCountdown = false;
-
-    swordActive = false;
-
-    spinning = false;
-
-    ultra = false;
-
-
-    document.getElementById(
-        "bossUI"
-    ).style.display =
-        "none";
-
-
-    document.getElementById(
-        "powerText"
-    ).innerText =
-        "READY";
-
-
-    showMessage(
-        "LEVEL " + level
-    );
-
+ showMessage(levelNames[level-1]);
 }
 
 
-/* =====================================================
-   ENEMY POOL
-===================================================== */
-
-function getEnemyPool(){
-
-    if(level === 1)
-        return ["beast"];
-
-    if(level === 2)
-        return ["beast","hunter"];
-
-    if(level === 3)
-        return ["hunter","demon"];
-
-    if(level === 4)
-        return ["beast","hunter","demon"];
-
-    if(level === 5)
-        return ["demon","brute"];
-
-    if(level === 6)
-        return ["hunter","brute","shadow"];
-
-    if(level === 7)
-        return ["demon","brute","shadow"];
-
-    if(level === 8)
-        return ["brute","shadow","monster"];
-
-    if(level === 9)
-        return ["shadow","monster","demon","brute"];
-
-    return ["shadow","monster","brute"];
-
-}
-
-
-/* =====================================================
-   SPAWN ENEMY
-===================================================== */
+/* =========================
+   SPAWN
+========================= */
 
 function spawnEnemy(){
 
-    const pool =
-        getEnemyPool();
+ const pool=pools[level-1];
+ const type=pool[Math.floor(Math.random()*pool.length)];
+ const d=types[type];
 
+ const side=Math.floor(Math.random()*4);
 
-    const type =
-        pool[
-            Math.floor(
-                Math.random()*pool.length
-            )
-        ];
+ let x,y;
 
+ if(side===0){x=-70;y=Math.random()*H}
+ else if(side===1){x=W+70;y=Math.random()*H}
+ else if(side===2){x=Math.random()*W;y=-70}
+ else{x=Math.random()*W;y=H+70}
 
-    const data =
-        enemyTypes[type];
+ const diff=1+(level-1)*.16;
 
-
-    const side =
-        Math.floor(
-            Math.random()*4
-        );
-
-
-    let x;
-    let y;
-
-
-    if(side === 0){
-
-        x = -80;
-        y = Math.random()*H;
-
-    }
-
-    else if(side === 1){
-
-        x = W+80;
-        y = Math.random()*H;
-
-    }
-
-    else if(side === 2){
-
-        x = Math.random()*W;
-        y = -80;
-
-    }
-
-    else{
-
-        x = Math.random()*W;
-        y = H+80;
-
-    }
-
-
-    const difficulty =
-        1+
-        (level-1)*.18;
-
-
-    enemies.push({
-
-        x:x,
-
-        y:y,
-
-        r:data.r,
-
-        hp:
-            data.hp*
-            difficulty,
-
-        maxHp:
-            data.hp*
-            difficulty,
-
-        speed:
-            data.speed*
-            (1+(level-1)*.06),
-
-        damage:
-            data.damage*
-            difficulty,
-
-        color:data.color,
-
-        flash:0
-
-    });
-
+ enemies.push({
+  type,
+  x,y,
+  r:d.r,
+  hp:d.hp*diff,
+  maxHp:d.hp*diff,
+  speed:d.speed*(1+(level-1)*.05),
+  damage:d.damage*diff,
+  color:d.color,
+  flash:0,
+  bomb:0
+ });
 }
 
 
-/* =====================================================
-   SPAWN BOSS
-===================================================== */
+/* =========================
+   BOSS
+========================= */
 
 function spawnBoss(){
 
-    if(boss !== null)
-        return;
+ if(boss)return;
 
+ boss={
+  name:bossNames[level-1],
+  x:W/2,
+  y:130,
+  r:72+level*3,
+  hp:bossHP[level-1],
+  maxHp:bossHP[level-1],
+  speed:.8+level*.035,
+  damage:25+level*4,
+  attack:0,
+  phase:1,
+  flash:0
+ };
 
-    const data =
-        bossData[level-1];
+ document.getElementById("bossName").innerText=
+  "☠ "+boss.name+" ☠";
 
+ document.getElementById("bossUI").style.display="block";
 
-    boss = {
+ updateBossBar();
 
-        name:data.name,
-
-        x:W/2,
-
-        y:140,
-
-        r:
-            75+
-            level*3,
-
-        hp:data.hp,
-
-        maxHp:data.hp,
-
-        speed:data.speed,
-
-        damage:data.damage,
-
-        attackTimer:0,
-
-        chargeTimer:0,
-
-        chargeTime:0,
-
-        flash:0
-
-    };
-
-
-    document.getElementById(
-        "bossName"
-    ).innerText =
-        "☠ " +
-        boss.name +
-        " ☠";
-
-
-    document.getElementById(
-        "bossUI"
-    ).style.display =
-        "block";
-
-
-    updateBossBar();
-
-
-    showMessage(
-        "☠ " +
-        boss.name +
-        " ☠"
-    );
-
+ showMessage("☠ "+boss.name+" ☠");
 }
 
 
-/* =====================================================
-   HERO MOVEMENT
-===================================================== */
+/* =========================
+   MOVEMENT
+========================= */
 
 function moveHero(){
 
-    let dx=0;
+ let dx=0,dy=0;
 
-    let dy=0;
+ if(keys.w)dy--;
+ if(keys.s)dy++;
+ if(keys.a)dx--;
+ if(keys.d)dx++;
 
+ if(dx||dy){
 
-    if(keys.w)
-        dy--;
+  const l=Math.hypot(dx,dy);
 
-    if(keys.s)
-        dy++;
+  hero.x+=dx/l*hero.speed*speedMultiplier;
+  hero.y+=dy/l*hero.speed*speedMultiplier;
+ }
 
-    if(keys.a)
-        dx--;
+ hero.x=Math.max(hero.r,Math.min(W-hero.r,hero.x));
+ hero.y=Math.max(95,Math.min(H-hero.r,hero.y));
+}
 
-    if(keys.d)
-        dx++;
-
-
-    if(
-        dx !== 0 ||
-        dy !== 0
-    ){
-
-        const length =
-            Math.hypot(
-                dx,
-                dy
-            );
-
-
-        dx/=length;
-
-        dy/=length;
-
-
-        hero.x +=
-            dx*
-            hero.speed;
-
-
-        hero.y +=
-            dy*
-            hero.speed;
-
-    }
-
-
-    hero.x =
-        Math.max(
-            hero.r,
-            Math.min(
-                W-hero.r,
-                hero.x
-            )
-        );
-
-
-    hero.y =
-        Math.max(
-            80,
-            Math.min(
-                H-hero.r,
-                hero.y
-            )
-        );
-
+function dist(a,b){
+ return Math.hypot(a.x-b.x,a.y-b.y);
 }
 
 
-/* =====================================================
-   DISTANCE
-===================================================== */
-
-function distance(a,b){
-
-    return Math.hypot(
-        a.x-b.x,
-        a.y-b.y
-    );
-
-}
-
-
-/* =====================================================
+/* =========================
    SWORD
-===================================================== */
+========================= */
 
 function swordAttack(){
 
-    if(
-        !running ||
-        spinning
-    )
-        return;
+ if(!running||ultraMode)return;
 
+ swordActive=true;
 
-    swordActive = true;
+ setTimeout(()=>swordActive=false,130);
 
+ const damage=45*damageMultiplier;
 
-    setTimeout(
-        function(){
+ for(let i=enemies.length-1;i>=0;i--){
 
-            swordActive = false;
+  const e=enemies[i];
 
-        },
-        180
-    );
+  if(dist(hero,e)<125){
 
+   e.hp-=damage;
+   e.flash=5;
 
-    for(
-        let i=enemies.length-1;
-        i>=0;
-        i--
-    ){
+   hit(e.x,e.y);
 
-        const enemy =
-            enemies[i];
+   if(e.hp<=0){
 
+    score+=100;
+    explosion(e.x,e.y);
+    enemies.splice(i,1);
+   }
+  }
+ }
 
-        if(
-            distance(
-                hero,
-                enemy
-            )
-            <
-            120
-        ){
+ if(boss&&dist(hero,boss)<155){
 
-            enemy.hp -= 35;
+  boss.hp-=damage;
+  boss.flash=5;
 
-            enemy.flash = 5;
+  updateBossBar();
 
-            createHit(
-                enemy.x,
-                enemy.y
-            );
-
-
-            if(
-                enemy.hp<=0
-            ){
-
-                score += 100;
-
-                enemies.splice(
-                    i,
-                    1
-                );
-
-            }
-
-        }
-
-    }
-
-
-    if(boss !== null){
-
-        if(
-            distance(
-                hero,
-                boss
-            )
-            <
-            150
-        ){
-
-            boss.hp -= 35;
-
-            boss.flash = 5;
-
-            createHit(
-                boss.x,
-                boss.y
-            );
-
-
-            if(
-                boss.hp<=0
-            ){
-
-                defeatBoss();
-
-            }
-
-        }
-
-    }
-
+  if(boss.hp<=0)defeatBoss();
+ }
 }
 
 
-/* =====================================================
-   T = GHUMI SPIN
-===================================================== */
+/* =========================================================
+   T = GHUMI GHUMI
 
-function startSpin(){
+   CHARACTER ITSELF ROTATES.
+   NO SECOND GAME LOOP.
+========================================================= */
 
-    if(
-        !running ||
-        spinning
-    )
-        return;
+function activateSpin(){
 
+ if(!running)return;
+ if(spinning)return;
+ if(trishulActive)return;
 
-    spinning = true;
+ spinning=true;
 
+ spinTime=1.7;
 
-    document.getElementById(
-        "powerText"
-    ).innerText =
-        "🌀 GHUMI GHUMI";
+ spinAngle=0;
 
+ spinHeight=0;
 
-    const start =
-        performance.now();
-
-
-    function spinLoop(){
-
-        if(!running){
-
-            spinning = false;
-
-            return;
-
-        }
-
-
-        spinAngle += .5;
-
-
-        /*
-            LOW DAMAGE
-        */
-
-        for(
-            let i=enemies.length-1;
-            i>=0;
-            i--
-        ){
-
-            const enemy =
-                enemies[i];
-
-
-            if(
-                distance(
-                    hero,
-                    enemy
-                )
-                <
-                165
-            ){
-
-                enemy.hp -= 2;
-
-
-                if(
-                    enemy.hp<=0
-                ){
-
-                    score += 100;
-
-                    enemies.splice(
-                        i,
-                        1
-                    );
-
-                }
-
-            }
-
-        }
-
-
-        /*
-            BOSS LOW DAMAGE
-        */
-
-        if(
-            boss !== null &&
-            distance(
-                hero,
-                boss
-            )
-            <
-            170
-        ){
-
-            boss.hp -= 2;
-
-
-            if(
-                boss.hp<=0
-            ){
-
-                defeatBoss();
-
-                return;
-
-            }
-
-        }
-
-
-        if(
-            performance.now()-
-            start
-            <
-            1500
-        ){
-
-            requestAnimationFrame(
-                spinLoop
-            );
-
-        }
-
-        else{
-
-            spinning = false;
-
-
-            document.getElementById(
-                "powerText"
-            ).innerText =
-                "READY";
-
-        }
-
-    }
-
-
-    requestAnimationFrame(
-        spinLoop
-    );
-
+ document.getElementById("powerText").innerText=
+  "🌀 GHUMI GHUMI";
 }
 
 
-/* =====================================================
-   K = ULTRA
-===================================================== */
+/* =========================
+   SPIN UPDATE
+========================= */
 
-function ultraAttack(){
+function updateSpin(dt){
 
-    if(!running)
-        return;
+ if(!spinning)return;
 
+ spinTime-=dt;
 
-    ultra = true;
+ spinAngle+=dt*14;
 
+ /*
+    Floating movement.
+    Hero actually rises and falls.
+ */
 
-    document.getElementById(
-        "powerText"
-    ).innerText =
-        "🔥 ULTRA ACTIVE";
+ const progress=
+   1-(spinTime/1.7);
 
+ spinHeight=
+   Math.sin(progress*Math.PI)*55;
 
-    /*
-        NORMAL ENEMIES:
-        100% DAMAGE
-    */
+ /*
+    Spin damage.
+ */
 
-    for(
-        const enemy
-        of enemies
-    ){
+ const range=155;
 
-        enemy.hp = 0;
+ for(let i=enemies.length-1;i>=0;i--){
 
-        score += 100;
+  const e=enemies[i];
 
-        createExplosion(
-            enemy.x,
-            enemy.y
-        );
+  if(dist(hero,e)<range){
 
-    }
+   e.hp-=5*damageMultiplier;
 
+   e.flash=2;
 
-    enemies = [];
+   /*
+      Knock enemy backward.
+   */
 
+   const dx=e.x-hero.x;
+   const dy=e.y-hero.y;
+   const d=Math.max(1,Math.hypot(dx,dy));
 
-    /*
-        BOSS:
-        60% DAMAGE
-    */
+   e.x+=dx/d*7;
+   e.y+=dy/d*7;
 
-    if(
-        boss !== null
-    ){
+   if(e.hp<=0){
 
-        boss.hp -=
-            boss.maxHp*
-            .60;
+    score+=100;
 
+    explosion(e.x,e.y);
 
-        createExplosion(
-            boss.x,
-            boss.y
-        );
+    enemies.splice(i,1);
+   }
+  }
+ }
 
+ /*
+    Boss gets spin damage too.
+ */
 
-        if(
-            boss.hp<=0
-        ){
+ if(boss&&dist(hero,boss)<range){
 
-            defeatBoss();
+  boss.hp-=5*damageMultiplier;
+  boss.flash=3;
 
-        }
+  updateBossBar();
 
-        else{
+  if(boss.hp<=0){
 
-            updateBossBar();
+   defeatBoss();
 
-        }
+   spinning=false;
 
-    }
+   return;
+  }
+ }
 
+ if(spinTime<=0){
+
+  spinning=false;
+  spinTime=0;
+  spinHeight=0;
+
+  document.getElementById("powerText").innerText=
+   "READY";
+ }
 }
 
 
-/* =====================================================
-   NORMAL ENEMIES UPDATE
-===================================================== */
+/* =========================================================
+   K = ULTRA REVERSE TRISHUL
+========================================================= */
 
-function updateEnemies(){
+function activateUltra(){
 
-    for(
-        let i=enemies.length-1;
-        i>=0;
-        i--
-    ){
+ if(!running)return;
+ if(trishulActive)return;
 
-        const enemy =
-            enemies[i];
+ ultraMode=true;
+ trishulActive=true;
 
+ spinning=false;
 
-        const dx =
-            hero.x-
-            enemy.x;
+ trishulTime=1.35;
+ trishulProgress=0;
 
+ bullets=[];
 
-        const dy =
-            hero.y-
-            enemy.y;
+ document.getElementById("powerText").innerText=
+  "🔱 ULTRA TRISHUL";
 
+ /*
+    NORMAL ENEMIES 100% DEAD
+ */
 
-        const dist =
-            Math.hypot(
-                dx,
-                dy
-            );
+ for(const e of enemies){
 
+  score+=100;
 
-        if(
-            dist>1
-        ){
+  explosion(e.x,e.y);
+ }
 
-            enemy.x +=
-                (dx/dist)*
-                enemy.speed;
+ enemies=[];
 
+ /*
+    BOSS 60% MAX HP
+ */
 
-            enemy.y +=
-                (dy/dist)*
-                enemy.speed;
+ if(boss){
 
-        }
+  boss.hp-=boss.maxHp*.60;
 
+  boss.flash=10;
 
-        if(
-            enemy.flash>0
-        ){
+  explosion(boss.x,boss.y);
 
-            enemy.flash--;
+  updateBossBar();
 
-        }
-
-
-        /*
-            ENEMY TOUCH DAMAGE
-        */
-
-        if(
-            dist
-            <=
-            hero.r+
-            enemy.r*.65
-        ){
-
-            hero.hp -=
-                enemy.damage*
-                .025;
-
-        }
-
-
-        if(
-            enemy.hp<=0
-        ){
-
-            score += 100;
-
-            enemies.splice(
-                i,
-                1
-            );
-
-        }
-
-    }
-
+  if(boss.hp<=0)
+   defeatBoss();
+ }
 }
 
 
-/* =====================================================
+/* =========================
+   ULTRA UPDATE
+========================= */
+
+function updateUltra(dt){
+
+ if(!trishulActive)return;
+
+ trishulTime-=dt;
+
+ trishulProgress=
+  Math.min(1,1-trishulTime/1.35);
+
+ /*
+    Keep all attacks away.
+ */
+
+ bullets=[];
+
+ if(trishulTime<=0){
+
+  trishulTime=0;
+
+  trishulActive=false;
+
+  ultraMode=false;
+
+  document.getElementById("powerText").innerText=
+   "READY";
+ }
+}
+
+
+/* =========================
+   ENEMIES
+========================= */
+
+function updateEnemies(dt){
+
+ /*
+    K = COMPLETE INVINCIBILITY
+ */
+
+ if(ultraMode)return;
+
+ for(let i=enemies.length-1;i>=0;i--){
+
+  const e=enemies[i];
+
+  const dx=hero.x-e.x;
+  const dy=hero.y-e.y;
+
+  const d=Math.max(1,Math.hypot(dx,dy));
+
+  e.x+=dx/d*e.speed;
+  e.y+=dy/d*e.speed;
+
+  if(e.type==="bomber"){
+
+   e.bomb+=dt;
+
+   if(d<85&&e.bomb>1.2){
+
+    explosion(e.x,e.y);
+
+    hero.hp-=e.damage;
+
+    enemies.splice(i,1);
+
+    continue;
+   }
+  }
+
+  if(d<hero.r+e.r*.65){
+
+   hero.hp-=e.damage*dt*.06;
+  }
+
+  if(e.flash>0)e.flash--;
+ }
+}
+
+
+/* =========================
    BOSS UPDATE
-===================================================== */
+========================= */
 
-function updateBoss(){
+function updateBoss(dt){
 
-    if(
-        boss===null
-    )
-        return;
+ if(!boss)return;
 
+ if(ultraMode)return;
 
-    const dx =
-        hero.x-
-        boss.x;
+ const p=boss.hp/boss.maxHp;
 
+ if(p<=.66)boss.phase=2;
+ if(p<=.33)boss.phase=3;
 
-    const dy =
-        hero.y-
-        boss.y;
+ const dx=hero.x-boss.x;
+ const dy=hero.y-boss.y;
 
+ const d=Math.max(1,Math.hypot(dx,dy));
 
-    const dist =
-        Math.hypot(
-            dx,
-            dy
-        );
+ let speed=boss.speed;
 
+ if(boss.phase===2)speed*=1.3;
+ if(boss.phase===3)speed*=1.6;
 
-    /*
-        MOVE TOWARD HERO
-    */
+ if(d>125){
 
-    if(
-        dist>120
-    ){
+  boss.x+=dx/d*speed;
+  boss.y+=dy/d*speed;
+ }
 
-        boss.x +=
-            (dx/dist)*
-            boss.speed;
+ if(d<hero.r+boss.r*.55){
 
+  hero.hp-=boss.damage*dt*.035;
+ }
 
-        boss.y +=
-            (dy/dist)*
-            boss.speed;
+ boss.attack+=dt;
 
-    }
+ const attackRate=
+  boss.phase===3?.7:
+  boss.phase===2?1:1.3;
 
+ if(boss.attack>=attackRate){
 
-    /*
-        KEEP ON SCREEN
-    */
+  boss.attack=0;
 
-    boss.x =
-        Math.max(
-            boss.r,
-            Math.min(
-                W-boss.r,
-                boss.x
-            )
-        );
+  const angle=
+   Math.atan2(hero.y-boss.y,hero.x-boss.x);
 
+  const count=
+   boss.phase===3?7:
+   boss.phase===2?5:3;
 
-    boss.y =
-        Math.max(
-            110,
-            Math.min(
-                H-boss.r,
-                boss.y
-            )
-        );
+  for(let i=0;i<count;i++){
 
+   const a=
+    angle+(i-(count-1)/2)*.18;
 
-    /*
-        TOUCH DAMAGE
-    */
+   bullets.push({
+    x:boss.x,
+    y:boss.y,
+    vx:Math.cos(a)*5,
+    vy:Math.sin(a)*5,
+    life:4,
+    damage:10+level*2
+   });
+  }
+ }
 
-    if(
-        dist
-        <=
-        hero.r+
-        boss.r*.55
-    ){
-
-        hero.hp -=
-            boss.damage*
-            .035;
-
-    }
-
-
-    /*
-        PROJECTILE ATTACK
-    */
-
-    boss.attackTimer++;
-
-
-    if(
-        boss.attackTimer>=90
-    ){
-
-        boss.attackTimer=0;
-
-
-        const angle =
-            Math.atan2(
-                hero.y-boss.y,
-                hero.x-boss.x
-            );
-
-
-        for(
-            let i=-2;
-            i<=2;
-            i++
-        ){
-
-            const a =
-                angle+
-                i*.16;
-
-
-            bullets.push({
-
-                x:boss.x,
-
-                y:boss.y,
-
-                vx:
-                    Math.cos(a)*
-                    5,
-
-                vy:
-                    Math.sin(a)*
-                    5,
-
-                life:180,
-
-                damage:
-                    8+level
-
-            });
-
-        }
-
-    }
-
-
-    /*
-        CHARGE ATTACK
-    */
-
-    boss.chargeTimer++;
-
-
-    if(
-        boss.chargeTimer>=330
-    ){
-
-        boss.chargeTimer=0;
-
-        boss.chargeTime=45;
-
-    }
-
-
-    if(
-        boss.chargeTime>0
-    ){
-
-        boss.chargeTime--;
-
-
-        if(
-            dist>1
-        ){
-
-            boss.x +=
-                (dx/dist)*
-                3.5;
-
-
-            boss.y +=
-                (dy/dist)*
-                3.5;
-
-        }
-
-    }
-
-
-    if(
-        boss.flash>0
-    ){
-
-        boss.flash--;
-
-    }
-
-
-    updateBossBar();
-
+ if(boss.flash>0)boss.flash--;
 }
 
 
-/* =====================================================
-   BOSS BAR
-===================================================== */
-
-function updateBossBar(){
-
-    if(
-        boss===null
-    ){
-
-        document.getElementById(
-            "bossUI"
-        ).style.display =
-            "none";
-
-        return;
-
-    }
-
-
-    const percent =
-        Math.max(
-            0,
-            boss.hp/
-            boss.maxHp*
-            100
-        );
-
-
-    document.getElementById(
-        "bossHPFill"
-    ).style.width =
-        percent+"%";
-
-}
-
-
-/* =====================================================
+/* =========================
    BULLETS
-===================================================== */
+========================= */
 
-function updateBullets(){
+function updateBullets(dt){
 
-    for(
-        let i=bullets.length-1;
-        i>=0;
-        i--
-    ){
+ if(ultraMode){
 
-        const bullet =
-            bullets[i];
+  bullets=[];
 
+  return;
+ }
 
-        bullet.x +=
-            bullet.vx;
+ for(let i=bullets.length-1;i>=0;i--){
 
-        bullet.y +=
-            bullet.vy;
+  const b=bullets[i];
 
-        bullet.life--;
+  b.x+=b.vx;
+  b.y+=b.vy;
 
+  b.life-=dt;
 
-        if(
-            distance(
-                hero,
-                bullet
-            )
-            <
-            30
-        ){
+  if(Math.hypot(hero.x-b.x,hero.y-b.y)<30){
 
-            hero.hp -=
-                bullet.damage;
+   hero.hp-=b.damage;
 
+   hit(hero.x,hero.y);
 
-            createExplosion(
-                hero.x,
-                hero.y
-            );
+   bullets.splice(i,1);
 
+   continue;
+  }
 
-            bullets.splice(
-                i,
-                1
-            );
-
-
-            continue;
-
-        }
-
-
-        if(
-            bullet.life<=0 ||
-            bullet.x<-100 ||
-            bullet.x>W+100 ||
-            bullet.y<-100 ||
-            bullet.y>H+100
-        ){
-
-            bullets.splice(
-                i,
-                1
-            );
-
-        }
-
-    }
-
+  if(b.life<=0)
+   bullets.splice(i,1);
+ }
 }
 
 
-/* =====================================================
+/* =========================
    LEVEL SYSTEM
-===================================================== */
+========================= */
 
 function updateLevel(dt){
 
-    /*
-        Boss active:
-        no normal level logic.
-    */
+ levelTime+=dt;
+ spawnTimer+=dt;
 
-    if(
-        boss!==null
-    )
-        return;
+ let rate=.8;
 
+ if(level===2)rate=.35;
+ if(level===4)rate=.55;
+ if(level===9)rate=.22;
 
-    if(
-        bossCountdown
-    )
-        return;
+ if(spawnTimer>=rate&&!boss){
 
+  spawnTimer=0;
 
-    levelTime += dt;
+  let count=1;
 
+  if(level>=3)count=2;
+  if(level>=7)count=3;
+  if(level===9)count=4;
 
-    /*
-        20 seconds of enemies
-    */
+  for(let i=0;i<count;i++)
+   spawnEnemy();
+ }
 
-    if(
-        levelTime<20
-    ){
+ let bossTime=
+  level===9?45:
+  level===10?8:
+  25;
 
-        spawnTimer += dt;
+ if(levelTime>=bossTime&&!boss){
 
+  enemies=[];
 
-        const spawnRate =
-            Math.max(
-                .18,
-                .65-
-                level*.035
-            );
-
-
-        if(
-            spawnTimer>=spawnRate
-        ){
-
-            spawnTimer=0;
-
-
-            /*
-                More enemies
-                at higher levels.
-            */
-
-            let amount =
-                1+
-                Math.floor(
-                    level/2
-                );
-
-
-            if(
-                Math.random()<.5
-            ){
-
-                amount++;
-
-            }
-
-
-            for(
-                let i=0;
-                i<amount;
-                i++
-            ){
-
-                spawnEnemy();
-
-            }
-
-        }
-
-
-        return;
-
-    }
-
-
-    /*
-        Wait for all enemies
-    */
-
-    if(
-        enemies.length===0
-    ){
-
-        bossCountdown=true;
-
-
-        showMessage(
-            "⚠ BOSS INCOMING ⚠"
-        );
-
-
-        setTimeout(
-            function(){
-
-                if(
-                    running &&
-                    boss===null
-                ){
-
-                    spawnBoss();
-
-                }
-
-            },
-            1200
-        );
-
-    }
-
+  spawnBoss();
+ }
 }
 
 
-/* =====================================================
-   DEFEAT BOSS
-===================================================== */
+/* =========================
+   BOSS DEFEAT
+========================= */
 
 function defeatBoss(){
 
-    if(
-        boss===null
-    )
-        return;
+ if(!boss)return;
 
+ explosion(boss.x,boss.y);
 
-    createExplosion(
-        boss.x,
-        boss.y
-    );
+ score+=5000;
 
+ boss=null;
 
-    score += 5000;
+ bullets=[];
 
+ document.getElementById("bossUI").style.display="none";
 
-    boss=null;
+ if(level>=10){
 
-    bullets=[];
+  victory();
 
+  return;
+ }
 
-    document.getElementById(
-        "bossUI"
-    ).style.display =
-        "none";
+ showMessage("👑 BOSS DEFEATED");
 
+ setTimeout(()=>{
 
-    /*
-        FINAL BOSS
-    */
+  if(running){
 
-    if(
-        level>=10
-    ){
+   level++;
 
-        victory();
+   startLevel();
+  }
 
-        return;
-
-    }
-
-
-    showMessage(
-        "👑 BOSS DEFEATED"
-    );
-
-
-    /*
-        HP reward
-    */
-
-    hero.hp =
-        Math.min(
-            hero.maxHp,
-            hero.hp+25
-        );
-
-
-    setTimeout(
-        function(){
-
-            if(
-                !running
-            )
-                return;
-
-
-            level++;
-
-
-            startLevel();
-
-        },
-        2000
-    );
-
+ },1200);
 }
 
 
-/* =====================================================
+/* =========================
    PARTICLES
-===================================================== */
+========================= */
 
-function createHit(x,y){
+function hit(x,y){
 
-    for(
-        let i=0;
-        i<5;
-        i++
-    ){
+ for(let i=0;i<6;i++){
 
-        particles.push({
+  particles.push({
+   x,y,
+   vx:(Math.random()-.5)*7,
+   vy:(Math.random()-.5)*7,
+   life:.4,
+   size:3+Math.random()*3
+  });
+ }
+}
 
-            x:x,
+function explosion(x,y){
 
-            y:y,
+ for(let i=0;i<28;i++){
 
-            vx:
-                (Math.random()-.5)*
-                7,
+  particles.push({
+   x,y,
+   vx:(Math.random()-.5)*14,
+   vy:(Math.random()-.5)*14,
+   life:.7,
+   size:3+Math.random()*6
+  });
+ }
+}
 
-            vy:
-                (Math.random()-.5)*
-                7,
+function updateParticles(dt){
 
-            life:25,
+ for(const p of particles){
 
-            size:
-                3+
-                Math.random()*4
+  p.x+=p.vx;
+  p.y+=p.vy;
 
-        });
+  p.vx*=.96;
+  p.vy*=.96;
 
-    }
+  p.life-=dt;
+ }
 
+ particles=particles.filter(p=>p.life>0);
 }
 
 
-function createExplosion(x,y){
-
-    for(
-        let i=0;
-        i<25;
-        i++
-    ){
-
-        particles.push({
-
-            x:x,
-
-            y:y,
-
-            vx:
-                (Math.random()-.5)*
-                14,
-
-            vy:
-                (Math.random()-.5)*
-                14,
-
-            life:45,
-
-            size:
-                3+
-                Math.random()*7
-
-        });
-
-    }
-
-}
-
-
-function updateParticles(){
-
-    for(
-        const p
-        of particles
-    ){
-
-        p.x += p.vx;
-
-        p.y += p.vy;
-
-        p.vx *= .96;
-
-        p.vy *= .96;
-
-        p.life--;
-
-    }
-
-
-    particles =
-        particles.filter(
-            p=>p.life>0
-        );
-
-}
-
-
-/* =====================================================
+/* =========================
    BACKGROUND
-===================================================== */
+========================= */
 
 function drawBackground(){
 
-    ctx.fillStyle =
-        "#020205";
+ let top="#17061e";
+ let bottom="#040208";
 
+ if(level===4){
+  top="#401000";
+  bottom="#0d0200";
+ }
 
-    ctx.fillRect(
-        0,
-        0,
-        W,
-        H
-    );
+ if(level===6){
+  top="#071b3c";
+  bottom="#02040c";
+ }
 
+ if(level===7){
+  top="#19062f";
+  bottom="#04010a";
+ }
 
-    const gradient =
-        ctx.createRadialGradient(
-            W/2,
-            H/2,
-            30,
-            W/2,
-            H/2,
-            Math.max(W,H)
-        );
+ if(level===10){
+  top="#30030b";
+  bottom="#050106";
+ }
 
+ const g=ctx.createLinearGradient(0,0,0,H);
 
-    gradient.addColorStop(
-        0,
-        "#300707"
-    );
+ g.addColorStop(0,top);
+ g.addColorStop(1,bottom);
 
+ ctx.fillStyle=g;
+ ctx.fillRect(0,0,W,H);
 
-    gradient.addColorStop(
-        1,
-        "#020205"
-    );
+ /*
+    Stars
+ */
 
+ ctx.fillStyle="rgba(255,255,255,.45)";
 
-    ctx.fillStyle =
-        gradient;
+ for(let i=0;i<100;i++){
 
+  const x=(i*173)%W;
 
-    ctx.fillRect(
-        0,
-        0,
-        W,
-        H
-    );
+  const y=
+   (i*97+performance.now()*.025)%H;
 
+  ctx.fillRect(x,y,2,2);
+ }
 
-    for(
-        let i=0;
-        i<80;
-        i++
-    ){
+ /*
+    Arena rings
+ */
 
-        const x =
-            (i*137)%W;
+ ctx.save();
 
+ ctx.translate(W/2,H/2);
 
-        const y =
-            (i*83)%H;
+ ctx.strokeStyle="rgba(255,255,255,.045)";
 
+ for(let i=1;i<7;i++){
 
-        ctx.fillStyle =
-            "#ffffff15";
+  ctx.beginPath();
 
+  ctx.arc(0,0,i*100,0,Math.PI*2);
 
-        ctx.fillRect(
-            x,
-            y,
-            2,
-            2
-        );
+  ctx.stroke();
+ }
 
-    }
+ ctx.restore();
 
+ ctx.strokeStyle="rgba(255,40,40,.14)";
+ ctx.lineWidth=3;
+
+ ctx.strokeRect(15,75,W-30,H-90);
 }
 
 
-/* =====================================================
-   DRAW HERO
-===================================================== */
+/* =========================================================
+   HERO DRAW
+
+   THIS IS THE IMPORTANT PART:
+   BODY ITSELF ROTATES DURING T.
+========================================================= */
 
 function drawHero(){
 
-    ctx.save();
+ /*
+    Hero rises during spin.
+ */
 
+ const drawY=
+  hero.y-
+  spinHeight;
 
-    ctx.translate(
-        hero.x,
-        hero.y
-    );
+ ctx.save();
 
+ ctx.translate(hero.x,drawY);
 
-    /*
-        ULTRA AURA
-    */
+ /*
+    During spin rotate the whole body.
+ */
 
-    if(
-        ultra
-    ){
+ if(spinning){
 
-        ctx.beginPath();
+  ctx.rotate(spinAngle);
 
+  /*
+     Bright spinning aura.
+  */
 
-        ctx.arc(
-            0,
-            0,
-            75+
-            Math.sin(
-                Date.now()/80
-            )*10,
-            0,
-            Math.PI*2
-        );
+  ctx.beginPath();
 
+  ctx.arc(
+   0,
+   0,
+   65+Math.sin(performance.now()/50)*10,
+   0,
+   Math.PI*2
+  );
 
-        ctx.fillStyle =
-            "#00eaff18";
+  ctx.strokeStyle="#ffd000";
+  ctx.lineWidth=6;
 
+  ctx.shadowBlur=30;
+  ctx.shadowColor="#ffd000";
 
-        ctx.fill();
+  ctx.stroke();
 
+  ctx.shadowBlur=0;
+ }
 
-        ctx.strokeStyle =
-            "#00eaff";
 
+ /*
+    Cape
+ */
 
-        ctx.lineWidth=5;
+ ctx.fillStyle="#991b1b";
 
+ ctx.beginPath();
 
-        ctx.stroke();
+ ctx.moveTo(-15,5);
+ ctx.lineTo(-55,55);
+ ctx.lineTo(0,35);
+ ctx.lineTo(55,55);
+ ctx.lineTo(15,5);
 
-    }
+ ctx.closePath();
 
+ ctx.fill();
 
-    /*
-        GHUMI GHUMI SPIN
-    */
 
-    if(
-        spinning
-    ){
+ /*
+    Legs
+ */
 
-        ctx.rotate(
-            spinAngle
-        );
+ ctx.strokeStyle="#111";
+ ctx.lineWidth=11;
 
+ ctx.beginPath();
 
-        ctx.beginPath();
+ ctx.moveTo(-9,25);
+ ctx.lineTo(-14,55);
 
+ ctx.moveTo(9,25);
+ ctx.lineTo(14,55);
 
-        ctx.arc(
-            0,
-            0,
-            105,
-            0,
-            Math.PI*2
-        );
+ ctx.stroke();
 
 
-        ctx.strokeStyle =
-            "#ffd000";
+ /*
+    Body
+ */
 
+ ctx.fillStyle="#dc2626";
 
-        ctx.lineWidth=6;
+ ctx.beginPath();
 
+ ctx.roundRect(
+  -21,-10,42,43,10
+ );
 
-        ctx.stroke();
+ ctx.fill();
 
-    }
 
+ /*
+    Arms
+ */
 
-    /*
-        CAPE
-    */
+ ctx.strokeStyle="#f0b090";
+ ctx.lineWidth=10;
 
-    ctx.fillStyle =
-        "#991b1b";
+ ctx.beginPath();
 
+ ctx.moveTo(-18,-2);
+ ctx.lineTo(-40,18);
 
-    ctx.beginPath();
+ ctx.moveTo(18,-2);
+ ctx.lineTo(40,18);
 
+ ctx.stroke();
 
-    ctx.moveTo(
-        -17,
-        5
-    );
 
+ /*
+    Head
+ */
 
-    ctx.lineTo(
-        -55,
-        55
-    );
+ ctx.fillStyle="#f0b090";
 
+ ctx.beginPath();
 
-    ctx.lineTo(
-        0,
-        35
-    );
+ ctx.arc(0,-29,18,0,Math.PI*2);
 
+ ctx.fill();
 
-    ctx.lineTo(
-        55,
-        55
-    );
 
+ /*
+    Hair
+ */
 
-    ctx.lineTo(
-        17,
-        5
-    );
+ ctx.fillStyle="#111";
 
+ ctx.beginPath();
 
-    ctx.closePath();
+ ctx.arc(
+  0,-36,18,
+  Math.PI,
+  Math.PI*2
+ );
 
+ ctx.fill();
 
-    ctx.fill();
 
+ /*
+    Eyes
+ */
 
-    /*
-        LEGS
-    */
+ ctx.fillStyle="#111";
 
-    ctx.strokeStyle =
-        "#111";
+ ctx.beginPath();
 
+ ctx.arc(-6,-29,3,0,Math.PI*2);
+ ctx.arc(6,-29,3,0,Math.PI*2);
 
-    ctx.lineWidth=11;
+ ctx.fill();
 
 
-    ctx.beginPath();
+ /*
+    Chest
+ */
 
+ ctx.fillStyle="#ffd000";
 
-    ctx.moveTo(
-        -9,
-        27
-    );
+ ctx.beginPath();
 
+ ctx.moveTo(0,-5);
+ ctx.lineTo(8,8);
+ ctx.lineTo(0,4);
+ ctx.lineTo(-8,8);
 
-    ctx.lineTo(
-        -14,
-        55
-    );
+ ctx.closePath();
 
+ ctx.fill();
 
-    ctx.moveTo(
-        9,
-        27
-    );
 
+ /*
+    Sword
+ */
 
-    ctx.lineTo(
-        14,
-        55
-    );
+ if(swordActive){
 
+  ctx.fillStyle="#fff";
 
-    ctx.stroke();
+  ctx.shadowBlur=15;
+  ctx.shadowColor="#fff";
 
+  ctx.fillRect(25,-5,100,9);
 
-    /*
-        BODY
-    */
+  ctx.shadowBlur=0;
 
-    ctx.fillStyle =
-        "#dc2626";
+  ctx.fillStyle="#ffd000";
 
+  ctx.fillRect(20,-9,10,18);
+ }
 
-    ctx.beginPath();
+ ctx.restore();
 
 
-    ctx.roundRect(
-        -21,
-        -10,
-        42,
-        45,
-        10
-    );
+ /*
+    Extra circular energy trails
+    around the flying hero.
+ */
 
+ if(spinning){
 
-    ctx.fill();
+  ctx.save();
 
+  ctx.translate(hero.x,drawY);
 
-    /*
-        ARMS
-    */
+  for(let i=0;i<3;i++){
 
-    ctx.strokeStyle =
-        "#f1b092";
+   ctx.rotate(
+    spinAngle*(i+1)*.35
+   );
 
+   ctx.beginPath();
 
-    ctx.lineWidth=10;
+   ctx.ellipse(
+    0,
+    0,
+    80+i*18,
+    24+i*8,
+    0,
+    0,
+    Math.PI*2
+   );
 
+   ctx.strokeStyle=
+    i===0
+    ?"rgba(255,215,0,.8)"
+    :"rgba(255,180,0,.3)";
 
-    ctx.beginPath();
+   ctx.lineWidth=4;
 
+   ctx.shadowBlur=15;
+   ctx.shadowColor="#ffd000";
 
-    ctx.moveTo(
-        -18,
-        -2
-    );
+   ctx.stroke();
+  }
 
-
-    ctx.lineTo(
-        -40,
-        18
-    );
-
-
-    ctx.moveTo(
-        18,
-        -2
-    );
-
-
-    ctx.lineTo(
-        40,
-        18
-    );
-
-
-    ctx.stroke();
-
-
-    /*
-        HEAD
-    */
-
-    ctx.fillStyle =
-        "#f1b092";
-
-
-    ctx.beginPath();
-
-
-    ctx.arc(
-        0,
-        -29,
-        18,
-        0,
-        Math.PI*2
-    );
-
-
-    ctx.fill();
-
-
-    /*
-        HAIR
-    */
-
-    ctx.fillStyle =
-        "#111";
-
-
-    ctx.beginPath();
-
-
-    ctx.arc(
-        0,
-        -36,
-        18,
-        Math.PI,
-        Math.PI*2
-    );
-
-
-    ctx.fill();
-
-
-    /*
-        EYES
-    */
-
-    ctx.fillStyle =
-        "#111";
-
-
-    ctx.beginPath();
-
-
-    ctx.arc(
-        -6,
-        -29,
-        3,
-        0,
-        Math.PI*2
-    );
-
-
-    ctx.arc(
-        6,
-        -29,
-        3,
-        0,
-        Math.PI*2
-    );
-
-
-    ctx.fill();
-
-
-    /*
-        CHEST
-    */
-
-    ctx.fillStyle =
-        "#ffd000";
-
-
-    ctx.beginPath();
-
-
-    ctx.moveTo(
-        0,
-        -5
-    );
-
-
-    ctx.lineTo(
-        8,
-        8
-    );
-
-
-    ctx.lineTo(
-        0,
-        4
-    );
-
-
-    ctx.lineTo(
-        -8,
-        8
-    );
-
-
-    ctx.closePath();
-
-
-    ctx.fill();
-
-
-    /*
-        SWORD
-    */
-
-    if(
-        swordActive
-    ){
-
-        ctx.fillStyle =
-            "#eee";
-
-
-        ctx.fillRect(
-            25,
-            -5,
-            100,
-            9
-        );
-
-
-        ctx.fillStyle =
-            "#ffd000";
-
-
-        ctx.fillRect(
-            20,
-            -9,
-            10,
-            18
-        );
-
-    }
-
-
-    ctx.restore();
-
+  ctx.restore();
+ }
 }
 
 
-/* =====================================================
-   DRAW ENEMY
-===================================================== */
+/* =========================
+   TRISHUL DRAW
+========================= */
 
-function drawEnemy(enemy){
+function drawTrishul(){
 
-    ctx.save();
+ if(!trishulActive)return;
 
+ const p=trishulProgress;
 
-    ctx.translate(
-        enemy.x,
-        enemy.y
-    );
+ const distance=30+p*430;
 
+ const angle=-Math.PI/2+p*Math.PI*2;
 
-    /*
-        BODY
-    */
+ const x=hero.x+Math.cos(angle)*distance;
 
-    ctx.fillStyle =
-        enemy.flash>0
-        ?
-        "white"
-        :
-        enemy.color;
+ const y=hero.y-spinHeight+Math.sin(angle)*distance;
 
+ const scale=.35+p;
 
-    ctx.beginPath();
+ ctx.save();
 
+ ctx.translate(x,y);
 
-    ctx.roundRect(
-        -enemy.r*.6,
-        -enemy.r*.15,
-        enemy.r*1.2,
-        enemy.r*1.1,
-        9
-    );
+ ctx.rotate(
+  -Math.PI/2+p*Math.PI*2
+ );
 
+ ctx.strokeStyle="#ffd700";
+ ctx.fillStyle="#ffd700";
+ ctx.lineWidth=8;
 
-    ctx.fill();
+ ctx.shadowBlur=35;
+ ctx.shadowColor="#ffd700";
 
+ /*
+    Handle
+ */
 
-    /*
-        ARMS
-    */
+ ctx.beginPath();
 
-    ctx.strokeStyle =
-        enemy.color;
+ ctx.moveTo(0,110*scale);
+ ctx.lineTo(0,-50*scale);
 
+ ctx.stroke();
 
-    ctx.lineWidth=10;
+ /*
+    Center
+ */
 
+ ctx.beginPath();
 
-    ctx.beginPath();
+ ctx.moveTo(0,-45*scale);
+ ctx.lineTo(0,-155*scale);
 
+ ctx.stroke();
 
-    ctx.moveTo(
-        -enemy.r*.5,
-        0
-    );
+ /*
+    Left
+ */
 
+ ctx.beginPath();
 
-    ctx.lineTo(
-        -enemy.r,
-        enemy.r*.45
-    );
+ ctx.moveTo(0,-50*scale);
+ ctx.lineTo(-50*scale,-105*scale);
+ ctx.lineTo(-50*scale,-50*scale);
 
+ ctx.stroke();
 
-    ctx.moveTo(
-        enemy.r*.5,
-        0
-    );
+ /*
+    Right
+ */
 
+ ctx.beginPath();
 
-    ctx.lineTo(
-        enemy.r,
-        enemy.r*.45
-    );
+ ctx.moveTo(0,-50*scale);
+ ctx.lineTo(50*scale,-105*scale);
+ ctx.lineTo(50*scale,-50*scale);
 
+ ctx.stroke();
 
-    ctx.stroke();
+ ctx.restore();
 
+ /*
+    Energy beam
+ */
 
-    /*
-        HEAD
-    */
+ ctx.save();
 
-    ctx.fillStyle =
-        "#63372b";
+ ctx.strokeStyle="rgba(255,215,0,.25)";
+ ctx.lineWidth=20;
 
+ ctx.beginPath();
 
-    ctx.beginPath();
+ ctx.moveTo(hero.x,hero.y-spinHeight);
+ ctx.lineTo(x,y);
 
+ ctx.stroke();
 
-    ctx.arc(
-        0,
-        -enemy.r*.55,
-        enemy.r*.48,
-        0,
-        Math.PI*2
-    );
-
-
-    ctx.fill();
-
-
-    /*
-        HORNS
-    */
-
-    ctx.fillStyle =
-        "#ddd";
-
-
-    ctx.beginPath();
-
-
-    ctx.moveTo(
-        -enemy.r*.25,
-        -enemy.r*.75
-    );
-
-
-    ctx.lineTo(
-        -enemy.r*.65,
-        -enemy.r*1.35
-    );
-
-
-    ctx.lineTo(
-        -enemy.r*.05,
-        -enemy.r*.9
-    );
-
-
-    ctx.fill();
-
-
-    ctx.beginPath();
-
-
-    ctx.moveTo(
-        enemy.r*.25,
-        -enemy.r*.75
-    );
-
-
-    ctx.lineTo(
-        enemy.r*.65,
-        -enemy.r*1.35
-    );
-
-
-    ctx.lineTo(
-        enemy.r*.05,
-        -enemy.r*.9
-    );
-
-
-    ctx.fill();
-
-
-    /*
-        EYES
-    */
-
-    ctx.fillStyle =
-        "#ff0000";
-
-
-    ctx.shadowBlur=15;
-
-    ctx.shadowColor =
-        "red";
-
-
-    ctx.beginPath();
-
-
-    ctx.arc(
-        -enemy.r*.17,
-        -enemy.r*.55,
-        4,
-        0,
-        Math.PI*2
-    );
-
-
-    ctx.arc(
-        enemy.r*.17,
-        -enemy.r*.55,
-        4,
-        0,
-        Math.PI*2
-    );
-
-
-    ctx.fill();
-
-
-    ctx.shadowBlur=0;
-
-
-    /*
-        ENEMY HP
-    */
-
-    ctx.fillStyle =
-        "#200000";
-
-
-    ctx.fillRect(
-        -enemy.r,
-        enemy.r*1.2,
-        enemy.r*2,
-        6
-    );
-
-
-    ctx.fillStyle =
-        "#22c55e";
-
-
-    ctx.fillRect(
-        -enemy.r,
-        enemy.r*1.2,
-        enemy.r*2*
-        Math.max(
-            0,
-            enemy.hp/
-            enemy.maxHp
-        ),
-        6
-    );
-
-
-    ctx.restore();
-
+ ctx.restore();
 }
 
 
-/* =====================================================
-   DRAW BOSS
-===================================================== */
+/* =========================
+   ENEMY DRAW
+========================= */
+
+function drawEnemy(e){
+
+ ctx.save();
+
+ ctx.translate(e.x,e.y);
+
+ ctx.fillStyle=
+  e.flash>0?"white":e.color;
+
+ ctx.beginPath();
+
+ ctx.roundRect(
+  -e.r*.6,
+  -e.r*.1,
+  e.r*1.2,
+  e.r*1.1,
+  8
+ );
+
+ ctx.fill();
+
+ ctx.fillStyle="#62382d";
+
+ ctx.beginPath();
+
+ ctx.arc(
+  0,
+  -e.r*.55,
+  e.r*.48,
+  0,
+  Math.PI*2
+ );
+
+ ctx.fill();
+
+ ctx.fillStyle="#ddd";
+
+ ctx.beginPath();
+
+ ctx.moveTo(-e.r*.2,-e.r*.75);
+ ctx.lineTo(-e.r*.6,-e.r*1.3);
+ ctx.lineTo(-e.r*.05,-e.r*.9);
+ ctx.fill();
+
+ ctx.beginPath();
+
+ ctx.moveTo(e.r*.2,-e.r*.75);
+ ctx.lineTo(e.r*.6,-e.r*1.3);
+ ctx.lineTo(e.r*.05,-e.r*.9);
+ ctx.fill();
+
+ ctx.fillStyle="#f00";
+
+ ctx.shadowBlur=15;
+ ctx.shadowColor="red";
+
+ ctx.beginPath();
+
+ ctx.arc(-e.r*.17,-e.r*.55,4,0,Math.PI*2);
+ ctx.arc(e.r*.17,-e.r*.55,4,0,Math.PI*2);
+
+ ctx.fill();
+
+ ctx.shadowBlur=0;
+
+ ctx.fillStyle="#250000";
+
+ ctx.fillRect(
+  -e.r,
+  e.r*1.2,
+  e.r*2,
+  5
+ );
+
+ ctx.fillStyle="#22c55e";
+
+ ctx.fillRect(
+  -e.r,
+  e.r*1.2,
+  e.r*2*Math.max(0,e.hp/e.maxHp),
+  5
+ );
+
+ ctx.restore();
+}
+
+
+/* =========================
+   BOSS DRAW
+========================= */
 
 function drawBoss(){
 
-    if(
-        boss===null
-    )
-        return;
+ if(!boss)return;
 
+ ctx.save();
 
-    ctx.save();
+ ctx.translate(boss.x,boss.y);
 
+ ctx.strokeStyle=
+  boss.phase===3?"orange":"red";
 
-    ctx.translate(
-        boss.x,
-        boss.y
-    );
+ ctx.lineWidth=10;
 
+ ctx.shadowBlur=40;
 
-    /*
-        MASSIVE AURA
-    */
+ ctx.shadowColor=
+  boss.phase===3?"orange":"red";
 
-    ctx.shadowBlur=40;
+ ctx.beginPath();
 
-    ctx.shadowColor =
-        "red";
+ ctx.arc(
+  0,
+  0,
+  boss.r*1.3+
+  Math.sin(performance.now()/130)*8,
+  0,
+  Math.PI*2
+ );
 
+ ctx.stroke();
 
-    ctx.strokeStyle =
-        "#ff000055";
+ ctx.shadowBlur=0;
 
+ ctx.fillStyle=
+  boss.flash>0?"white":"#250000";
 
-    ctx.lineWidth=12;
+ ctx.beginPath();
 
+ ctx.roundRect(
+  -boss.r*.65,
+  -boss.r*.05,
+  boss.r*1.3,
+  boss.r*1.2,
+  15
+ );
 
-    ctx.beginPath();
+ ctx.fill();
 
+ ctx.fillStyle="#593126";
 
-    ctx.arc(
-        0,
-        0,
-        boss.r*1.35+
-        Math.sin(
-            Date.now()/100
-        )*10,
-        0,
-        Math.PI*2
-    );
+ ctx.beginPath();
 
+ ctx.arc(
+  0,
+  -boss.r*.65,
+  boss.r*.5,
+  0,
+  Math.PI*2
+ );
 
-    ctx.stroke();
+ ctx.fill();
 
+ ctx.fillStyle="#ddd";
 
-    ctx.shadowBlur=0;
+ ctx.beginPath();
 
+ ctx.moveTo(-boss.r*.3,-boss.r*.85);
+ ctx.lineTo(-boss.r*.75,-boss.r*1.5);
+ ctx.lineTo(-boss.r*.05,-boss.r);
+ ctx.fill();
 
-    /*
-        BODY
-    */
+ ctx.beginPath();
 
-    ctx.fillStyle =
-        boss.flash>0
-        ?
-        "white"
-        :
-        "#260000";
+ ctx.moveTo(boss.r*.3,-boss.r*.85);
+ ctx.lineTo(boss.r*.75,-boss.r*1.5);
+ ctx.lineTo(boss.r*.05,-boss.r);
+ ctx.fill();
 
+ ctx.fillStyle="#f00";
 
-    ctx.beginPath();
+ ctx.shadowBlur=25;
+ ctx.shadowColor="red";
 
+ ctx.beginPath();
 
-    ctx.roundRect(
-        -boss.r*.65,
-        -boss.r*.05,
-        boss.r*1.3,
-        boss.r*1.25,
-        15
-    );
+ ctx.arc(-boss.r*.2,-boss.r*.65,7,0,Math.PI*2);
+ ctx.arc(boss.r*.2,-boss.r*.65,7,0,Math.PI*2);
 
+ ctx.fill();
 
-    ctx.fill();
-
-
-    /*
-        SHOULDERS
-    */
-
-    ctx.fillStyle =
-        "#4d0000";
-
-
-    ctx.beginPath();
-
-
-    ctx.arc(
-        -boss.r*.75,
-        0,
-        boss.r*.4,
-        0,
-        Math.PI*2
-    );
-
-
-    ctx.arc(
-        boss.r*.75,
-        0,
-        boss.r*.4,
-        0,
-        Math.PI*2
-    );
-
-
-    ctx.fill();
-
-
-    /*
-        HEAD
-    */
-
-    ctx.fillStyle =
-        "#51251d";
-
-
-    ctx.beginPath();
-
-
-    ctx.arc(
-        0,
-        -boss.r*.65,
-        boss.r*.52,
-        0,
-        Math.PI*2
-    );
-
-
-    ctx.fill();
-
-
-    /*
-        HORNS
-    */
-
-    ctx.fillStyle =
-        "#ddd";
-
-
-    ctx.beginPath();
-
-
-    ctx.moveTo(
-        -boss.r*.35,
-        -boss.r*.85
-    );
-
-
-    ctx.lineTo(
-        -boss.r*.75,
-        -boss.r*1.55
-    );
-
-
-    ctx.lineTo(
-        -boss.r*.05,
-        -boss.r
-    );
-
-
-    ctx.fill();
-
-
-    ctx.beginPath();
-
-
-    ctx.moveTo(
-        boss.r*.35,
-        -boss.r*.85
-    );
-
-
-    ctx.lineTo(
-        boss.r*.75,
-        -boss.r*1.55
-    );
-
-
-    ctx.lineTo(
-        boss.r*.05,
-        -boss.r
-    );
-
-
-    ctx.fill();
-
-
-    /*
-        BOSS EYES
-    */
-
-    ctx.fillStyle =
-        "#ff0000";
-
-
-    ctx.shadowBlur=25;
-
-    ctx.shadowColor =
-        "red";
-
-
-    ctx.beginPath();
-
-
-    ctx.arc(
-        -boss.r*.2,
-        -boss.r*.65,
-        7,
-        0,
-        Math.PI*2
-    );
-
-
-    ctx.arc(
-        boss.r*.2,
-        -boss.r*.65,
-        7,
-        0,
-        Math.PI*2
-    );
-
-
-    ctx.fill();
-
-
-    ctx.shadowBlur=0;
-
-
-    /*
-        CROWN
-    */
-
-    ctx.fillStyle =
-        "#ffd000";
-
-
-    ctx.beginPath();
-
-
-    ctx.moveTo(
-        -boss.r*.55,
-        -boss.r*1.55
-    );
-
-
-    ctx.lineTo(
-        -boss.r*.3,
-        -boss.r*2.05
-    );
-
-
-    ctx.lineTo(
-        0,
-        -boss.r*1.6
-    );
-
-
-    ctx.lineTo(
-        boss.r*.3,
-        -boss.r*2.05
-    );
-
-
-    ctx.lineTo(
-        boss.r*.55,
-        -boss.r*1.55
-    );
-
-
-    ctx.closePath();
-
-
-    ctx.fill();
-
-
-    /*
-        BOSS HP
-    */
-
-    ctx.fillStyle =
-        "#180000";
-
-
-    ctx.fillRect(
-        -boss.r*1.2,
-        boss.r*1.45,
-        boss.r*2.4,
-        10
-    );
-
-
-    ctx.fillStyle =
-        "#ef1111";
-
-
-    ctx.fillRect(
-        -boss.r*1.2,
-        boss.r*1.45,
-        boss.r*2.4*
-        Math.max(
-            0,
-            boss.hp/
-            boss.maxHp
-        ),
-        10
-    );
-
-
-    ctx.restore();
-
+ ctx.restore();
 }
 
 
-/* =====================================================
-   DRAW BULLETS
-===================================================== */
+/* =========================
+   BULLETS
+========================= */
 
 function drawBullets(){
 
-    for(
-        const bullet
-        of bullets
-    ){
+ for(const b of bullets){
 
-        ctx.save();
+  ctx.fillStyle="#ff2222";
 
+  ctx.shadowBlur=18;
+  ctx.shadowColor="red";
 
-        ctx.shadowBlur=20;
+  ctx.beginPath();
 
-        ctx.shadowColor =
-            "red";
+  ctx.arc(b.x,b.y,7,0,Math.PI*2);
 
+  ctx.fill();
 
-        ctx.fillStyle =
-            "#ff2222";
-
-
-        ctx.beginPath();
-
-
-        ctx.arc(
-            bullet.x,
-            bullet.y,
-            8,
-            0,
-            Math.PI*2
-        );
-
-
-        ctx.fill();
-
-
-        ctx.restore();
-
-    }
-
+  ctx.shadowBlur=0;
+ }
 }
 
 
-/* =====================================================
-   DRAW PARTICLES
-===================================================== */
+/* =========================
+   PARTICLES
+========================= */
 
 function drawParticles(){
 
-    for(
-        const p
-        of particles
-    ){
+ for(const p of particles){
 
-        ctx.globalAlpha =
-            Math.max(
-                0,
-                p.life/45
-            );
+  ctx.globalAlpha=Math.max(0,p.life/.7);
 
+  ctx.fillStyle="#ff7b00";
 
-        ctx.fillStyle =
-            "#ff5b22";
+  ctx.beginPath();
 
+  ctx.arc(
+   p.x,
+   p.y,
+   p.size,
+   0,
+   Math.PI*2
+  );
 
-        ctx.beginPath();
+  ctx.fill();
+ }
 
-
-        ctx.arc(
-            p.x,
-            p.y,
-            p.size,
-            0,
-            Math.PI*2
-        );
-
-
-        ctx.fill();
-
-    }
-
-
-    ctx.globalAlpha=1;
-
+ ctx.globalAlpha=1;
 }
 
 
-/* =====================================================
-   UPDATE UI
-===================================================== */
+/* =========================
+   UI
+========================= */
 
 function updateUI(){
 
-    document.getElementById(
-        "levelText"
-    ).innerText =
-        level;
+ document.getElementById("levelText").innerText=level;
+ document.getElementById("scoreText").innerText=score;
 
+ const hp=Math.max(0,hero.hp);
 
-    document.getElementById(
-        "scoreText"
-    ).innerText =
-        score;
+ document.getElementById("heroHP").style.width=
+  hp+"%";
 
+ document.getElementById("heroHP").style.background=
+  hp<30?"red":"#22c55e";
+}
 
-    const hp =
-        Math.max(
-            0,
-            hero.hp
-        );
+function updateBossBar(){
 
+ if(!boss)return;
 
-    document.getElementById(
-        "heroHP"
-    ).style.width =
-        hp+"%";
-
-
-    document.getElementById(
-        "heroHP"
-    ).style.background =
-        hp<30
-        ?
-        "#ef4444"
-        :
-        "#22c55e";
-
+ document.getElementById("bossHPFill").style.width=
+  Math.max(0,boss.hp/boss.maxHp*100)+"%";
 }
 
 
-/* =====================================================
+/* =========================
    MESSAGE
-===================================================== */
+========================= */
 
 function showMessage(text){
 
-    const message =
-        document.getElementById(
-            "message"
-        );
+ const m=document.getElementById("message");
 
+ m.innerHTML=text;
 
-    message.innerHTML =
-        text;
+ m.style.display="block";
 
+ setTimeout(()=>{
 
-    message.style.display =
-        "block";
+  if(running)
+   m.style.display="none";
 
-
-    setTimeout(
-        function(){
-
-            message.style.display =
-                "none";
-
-        },
-        1700
-    );
-
+ },1200);
 }
 
 
-/* =====================================================
+/* =========================
    GAME OVER
-===================================================== */
+========================= */
 
 function gameOver(){
 
-    running=false;
+ running=false;
 
-    boss=null;
+ spinning=false;
+ ultraMode=false;
+ trishulActive=false;
 
-    enemies=[];
+ document.getElementById("bossUI").style.display="none";
 
-    bullets=[];
+ document.getElementById("message").innerHTML=
+  "💀 YOU DIED 💀<br><small>SCORE: "+
+  score+"</small>";
 
+ document.getElementById("message").style.display="block";
 
-    document.getElementById(
-        "bossUI"
-    ).style.display =
-        "none";
-
-
-    document.getElementById(
-        "message"
-    ).innerHTML =
-        "💀 YOU DIED 💀"+
-        "<br>"+
-        "<small>SCORE: "+
-        score+
-        "</small>";
-
-
-    document.getElementById(
-        "message"
-    ).style.display =
-        "block";
-
-
-    document.getElementById(
-        "retry"
-    ).style.display =
-        "block";
-
+ document.getElementById("retry").style.display="block";
 }
 
 
-/* =====================================================
+/* =========================
    RETRY
-===================================================== */
+========================= */
 
 function retryGame(){
 
-    document.getElementById(
-        "message"
-    ).style.display =
-        "none";
+ resetGame();
 
+ running=true;
 
-    document.getElementById(
-        "retry"
-    ).style.display =
-        "none";
+ startLevel();
 
+ lastTime=performance.now();
 
-    resetGame();
-
-    running=true;
-
-    startLevel();
-
-    lastTime =
-        performance.now();
-
-
-    requestAnimationFrame(
-        gameLoop
-    );
-
+ requestAnimationFrame(loop);
 }
 
 
-/* =====================================================
+/* =========================
    VICTORY
-===================================================== */
+========================= */
 
 function victory(){
 
-    running=false;
+ running=false;
 
-    boss=null;
+ boss=null;
 
+ enemies=[];
+ bullets=[];
 
-    document.getElementById(
-        "bossUI"
-    ).style.display =
-        "none";
+ document.getElementById("message").innerHTML=
+  "🏆 GHUMI GHUMI WINS 🏆"+
+  "<br><small>ALL 10 LEVELS COMPLETED</small>"+
+  "<br><small>SCORE: "+score+"</small>";
 
-
-    document.getElementById(
-        "message"
-    ).innerHTML =
-        "🏆 GHUMI GHUMI WINS 🏆"+
-        "<br>"+
-        "<small>ALL 10 LEVELS COMPLETED</small>"+
-        "<br>"+
-        "<small>SCORE: "+
-        score+
-        "</small>";
-
-
-    document.getElementById(
-        "message"
-    ).style.display =
-        "block";
-
+ document.getElementById("message").style.display="block";
 }
 
 
-/* =====================================================
-   MAIN GAME LOOP
-===================================================== */
+/* =========================================================
+   ONLY ONE GAME LOOP
+========================================================= */
 
-function gameLoop(time){
+function loop(time){
 
-    if(!running)
-        return;
+ if(!running)return;
 
+ let dt=(time-lastTime)/1000;
 
-    let dt =
-        (time-lastTime)/1000;
+ lastTime=time;
 
-
-    lastTime=time;
+ if(dt>.05)dt=.05;
 
 
-    dt =
-        Math.min(
-            dt,
-            .05
-        );
+ /*
+    UPDATE
+ */
+
+ moveHero();
+
+ updateLevel(dt);
+
+ updateSpin(dt);
+
+ updateUltra(dt);
+
+ updateEnemies(dt);
+
+ updateBoss(dt);
+
+ updateBullets(dt);
+
+ updateParticles(dt);
 
 
-    /*
-        UPDATE
-    */
+ /*
+    DRAW
+ */
 
-    moveHero();
+ ctx.clearRect(0,0,W,H);
 
-    updateLevel(dt);
+ drawBackground();
 
-    updateEnemies();
+ drawParticles();
 
-    updateBoss();
+ drawBullets();
 
-    updateBullets();
+ for(const e of enemies)
+  drawEnemy(e);
 
-    updateParticles();
+ drawBoss();
 
+ drawHero();
 
-    /*
-        DRAW
-    */
+ drawTrishul();
 
-    ctx.clearRect(
-        0,
-        0,
-        W,
-        H
-    );
+ updateUI();
 
 
-    drawBackground();
+ /*
+    K = INVINCIBLE
+ */
 
-    drawParticles();
+ if(!ultraMode&&hero.hp<=0){
 
-    drawBullets();
+  hero.hp=0;
 
+  updateUI();
 
-    for(
-        const enemy
-        of enemies
-    ){
+  gameOver();
 
-        drawEnemy(enemy);
-
-    }
-
-
-    drawBoss();
-
-    drawHero();
-
-    updateUI();
+  return;
+ }
 
 
-    /*
-        DEATH
-    */
-
-    if(
-        hero.hp<=0
-    ){
-
-        hero.hp=0;
-
-        updateUI();
-
-        gameOver();
-
-        return;
-
-    }
-
-
-    requestAnimationFrame(
-        gameLoop
-    );
-
+ requestAnimationFrame(loop);
 }
-
-
-/* =====================================================
-   INITIAL
-===================================================== */
 
 updateUI();
 
 </script>
-
 </body>
 </html>
