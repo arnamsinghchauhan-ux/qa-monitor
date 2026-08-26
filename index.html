@@ -1,249 +1,2332 @@
 <!DOCTYPE html>
-<html lang="en">
-
+<html>
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Shaktimaan Dark Battle</title>
 
-    <title>Hello World - Virat Kohli</title>
+<style>
+*{
+    box-sizing:border-box;
+    user-select:none;
+}
 
-    <style>
+html,body{
+    margin:0;
+    width:100%;
+    height:100%;
+    overflow:hidden;
+    background:#030305;
+    font-family:Arial,sans-serif;
+    color:white;
+}
 
-        * {
-            box-sizing: border-box;
-        }
+canvas{
+    display:block;
+}
 
-        body {
-            margin: 0;
-            height: 100vh;
-            overflow: hidden;
+#ui{
+    position:fixed;
+    top:10px;
+    left:10px;
+    right:10px;
+    display:flex;
+    justify-content:space-between;
+    z-index:10;
+}
 
-            font-family: Arial, sans-serif;
+.box{
+    background:rgba(0,0,0,.8);
+    border:1px solid #333;
+    border-radius:12px;
+    padding:10px 15px;
+}
 
-            display: flex;
-            justify-content: center;
-            align-items: center;
+#hpbar,#bossbar{
+    width:260px;
+    height:18px;
+    background:#350606;
+    border-radius:20px;
+    overflow:hidden;
+    margin-top:5px;
+}
 
-            background:
-                radial-gradient(circle at 20% 20%, #283cff, transparent 30%),
-                radial-gradient(circle at 80% 80%, #00eaff, transparent 25%),
-                #050816;
+#hp{
+    width:100%;
+    height:100%;
+    background:#22c55e;
+}
 
-            color: white;
-        }
+#bosshp{
+    width:100%;
+    height:100%;
+    background:#ef1111;
+}
 
-        .card {
-            width: 650px;
-            min-height: 520px;
+#bossUI{
+    position:fixed;
+    top:70px;
+    left:50%;
+    transform:translateX(-50%);
+    width:360px;
+    text-align:center;
+    display:none;
+    z-index:10;
+}
 
-            padding: 55px 40px;
+#bossName{
+    color:#ff2020;
+    font-size:21px;
+    font-weight:bold;
+    text-shadow:0 0 15px red;
+    margin-bottom:5px;
+}
 
-            text-align: center;
+#message{
+    position:fixed;
+    top:43%;
+    left:50%;
+    transform:translate(-50%,-50%);
+    z-index:20;
+    display:none;
+    text-align:center;
+    font-size:42px;
+    font-weight:bold;
+    text-shadow:0 0 20px red;
+}
 
-            background: rgba(255, 255, 255, 0.08);
+#retry{
+    position:fixed;
+    top:58%;
+    left:50%;
+    transform:translateX(-50%);
+    z-index:21;
+    display:none;
+    border:0;
+    padding:14px 42px;
+    border-radius:30px;
+    background:#b91c1c;
+    color:white;
+    font-size:18px;
+    font-weight:bold;
+    cursor:pointer;
+}
 
-            border: 1px solid rgba(255, 255, 255, 0.2);
+#retry:hover{
+    background:#ef4444;
+    box-shadow:0 0 30px red;
+}
 
-            border-radius: 30px;
+#controls{
+    position:fixed;
+    bottom:10px;
+    left:10px;
+    z-index:10;
+    padding:8px 12px;
+    border-radius:8px;
+    background:rgba(0,0,0,.7);
+    font-size:13px;
+}
 
-            backdrop-filter: blur(20px);
+#start{
+    position:fixed;
+    inset:0;
+    z-index:50;
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    background:radial-gradient(circle,#350707,#020204 70%);
+}
 
-            box-shadow:
-                0 25px 80px rgba(0, 0, 0, 0.5);
-        }
+.startBox{
+    text-align:center;
+    padding:50px;
+    background:#ffffff08;
+    border:1px solid #ff222244;
+    border-radius:25px;
+}
 
-        h1 {
-            margin: 0;
+.startBox h1{
+    margin:0;
+    color:#ff2222;
+    font-size:52px;
+    text-shadow:0 0 25px red;
+}
 
-            font-size: 65px;
-
-            background: linear-gradient(
-                90deg,
-                #00eaff,
-                white,
-                #8b5cf6
-            );
-
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-
-            animation: glow 2s infinite alternate;
-        }
-
-        .subtitle {
-            margin: 20px 0 35px;
-
-            color: #b8c0d9;
-
-            font-size: 17px;
-
-            letter-spacing: 3px;
-        }
-
-        button {
-            padding: 16px 38px;
-
-            border: none;
-
-            border-radius: 50px;
-
-            background: linear-gradient(
-                90deg,
-                #00c6ff,
-                #7c3aed
-            );
-
-            color: white;
-
-            font-size: 17px;
-
-            font-weight: bold;
-
-            cursor: pointer;
-
-            transition: 0.3s;
-        }
-
-        button:hover {
-            transform: scale(1.08);
-
-            box-shadow:
-                0 0 25px #00c6ff,
-                0 0 50px #7c3aed;
-        }
-
-        button:active {
-            transform: scale(0.95);
-        }
-
-        button:disabled {
-            cursor: default;
-        }
-
-        #virat {
-            display: none;
-
-            margin-top: 30px;
-
-            animation: reveal 1.2s ease forwards;
-        }
-
-        #virat img {
-            width: 220px;
-            height: 235px;
-
-            object-fit: cover;
-
-            border-radius: 25px;
-
-            border: 3px solid white;
-
-            box-shadow:
-                0 0 25px #00eaff,
-                0 0 60px rgba(0, 234, 255, 0.4);
-        }
-
-        #virat h2 {
-            margin: 15px 0 5px;
-
-            font-size: 30px;
-        }
-
-        #virat p {
-            margin: 0;
-
-            color: #00eaff;
-
-            letter-spacing: 4px;
-
-            font-size: 14px;
-
-            font-weight: bold;
-        }
-
-        @keyframes reveal {
-
-            0% {
-                opacity: 0;
-                transform: scale(0.3) translateY(80px);
-            }
-
-            60% {
-                transform: scale(1.1) translateY(-10px);
-            }
-
-            100% {
-                opacity: 1;
-                transform: scale(1) translateY(0);
-            }
-        }
-
-        @keyframes glow {
-
-            from {
-                filter: drop-shadow(0 0 5px #00eaff);
-            }
-
-            to {
-                filter: drop-shadow(0 0 25px #8b5cf6);
-            }
-        }
-
-    </style>
-
+.startBox button{
+    margin-top:20px;
+    padding:14px 40px;
+    border:0;
+    border-radius:30px;
+    background:#b91c1c;
+    color:white;
+    font-size:18px;
+    font-weight:bold;
+    cursor:pointer;
+}
+</style>
 </head>
-
 
 <body>
 
-    <div class="card">
+<div id="start">
+    <div class="startBox">
+        <h1>⚡ SHAKTIMAAN ⚡</h1>
+        <h2>DARK POWER BATTLE</h2>
+        <p>10 Levels • 10 Bosses • Increasing Difficulty</p>
+        <button onclick="startGame()">START BATTLE</button>
+    </div>
+</div>
 
-        <h1>Hello, World! 🌎</h1>
+<div id="ui">
 
-        <div class="subtitle">
-            SOMETHING SPECIAL IS WAITING...
+    <div class="box">
+        ❤️ HERO HP
+        <div id="hpbar">
+            <div id="hp"></div>
         </div>
-
-        <button id="enterButton">
-            ENTER THE WORLD 🚀
-        </button>
-
-
-        <div id="virat">
-
-            <img
-                src="https://commons.wikimedia.org/wiki/Special:Redirect/file/Virat%20Kohli%20portrait.jpg"
-                alt="Virat Kohli"
-            >
-
-            <h2>👑 Virat Kohli</h2>
-
-            <p>THE KING</p>
-
-        </div>
-
     </div>
 
+    <div class="box">
+        LEVEL <b id="level">1</b> / 10
+        &nbsp;&nbsp;
+        SCORE <b id="score">0</b>
+        <br>
+        ⚡ <span id="power">READY</span>
+    </div>
 
-    <script>
+</div>
 
-        const button = document.getElementById("enterButton");
+<div id="bossUI">
 
-        const virat = document.getElementById("virat");
+    <div id="bossName">BOSS</div>
+
+    <div id="bossbar">
+        <div id="bosshp"></div>
+    </div>
+
+</div>
+
+<div id="message"></div>
+
+<button id="retry" onclick="retryGame()">
+    🔄 RETRY
+</button>
+
+<div id="controls">
+    <b>W A S D</b> Move |
+    <b>SPACE / CLICK</b> Sword |
+    <b>T</b> Spin |
+    <b>K</b> Ultra
+</div>
+
+<canvas id="game"></canvas>
 
 
-        button.addEventListener("click", function() {
+<script>
 
-            virat.style.display = "block";
+/* =====================================================
+   CANVAS
+===================================================== */
 
-            button.innerHTML = "🔥 KING REVEALED";
+const canvas = document.getElementById("game");
+const ctx = canvas.getContext("2d");
 
-            button.disabled = true;
+let W = innerWidth;
+let H = innerHeight;
 
+function resize(){
+    W = canvas.width = innerWidth;
+    H = canvas.height = innerHeight;
+}
+
+resize();
+addEventListener("resize",resize);
+
+
+/* =====================================================
+   GAME STATE
+===================================================== */
+
+let gameRunning = false;
+
+let level = 1;
+
+let score = 0;
+
+let enemies = [];
+
+let boss = null;
+
+let particles = [];
+
+let bullets = [];
+
+let keys = {};
+
+let levelTime = 0;
+
+let spawnTimer = 0;
+
+let bossWaiting = false;
+
+let swordActive = false;
+
+let spinning = false;
+
+let ultra = false;
+
+let spinAngle = 0;
+
+let lastTime = 0;
+
+
+/* =====================================================
+   HERO
+===================================================== */
+
+const hero = {
+
+    x:W/2,
+    y:H/2,
+
+    r:24,
+
+    speed:5.5,
+
+    hp:100,
+    maxHp:100
+};
+
+
+/* =====================================================
+   ENEMY TYPES
+===================================================== */
+
+const types = {
+
+    beast:{
+        hp:45,
+        speed:2.2,
+        damage:7,
+        r:22,
+        color:"#991b1b"
+    },
+
+    hunter:{
+        hp:75,
+        speed:3.3,
+        damage:9,
+        r:20,
+        color:"#4c1d95"
+    },
+
+    demon:{
+        hp:120,
+        speed:2.8,
+        damage:12,
+        r:27,
+        color:"#7f1d1d"
+    },
+
+    brute:{
+        hp:260,
+        speed:1.25,
+        damage:17,
+        r:35,
+        color:"#3f3f46"
+    },
+
+    shadow:{
+        hp:170,
+        speed:3.7,
+        damage:14,
+        r:23,
+        color:"#111827"
+    },
+
+    monster:{
+        hp:350,
+        speed:1.8,
+        damage:22,
+        r:42,
+        color:"#581c87"
+    }
+
+};
+
+
+/* =====================================================
+   BOSS DATA
+===================================================== */
+
+const bossData = [
+
+    ["BLOOD REAPER",1800,.75,25],
+    ["DARK HUNTER",2400,.82,28],
+    ["SKULL LORD",3200,.88,31],
+    ["HELL BRUTE",4200,.75,35],
+    ["DEMON KING",5400,.92,38],
+    ["NIGHTMARE",6800,1.0,42],
+    ["VOID WARRIOR",8500,1.05,46],
+    ["DARK TITAN",10500,.92,50],
+    ["HELL EMPEROR",13000,1.08,55],
+    ["THE DARK GOD",18000,1.12,65]
+
+];
+
+
+/* =====================================================
+   INPUT
+===================================================== */
+
+addEventListener("keydown",e=>{
+
+    const k=e.key.toLowerCase();
+
+    keys[k]=true;
+
+    if(k==="t"){
+        startSpin();
+    }
+
+    if(k==="k"){
+        ultraAttack();
+    }
+
+    if(e.code==="Space"){
+        e.preventDefault();
+        swordAttack();
+    }
+
+});
+
+addEventListener("keyup",e=>{
+
+    const k=e.key.toLowerCase();
+
+    keys[k]=false;
+
+    if(k==="k"){
+        ultra=false;
+        document.getElementById("power").innerText="READY";
+    }
+
+});
+
+canvas.addEventListener("mousedown",swordAttack);
+
+
+/* =====================================================
+   START
+===================================================== */
+
+function startGame(){
+
+    document.getElementById("start").style.display="none";
+
+    resetGame();
+
+    gameRunning=true;
+
+    lastTime=performance.now();
+
+    requestAnimationFrame(loop);
+}
+
+
+function resetGame(){
+
+    level=1;
+    score=0;
+
+    enemies=[];
+    bullets=[];
+    particles=[];
+
+    boss=null;
+
+    levelTime=0;
+    spawnTimer=0;
+
+    bossWaiting=false;
+
+    swordActive=false;
+    spinning=false;
+    ultra=false;
+
+    hero.x=W/2;
+    hero.y=H/2;
+    hero.hp=100;
+
+    document.getElementById("retry").style.display="none";
+
+    document.getElementById("message").style.display="none";
+
+    document.getElementById("bossUI").style.display="none";
+
+    document.getElementById("power").innerText="READY";
+}
+
+
+/* =====================================================
+   LEVEL START
+===================================================== */
+
+function startLevel(){
+
+    enemies=[];
+
+    bullets=[];
+
+    boss=null;
+
+    bossWaiting=false;
+
+    levelTime=0;
+
+    spawnTimer=0;
+
+    document.getElementById("bossUI").style.display="none";
+
+    showMessage("LEVEL "+level);
+}
+
+
+/* =====================================================
+   ENEMY POOL
+===================================================== */
+
+function enemyPool(){
+
+    if(level===1)
+        return ["beast"];
+
+    if(level===2)
+        return ["beast","hunter"];
+
+    if(level===3)
+        return ["hunter","demon"];
+
+    if(level===4)
+        return ["beast","hunter","demon"];
+
+    if(level===5)
+        return ["demon","brute"];
+
+    if(level===6)
+        return ["hunter","brute","shadow"];
+
+    if(level===7)
+        return ["demon","brute","shadow"];
+
+    if(level===8)
+        return ["brute","shadow","monster"];
+
+    if(level===9)
+        return ["shadow","monster","demon","brute"];
+
+    return ["shadow","monster","brute"];
+}
+
+
+/* =====================================================
+   SPAWN ENEMY
+===================================================== */
+
+function spawnEnemy(){
+
+    const pool=enemyPool();
+
+    const type=pool[
+        Math.floor(Math.random()*pool.length)
+    ];
+
+    const d=types[type];
+
+    const side=Math.floor(Math.random()*4);
+
+    let x,y;
+
+    if(side===0){
+        x=-70;
+        y=Math.random()*H;
+    }
+
+    if(side===1){
+        x=W+70;
+        y=Math.random()*H;
+    }
+
+    if(side===2){
+        x=Math.random()*W;
+        y=-70;
+    }
+
+    if(side===3){
+        x=Math.random()*W;
+        y=H+70;
+    }
+
+    const difficulty=1+(level-1)*.18;
+
+    enemies.push({
+
+        x:x,
+        y:y,
+
+        r:d.r,
+
+        hp:d.hp*difficulty,
+        maxHp:d.hp*difficulty,
+
+        speed:d.speed*(1+(level-1)*.06),
+
+        damage:d.damage*difficulty,
+
+        color:d.color,
+
+        flash:0
+    });
+}
+
+
+/* =====================================================
+   SPAWN BOSS
+===================================================== */
+
+function spawnBoss(){
+
+    if(boss)
+        return;
+
+    const d=bossData[level-1];
+
+    boss={
+
+        name:d[0],
+
+        x:W/2,
+
+        y:130,
+
+        r:70+level*3,
+
+        hp:d[1],
+
+        maxHp:d[1],
+
+        speed:d[2],
+
+        damage:d[3],
+
+        attackTimer:0,
+
+        chargeTimer:0,
+
+        charge:0,
+
+        flash:0
+    };
+
+    document.getElementById("bossName").innerText=
+        "☠ "+boss.name+" ☠";
+
+    document.getElementById("bossUI").style.display=
+        "block";
+
+    showMessage("☠ "+boss.name+" ☠");
+}
+
+
+/* =====================================================
+   MOVEMENT
+===================================================== */
+
+function moveHero(){
+
+    let dx=0;
+    let dy=0;
+
+    if(keys.w) dy--;
+    if(keys.s) dy++;
+    if(keys.a) dx--;
+    if(keys.d) dy++;
+
+    /* FIX typo-safe movement */
+
+    if(keys.d) dx++;
+    if(keys.a) dx--;
+
+    if(dx!==0 || dy!==0){
+
+        const len=Math.hypot(dx,dy);
+
+        dx/=len;
+        dy/=len;
+
+        hero.x+=dx*hero.speed;
+        hero.y+=dy*hero.speed;
+    }
+
+    hero.x=Math.max(hero.r,Math.min(W-hero.r,hero.x));
+
+    hero.y=Math.max(75,Math.min(H-hero.r,hero.y));
+}
+
+
+/* =====================================================
+   SWORD
+===================================================== */
+
+function swordAttack(){
+
+    if(!gameRunning || spinning)
+        return;
+
+    swordActive=true;
+
+    setTimeout(()=>{
+        swordActive=false;
+    },180);
+
+    /* Normal enemies */
+
+    for(const e of enemies){
+
+        if(distance(hero,e)<120){
+
+            e.hp-=35;
+
+            e.flash=5;
+
+            hitParticles(e.x,e.y);
+
+            if(e.hp<=0){
+
+                score+=100;
+
+            }
+        }
+    }
+
+    enemies=enemies.filter(e=>e.hp>0);
+
+
+    /* BOSS */
+
+    if(boss && distance(hero,boss)<145){
+
+        boss.hp-=35;
+
+        boss.flash=5;
+
+        hitParticles(boss.x,boss.y);
+
+        if(boss.hp<=0){
+
+            defeatBoss();
+        }
+    }
+}
+
+
+/* =====================================================
+   SPIN
+===================================================== */
+
+function startSpin(){
+
+    if(spinning || !gameRunning)
+        return;
+
+    spinning=true;
+
+    document.getElementById("power").innerText=
+        "🌀 SPINNING";
+
+    const start=performance.now();
+
+    function spin(){
+
+        if(!spinning)
+            return;
+
+        spinAngle+=.5;
+
+        /* VERY LOW DAMAGE */
+
+        for(const e of enemies){
+
+            if(distance(hero,e)<165){
+
+                e.hp-=2;
+
+                e.flash=3;
+            }
+        }
+
+        enemies=enemies.filter(e=>{
+
+            if(e.hp<=0){
+
+                score+=100;
+                return false;
+            }
+
+            return true;
         });
 
-    </script>
+
+        /* Boss only 2 damage per hit */
+
+        if(boss && distance(hero,boss)<165){
+
+            boss.hp-=2;
+
+            boss.flash=3;
+
+            if(boss.hp<=0){
+
+                defeatBoss();
+                return;
+            }
+        }
+
+
+        if(performance.now()-start<1500){
+
+            requestAnimationFrame(spin);
+
+        }else{
+
+            spinning=false;
+
+            document.getElementById("power").innerText=
+                "READY";
+        }
+    }
+
+    requestAnimationFrame(spin);
+}
+
+
+/* =====================================================
+   ULTRA
+===================================================== */
+
+function ultraAttack(){
+
+    if(!gameRunning)
+        return;
+
+    ultra=true;
+
+    document.getElementById("power").innerText=
+        "🔥 ULTRA ACTIVE";
+
+
+    /* NORMAL = 100% */
+
+    enemies.forEach(e=>{
+        e.hp=0;
+        explosion(e.x,e.y);
+        score+=100;
+    });
+
+    enemies=[];
+
+
+    /* BOSS = 60% */
+
+    if(boss){
+
+        boss.hp-=boss.maxHp*.60;
+
+        explosion(boss.x,boss.y);
+
+        if(boss.hp<=0){
+
+            defeatBoss();
+        }
+    }
+}
+
+
+/* =====================================================
+   UPDATE ENEMIES
+===================================================== */
+
+function updateEnemies(){
+
+    for(const e of enemies){
+
+        const dx=hero.x-e.x;
+        const dy=hero.y-e.y;
+
+        const dist=Math.hypot(dx,dy);
+
+        if(dist>1){
+
+            e.x+=(dx/dist)*e.speed;
+            e.y+=(dy/dist)*e.speed;
+        }
+
+        if(e.flash>0)
+            e.flash--;
+
+
+        /*
+            GUARANTEED CONTACT DAMAGE
+        */
+
+        if(dist <= hero.r+e.r*.65){
+
+            hero.hp-=e.damage*.025;
+
+        }
+    }
+
+    enemies=enemies.filter(e=>e.hp>0);
+}
+
+
+/* =====================================================
+   UPDATE BOSS
+===================================================== */
+
+function updateBoss(){
+
+    if(!boss)
+        return;
+
+
+    const dx=hero.x-boss.x;
+    const dy=hero.y-boss.y;
+
+    const dist=Math.hypot(dx,dy);
+
+
+    /*
+        BOSS MOVEMENT
+    */
+
+    if(dist>110){
+
+        boss.x+=(dx/dist)*boss.speed;
+        boss.y+=(dy/dist)*boss.speed;
+    }
+
+
+    /*
+        Keep boss on screen
+    */
+
+    boss.x=Math.max(
+        boss.r,
+        Math.min(
+            W-boss.r,
+            boss.x
+        )
+    );
+
+    boss.y=Math.max(
+        110,
+        Math.min(
+            H-boss.r,
+            boss.y
+        )
+    );
+
+
+    /*
+        TOUCH DAMAGE
+    */
+
+    if(dist<=hero.r+boss.r*.55){
+
+        hero.hp-=boss.damage*.035;
+    }
+
+
+    /*
+        RANGED ATTACK
+    */
+
+    boss.attackTimer++;
+
+    if(boss.attackTimer>90){
+
+        boss.attackTimer=0;
+
+        const angle=Math.atan2(
+            hero.y-boss.y,
+            hero.x-boss.x
+        );
+
+        for(let i=-2;i<=2;i++){
+
+            const a=angle+i*.16;
+
+            bullets.push({
+
+                x:boss.x,
+                y:boss.y,
+
+                vx:Math.cos(a)*5,
+                vy:Math.sin(a)*5,
+
+                life:180,
+
+                damage:8+level
+            });
+        }
+    }
+
+
+    /*
+        CHARGE
+    */
+
+    boss.chargeTimer++;
+
+    if(boss.chargeTimer>320){
+
+        boss.chargeTimer=0;
+
+        boss.charge=45;
+    }
+
+    if(boss.charge>0){
+
+        boss.charge--;
+
+        if(dist>1){
+
+            boss.x+=(dx/dist)*3.5;
+            boss.y+=(dy/dist)*3.5;
+        }
+    }
+
+
+    if(boss.flash>0)
+        boss.flash--;
+
+
+    /*
+        HP BAR
+    */
+
+    const percent=
+        Math.max(
+            0,
+            boss.hp/boss.maxHp*100
+        );
+
+    document.getElementById("bosshp").style.width=
+        percent+"%";
+}
+
+
+/* =====================================================
+   BULLETS
+===================================================== */
+
+function updateBullets(){
+
+    for(const b of bullets){
+
+        b.x+=b.vx;
+        b.y+=b.vy;
+
+        b.life--;
+
+        if(
+            distance(hero,b)<30
+        ){
+
+            hero.hp-=b.damage;
+
+            b.life=0;
+
+            explosion(
+                hero.x,
+                hero.y
+            );
+        }
+    }
+
+    bullets=bullets.filter(b=>
+        b.life>0 &&
+        b.x>-100 &&
+        b.x<W+100 &&
+        b.y>-100 &&
+        b.y<H+100
+    );
+}
+
+
+/* =====================================================
+   LEVEL UPDATE
+===================================================== */
+
+function updateLevel(dt){
+
+    /*
+        Boss fight:
+        nothing else spawns.
+    */
+
+    if(boss)
+        return;
+
+
+    levelTime+=dt;
+
+
+    /*
+        20 seconds enemy spawning
+    */
+
+    if(levelTime<20){
+
+        spawnTimer+=dt;
+
+        const rate=
+            Math.max(
+                .18,
+                .65-level*.035
+            );
+
+
+        if(spawnTimer>=rate){
+
+            spawnTimer=0;
+
+
+            let count=
+                1+
+                Math.floor(level/2);
+
+
+            if(Math.random()<.5)
+                count++;
+
+
+            for(let i=0;i<count;i++){
+
+                spawnEnemy();
+            }
+        }
+
+        return;
+    }
+
+
+    /*
+        After 20 sec:
+        wait for all enemies.
+    */
+
+    if(
+        enemies.length===0 &&
+        !bossWaiting
+    ){
+
+        bossWaiting=true;
+
+        showMessage("⚠ BOSS INCOMING ⚠");
+
+        setTimeout(()=>{
+
+            if(
+                gameRunning &&
+                !boss
+            ){
+
+                spawnBoss();
+            }
+
+        },1200);
+    }
+}
+
+
+/* =====================================================
+   BOSS DEFEAT
+===================================================== */
+
+function defeatBoss(){
+
+    if(!boss)
+        return;
+
+
+    explosion(
+        boss.x,
+        boss.y
+    );
+
+    score+=5000;
+
+    boss=null;
+
+    bullets=[];
+
+    document.getElementById("bossUI").style.display=
+        "none";
+
+
+    if(level>=10){
+
+        victory();
+
+        return;
+    }
+
+
+    showMessage("👑 BOSS DEFEATED");
+
+
+    setTimeout(()=>{
+
+        if(!gameRunning)
+            return;
+
+        level++;
+
+        /*
+            Recover 25 HP
+        */
+
+        hero.hp=Math.min(
+            hero.maxHp,
+            hero.hp+25
+        );
+
+        startLevel();
+
+    },2000);
+}
+
+
+/* =====================================================
+   PARTICLES
+===================================================== */
+
+function hitParticles(x,y){
+
+    for(let i=0;i<5;i++){
+
+        particles.push({
+
+            x:x,
+            y:y,
+
+            vx:(Math.random()-.5)*7,
+            vy:(Math.random()-.5)*7,
+
+            life:25,
+
+            size:3+Math.random()*4
+        });
+    }
+}
+
+
+function explosion(x,y){
+
+    for(let i=0;i<25;i++){
+
+        particles.push({
+
+            x:x,
+            y:y,
+
+            vx:(Math.random()-.5)*14,
+            vy:(Math.random()-.5)*14,
+
+            life:45,
+
+            size:3+Math.random()*7
+        });
+    }
+}
+
+
+function updateParticles(){
+
+    for(const p of particles){
+
+        p.x+=p.vx;
+        p.y+=p.vy;
+
+        p.vx*=.96;
+        p.vy*=.96;
+
+        p.life--;
+    }
+
+    particles=particles.filter(
+        p=>p.life>0
+    );
+}
+
+
+/* =====================================================
+   DISTANCE
+===================================================== */
+
+function distance(a,b){
+
+    return Math.hypot(
+        a.x-b.x,
+        a.y-b.y
+    );
+}
+
+
+/* =====================================================
+   DRAW BACKGROUND
+===================================================== */
+
+function drawBackground(){
+
+    ctx.fillStyle="#030305";
+
+    ctx.fillRect(
+        0,
+        0,
+        W,
+        H
+    );
+
+
+    const g=
+        ctx.createRadialGradient(
+            W/2,
+            H/2,
+            20,
+            W/2,
+            H/2,
+            Math.max(W,H)
+        );
+
+    g.addColorStop(
+        0,
+        "#300707"
+    );
+
+    g.addColorStop(
+        1,
+        "#020205"
+    );
+
+    ctx.fillStyle=g;
+
+    ctx.fillRect(
+        0,
+        0,
+        W,
+        H
+    );
+
+
+    /*
+        stars
+    */
+
+    for(let i=0;i<70;i++){
+
+        const x=(i*137)%W;
+        const y=(i*83)%H;
+
+        ctx.fillStyle="#ffffff15";
+
+        ctx.fillRect(
+            x,
+            y,
+            2,
+            2
+        );
+    }
+}
+
+
+/* =====================================================
+   DRAW HERO
+===================================================== */
+
+function drawHero(){
+
+    ctx.save();
+
+    ctx.translate(
+        hero.x,
+        hero.y
+    );
+
+
+    /*
+        ULTRA
+    */
+
+    if(ultra){
+
+        ctx.beginPath();
+
+        ctx.arc(
+            0,
+            0,
+            70+
+            Math.sin(Date.now()/80)*10,
+            0,
+            Math.PI*2
+        );
+
+        ctx.fillStyle="#00eaff18";
+
+        ctx.fill();
+
+        ctx.strokeStyle="#00eaff";
+
+        ctx.lineWidth=5;
+
+        ctx.stroke();
+    }
+
+
+    /*
+        SPIN
+    */
+
+    if(spinning){
+
+        ctx.rotate(spinAngle);
+
+        ctx.beginPath();
+
+        ctx.arc(
+            0,
+            0,
+            100,
+            0,
+            Math.PI*2
+        );
+
+        ctx.strokeStyle="#ffd000";
+
+        ctx.lineWidth=6;
+
+        ctx.stroke();
+    }
+
+
+    /*
+        CAPE
+    */
+
+    ctx.fillStyle="#991b1b";
+
+    ctx.beginPath();
+
+    ctx.moveTo(-17,5);
+    ctx.lineTo(-55,55);
+    ctx.lineTo(0,35);
+    ctx.lineTo(55,55);
+    ctx.lineTo(17,5);
+
+    ctx.closePath();
+
+    ctx.fill();
+
+
+    /*
+        LEGS
+    */
+
+    ctx.strokeStyle="#111";
+
+    ctx.lineWidth=11;
+
+    ctx.beginPath();
+
+    ctx.moveTo(-9,25);
+    ctx.lineTo(-14,55);
+
+    ctx.moveTo(9,25);
+    ctx.lineTo(14,55);
+
+    ctx.stroke();
+
+
+    /*
+        BODY
+    */
+
+    ctx.fillStyle="#dc2626";
+
+    ctx.beginPath();
+
+    ctx.roundRect(
+        -21,
+        -10,
+        42,
+        45,
+        10
+    );
+
+    ctx.fill();
+
+
+    /*
+        ARMS
+    */
+
+    ctx.strokeStyle="#f1b092";
+
+    ctx.lineWidth=10;
+
+    ctx.beginPath();
+
+    ctx.moveTo(-18,-2);
+    ctx.lineTo(-40,18);
+
+    ctx.moveTo(18,-2);
+    ctx.lineTo(40,18);
+
+    ctx.stroke();
+
+
+    /*
+        HEAD
+    */
+
+    ctx.fillStyle="#f1b092";
+
+    ctx.beginPath();
+
+    ctx.arc(
+        0,
+        -29,
+        18,
+        0,
+        Math.PI*2
+    );
+
+    ctx.fill();
+
+
+    /*
+        HAIR
+    */
+
+    ctx.fillStyle="#111";
+
+    ctx.beginPath();
+
+    ctx.arc(
+        0,
+        -36,
+        18,
+        Math.PI,
+        Math.PI*2
+    );
+
+    ctx.fill();
+
+
+    /*
+        EYES
+    */
+
+    ctx.fillStyle="#111";
+
+    ctx.beginPath();
+
+    ctx.arc(
+        -6,
+        -29,
+        3,
+        0,
+        Math.PI*2
+    );
+
+    ctx.arc(
+        6,
+        -29,
+        3,
+        0,
+        Math.PI*2
+    );
+
+    ctx.fill();
+
+
+    /*
+        CHEST
+    */
+
+    ctx.fillStyle="#ffd000";
+
+    ctx.beginPath();
+
+    ctx.moveTo(0,-5);
+    ctx.lineTo(8,8);
+    ctx.lineTo(0,4);
+    ctx.lineTo(-8,8);
+
+    ctx.closePath();
+
+    ctx.fill();
+
+
+    /*
+        SWORD
+    */
+
+    if(swordActive){
+
+        ctx.fillStyle="#eee";
+
+        ctx.fillRect(
+            25,
+            -5,
+            100,
+            9
+        );
+
+        ctx.fillStyle="#ffd000";
+
+        ctx.fillRect(
+            20,
+            -9,
+            10,
+            18
+        );
+    }
+
+
+    ctx.restore();
+}
+
+
+/* =====================================================
+   DRAW ENEMY
+===================================================== */
+
+function drawEnemy(e){
+
+    ctx.save();
+
+    ctx.translate(
+        e.x,
+        e.y
+    );
+
+
+    ctx.fillStyle=
+        e.flash>0
+        ?"white"
+        :e.color;
+
+
+    /*
+        BODY
+    */
+
+    ctx.beginPath();
+
+    ctx.roundRect(
+        -e.r*.6,
+        -e.r*.15,
+        e.r*1.2,
+        e.r*1.1,
+        8
+    );
+
+    ctx.fill();
+
+
+    /*
+        HEAD
+    */
+
+    ctx.fillStyle="#63372b";
+
+    ctx.beginPath();
+
+    ctx.arc(
+        0,
+        -e.r*.55,
+        e.r*.48,
+        0,
+        Math.PI*2
+    );
+
+    ctx.fill();
+
+
+    /*
+        HORNS
+    */
+
+    ctx.fillStyle="#ddd";
+
+    ctx.beginPath();
+
+    ctx.moveTo(
+        -e.r*.25,
+        -e.r*.75
+    );
+
+    ctx.lineTo(
+        -e.r*.65,
+        -e.r*1.35
+    );
+
+    ctx.lineTo(
+        -e.r*.05,
+        -e.r*.9
+    );
+
+    ctx.fill();
+
+
+    ctx.beginPath();
+
+    ctx.moveTo(
+        e.r*.25,
+        -e.r*.75
+    );
+
+    ctx.lineTo(
+        e.r*.65,
+        -e.r*1.35
+    );
+
+    ctx.lineTo(
+        e.r*.05,
+        -e.r*.9
+    );
+
+    ctx.fill();
+
+
+    /*
+        EYES
+    */
+
+    ctx.fillStyle="#ff0000";
+
+    ctx.shadowBlur=15;
+
+    ctx.shadowColor="red";
+
+    ctx.beginPath();
+
+    ctx.arc(
+        -e.r*.17,
+        -e.r*.55,
+        4,
+        0,
+        Math.PI*2
+    );
+
+    ctx.arc(
+        e.r*.17,
+        -e.r*.55,
+        4,
+        0,
+        Math.PI*2
+    );
+
+    ctx.fill();
+
+    ctx.shadowBlur=0;
+
+
+    /*
+        HP
+    */
+
+    ctx.fillStyle="#250000";
+
+    ctx.fillRect(
+        -e.r,
+        e.r*1.2,
+        e.r*2,
+        6
+    );
+
+    ctx.fillStyle="#22c55e";
+
+    ctx.fillRect(
+        -e.r,
+        e.r*1.2,
+        e.r*2*
+        Math.max(
+            0,
+            e.hp/e.maxHp
+        ),
+        6
+    );
+
+
+    ctx.restore();
+}
+
+
+/* =====================================================
+   DRAW BOSS
+===================================================== */
+
+function drawBoss(){
+
+    if(!boss)
+        return;
+
+
+    ctx.save();
+
+    ctx.translate(
+        boss.x,
+        boss.y
+    );
+
+
+    /*
+        MASSIVE AURA
+    */
+
+    ctx.shadowBlur=40;
+
+    ctx.shadowColor="red";
+
+    ctx.strokeStyle="#ff000055";
+
+    ctx.lineWidth=12;
+
+    ctx.beginPath();
+
+    ctx.arc(
+        0,
+        0,
+        boss.r*1.35+
+        Math.sin(Date.now()/100)*10,
+        0,
+        Math.PI*2
+    );
+
+    ctx.stroke();
+
+
+    ctx.shadowBlur=0;
+
+
+    /*
+        BODY
+    */
+
+    ctx.fillStyle=
+        boss.flash>0
+        ?"white"
+        :"#260000";
+
+    ctx.beginPath();
+
+    ctx.roundRect(
+        -boss.r*.65,
+        -boss.r*.05,
+        boss.r*1.3,
+        boss.r*1.25,
+        15
+    );
+
+    ctx.fill();
+
+
+    /*
+        SHOULDERS
+    */
+
+    ctx.fillStyle="#4b0000";
+
+    ctx.beginPath();
+
+    ctx.arc(
+        -boss.r*.75,
+        0,
+        boss.r*.4,
+        0,
+        Math.PI*2
+    );
+
+    ctx.arc(
+        boss.r*.75,
+        0,
+        boss.r*.4,
+        0,
+        Math.PI*2
+    );
+
+    ctx.fill();
+
+
+    /*
+        HEAD
+    */
+
+    ctx.fillStyle="#51251d";
+
+    ctx.beginPath();
+
+    ctx.arc(
+        0,
+        -boss.r*.65,
+        boss.r*.52,
+        0,
+        Math.PI*2
+    );
+
+    ctx.fill();
+
+
+    /*
+        HORNS
+    */
+
+    ctx.fillStyle="#ddd";
+
+    ctx.beginPath();
+
+    ctx.moveTo(
+        -boss.r*.35,
+        -boss.r*.85
+    );
+
+    ctx.lineTo(
+        -boss.r*.75,
+        -boss.r*1.55
+    );
+
+    ctx.lineTo(
+        -boss.r*.05,
+        -boss.r*1.0
+    );
+
+    ctx.fill();
+
+
+    ctx.beginPath();
+
+    ctx.moveTo(
+        boss.r*.35,
+        -boss.r*.85
+    );
+
+    ctx.lineTo(
+        boss.r*.75,
+        -boss.r*1.55
+    );
+
+    ctx.lineTo(
+        boss.r*.05,
+        -boss.r*1.0
+    );
+
+    ctx.fill();
+
+
+    /*
+        EYES
+    */
+
+    ctx.fillStyle="#ff0000";
+
+    ctx.shadowBlur=25;
+
+    ctx.shadowColor="red";
+
+    ctx.beginPath();
+
+    ctx.arc(
+        -boss.r*.2,
+        -boss.r*.65,
+        7,
+        0,
+        Math.PI*2
+    );
+
+    ctx.arc(
+        boss.r*.2,
+        -boss.r*.65,
+        7,
+        0,
+        Math.PI*2
+    );
+
+    ctx.fill();
+
+    ctx.shadowBlur=0;
+
+
+    /*
+        CROWN
+    */
+
+    ctx.fillStyle="#ffd000";
+
+    ctx.beginPath();
+
+    ctx.moveTo(
+        -boss.r*.55,
+        -boss.r*1.55
+    );
+
+    ctx.lineTo(
+        -boss.r*.3,
+        -boss.r*2.05
+    );
+
+    ctx.lineTo(
+        0,
+        -boss.r*1.6
+    );
+
+    ctx.lineTo(
+        boss.r*.3,
+        -boss.r*2.05
+    );
+
+    ctx.lineTo(
+        boss.r*.55,
+        -boss.r*1.55
+    );
+
+    ctx.closePath();
+
+    ctx.fill();
+
+
+    /*
+        BOSS HP
+    */
+
+    ctx.fillStyle="#190000";
+
+    ctx.fillRect(
+        -boss.r*1.2,
+        boss.r*1.45,
+        boss.r*2.4,
+        10
+    );
+
+    ctx.fillStyle="#ef1111";
+
+    ctx.fillRect(
+        -boss.r*1.2,
+        boss.r*1.45,
+        boss.r*2.4*
+        Math.max(
+            0,
+            boss.hp/boss.maxHp
+        ),
+        10
+    );
+
+
+    ctx.restore();
+}
+
+
+/* =====================================================
+   DRAW BULLETS
+===================================================== */
+
+function drawBullets(){
+
+    for(const b of bullets){
+
+        ctx.fillStyle="#ff2222";
+
+        ctx.shadowBlur=15;
+
+        ctx.shadowColor="red";
+
+        ctx.beginPath();
+
+        ctx.arc(
+            b.x,
+            b.y,
+            7,
+            0,
+            Math.PI*2
+        );
+
+        ctx.fill();
+
+        ctx.shadowBlur=0;
+    }
+}
+
+
+/* =====================================================
+   DRAW PARTICLES
+===================================================== */
+
+function drawParticles(){
+
+    for(const p of particles){
+
+        ctx.globalAlpha=
+            Math.max(
+                0,
+                p.life/45
+            );
+
+        ctx.fillStyle=
+            "#ff5b22";
+
+        ctx.beginPath();
+
+        ctx.arc(
+            p.x,
+            p.y,
+            p.size,
+            0,
+            Math.PI*2
+        );
+
+        ctx.fill();
+    }
+
+    ctx.globalAlpha=1;
+}
+
+
+/* =====================================================
+   UI
+===================================================== */
+
+function updateUI(){
+
+    document.getElementById("level").innerText=
+        level;
+
+    document.getElementById("score").innerText=
+        score;
+
+    document.getElementById("hp").style.width=
+        Math.max(
+            0,
+            hero.hp
+        )+"%";
+
+
+    if(hero.hp<30){
+
+        document.getElementById("hp").style.background=
+            "#ef4444";
+
+    }else{
+
+        document.getElementById("hp").style.background=
+            "#22c55e";
+    }
+}
+
+
+/* =====================================================
+   MESSAGE
+===================================================== */
+
+function showMessage(text){
+
+    const m=
+        document.getElementById("message");
+
+    m.innerHTML=text;
+
+    m.style.display="block";
+
+    setTimeout(()=>{
+
+        m.style.display="none";
+
+    },1700);
+}
+
+
+/* =====================================================
+   GAME OVER
+===================================================== */
+
+function gameOver(){
+
+    gameRunning=false;
+
+    boss=null;
+
+    document.getElementById("bossUI").style.display=
+        "none";
+
+    document.getElementById("message").innerHTML=
+        "💀 YOU DIED 💀"+
+        "<br><small>SCORE: "+
+        score+
+        "</small>";
+
+    document.getElementById("message").style.display=
+        "block";
+
+    document.getElementById("retry").style.display=
+        "block";
+}
+
+
+/* =====================================================
+   RETRY
+===================================================== */
+
+function retryGame(){
+
+    document.getElementById("message").style.display=
+        "none";
+
+    document.getElementById("retry").style.display=
+        "none";
+
+    resetGame();
+
+    gameRunning=true;
+
+    lastTime=performance.now();
+
+    requestAnimationFrame(loop);
+}
+
+
+/* =====================================================
+   VICTORY
+===================================================== */
+
+function victory(){
+
+    gameRunning=false;
+
+    boss=null;
+
+    document.getElementById("bossUI").style.display=
+        "none";
+
+    document.getElementById("message").innerHTML=
+        "🏆 THE DARK GOD IS DEFEATED 🏆"+
+        "<br><small>ALL 10 LEVELS COMPLETED</small>"+
+        "<br><small>SCORE: "+
+        score+
+        "</small>";
+
+    document.getElementById("message").style.display=
+        "block";
+}
+
+
+/* =====================================================
+   MAIN LOOP
+===================================================== */
+
+function loop(time){
+
+    if(!gameRunning)
+        return;
+
+
+    /*
+        Delta time
+    */
+
+    let dt=
+        (time-lastTime)/1000;
+
+    lastTime=time;
+
+
+    /*
+        Prevent huge jumps
+        if browser lags.
+    */
+
+    dt=Math.min(dt,.05);
+
+
+    moveHero();
+
+    updateLevel(dt);
+
+    updateEnemies();
+
+    updateBoss();
+
+    updateBullets();
+
+    updateParticles();
+
+
+    /*
+        DRAW
+    */
+
+    ctx.clearRect(
+        0,
+        0,
+        W,
+        H
+    );
+
+    drawBackground();
+
+    drawParticles();
+
+    drawBullets();
+
+    drawEnemies();
+
+    drawBoss();
+
+    drawHero();
+
+
+    updateUI();
+
+
+    /*
+        DEATH
+    */
+
+    if(hero.hp<=0){
+
+        hero.hp=0;
+
+        updateUI();
+
+        gameOver();
+
+        return;
+    }
+
+
+    requestAnimationFrame(loop);
+}
+
+
+/* =====================================================
+   START FIRST LEVEL
+===================================================== */
+
+startLevel();
+
+</script>
 
 </body>
-
 </html>
